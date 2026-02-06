@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/Migration/">
+    <Project Path="Migrators.PostgreSQL/Migrators.PostgreSQL.csproj" Id="89f478cf-891f-48a6-bc08-5a8c46d84576" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="global.json" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="Application/Application.csproj">
+    <BuildDependency Project="Domain/Domain.csproj" />
+    <BuildDependency Project="Shared/Shared.csproj" />
+  </Project>
+  <Project Path="Domain/Domain.csproj" />
+  <Project Path="Host/Host.csproj">
+    <BuildDependency Project="Migrators.PostgreSQL/Migrators.PostgreSQL.csproj" />
+  </Project>
+  <Project Path="Infrastructure/Infrastructure.csproj">
+    <BuildDependency Project="Application/Application.csproj" />
+  </Project>
+  <Project Path="Shared/Shared.csproj" Id="c69cd7a1-331d-4dc9-bdb6-618775d77af5" />
+</Solution>

@@ -1,0 +1,7 @@
+{
+  "LoggerSettings": {
+    "AppName": "Base.Government",
+    "WriteToFile": false,
+    "StructuredConsoleLogging": true
+  }
+}

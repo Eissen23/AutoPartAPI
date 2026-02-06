@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Domain.Entities.Common.Contracts;
+
+public interface IDeletableEntity
+{
+    public Guid CreatedBy { get; set; }
+    public DateTime CreatedOn { get; }
+    public Guid LastModifiedBy { get; set; }
+    public DateTime? LastModifiedOn { get; set; }
+}

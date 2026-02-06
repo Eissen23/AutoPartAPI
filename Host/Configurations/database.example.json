@@ -1,0 +1,8 @@
+{
+  "DatabaseSettings": {
+    "DBProvider": "mysql",
+    "ConnectionString": "Server=localhost;Port=3306;Database=kiosk_goiso_nan;Uid=root;Pwd=DucPhuc2@;CharSet=utf8mb4;",
+    "SchemaName": "kiosk_goiso_nan"
+  }
+}
+
