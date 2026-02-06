@@ -1,0 +1,11 @@
+{
+  "SecuritySettings": {
+    "Provider": "Jwt",
+    "RequireConfirmedAccount": true,
+    "JwtSettings": {
+      "key": "autopart_super@!secretkey$$123",
+      "tokenExpirationInMinutes": 60,
+      "refreshTokenExpirationInDays": 7
+    }
+  }
+}

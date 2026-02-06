@@ -12,6 +12,8 @@
 
     <ItemGroup>
         <PackageReference Include="Azure.Identity" Version="1.17.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.12" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.12" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.10" />
         <PackageReference Include="Microsoft.Identity.Client" Version="4.82.0" />
@@ -37,7 +39,7 @@
         <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
         <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.5" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.12">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

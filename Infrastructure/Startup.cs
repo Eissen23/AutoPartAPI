@@ -1,4 +1,5 @@
-﻿using Infrastructure.Persistence;
+﻿using Infrastructure.Auth;
+using Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure;
@@ -8,7 +9,9 @@ public static class Startup
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         // Register infrastructure services here
-        services.AddPersistence();
+        services
+            .AddPersistence()
+            .AddAuth();
 
         return services;
     }
