@@ -25,7 +25,7 @@ try
 
     app.UseHttpsRedirection();
 
-    app.UseAuthorization();
+    app.UseInfrastructure();
 
     app.MapControllers();
 

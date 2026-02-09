@@ -16,7 +16,7 @@ public class ConfigureJwtBearerOption(IOptions<JwtSettings> jwtSettings) : IConf
 
     public void Configure(JwtBearerOptions options)
     {
-        throw new NotImplementedException();
+        Configure(JwtBearerDefaults.AuthenticationScheme, options);
     }
 
     public void Configure(string name, JwtBearerOptions options)

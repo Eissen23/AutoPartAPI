@@ -24,7 +24,6 @@ internal static class Startup
                 .RequireAuthenticatedUser()
                 .Build());
 
-        // Register authentication services here
         return services.AddAuthentication(authentication =>
         {
             authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

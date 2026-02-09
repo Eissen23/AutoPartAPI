@@ -34,3 +34,16 @@ public class UnauthorizedException : BaseApiException
     {
     }
 }
+
+public class InternalServerException : BaseApiException
+{
+    public InternalServerException()
+        : base(HttpStatusCode.InternalServerError, "Internal Server Error", "")
+    {
+    }
+
+    public InternalServerException(string message)
+        : base(HttpStatusCode.InternalServerError, "Internal Server Error", message)
+    {
+    }
+}
