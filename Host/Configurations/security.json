@@ -3,9 +3,9 @@
     "Provider": "Jwt",
     "RequireConfirmedAccount": true,
     "JwtSettings": {
-      "key": "autopart_super@!secretkey$$123",
-      "tokenExpirationInMinutes": 60,
-      "refreshTokenExpirationInDays": 7
+      "Key": "autopart_super@!secretkey$$123a7&kP92!",
+      "TokenExpirationInMinutes": 60,
+      "RefreshTokenExpirationInDays": 7
     }
   }
 }

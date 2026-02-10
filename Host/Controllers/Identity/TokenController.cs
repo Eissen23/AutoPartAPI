@@ -9,7 +9,7 @@ public class TokenController(
 {
     private readonly ITokenService _tokenService = tokenService;
 
-    [HttpPost]
+    [AllowAnonymous, HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateToken([FromBody] TokenRequest request)
@@ -18,7 +18,7 @@ public class TokenController(
         return this.ApiOk<TokenResponse>(result, "Successfully create token");
     }
 
-    [HttpPost("logout")]
+    [Authorize, HttpPost("logout")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Logout()

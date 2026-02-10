@@ -22,7 +22,7 @@ public class TokenService(
     ApplicationDbContext context
     ) : ITokenService
 {
-    private readonly IOptions<JwtSettings> _jwtSettings = jwtSettings;
+    private readonly JwtSettings _jwtSettings = jwtSettings.Value;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly ApplicationDbContext _context = context;
 
@@ -44,7 +44,7 @@ public class TokenService(
 
         var token = GenerateJwtToken(user);
         var refreshToken = GenerateRefreshToken();
-        var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.Value.RefreshTokenExpirationInDays);
+        var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays);
 
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = refreshTokenExpiryTime;
@@ -68,7 +68,7 @@ public class TokenService(
 
         var token = GenerateJwtToken(user);
         var refreshToken = GenerateRefreshToken();
-        var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.Value.RefreshTokenExpirationInDays);
+        var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays);
 
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = refreshTokenExpiryTime;
@@ -86,7 +86,7 @@ public class TokenService(
 
     internal string GenerateJwtToken(ApplicationUser user)
     {
-        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Value.Key));
+        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Key));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>
@@ -122,7 +122,7 @@ public class TokenService(
             issuer: null,
             audience: null,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.Value.TokenExpirationInMinutes),
+            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.TokenExpirationInMinutes),
             signingCredentials: credentials
         );
 
@@ -141,7 +141,7 @@ public class TokenService(
     {
         try
         {
-            var key = Encoding.ASCII.GetBytes(_jwtSettings.Value.Key);
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.Key);
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
