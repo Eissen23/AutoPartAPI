@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using Shared.Common.Exceptions;
+using Host.Common.Exceptions;
 
-namespace Shared.Common.Exception;
+namespace Host.Common.Exception;
 
 /// <summary>
 /// Exception khi không có quyền truy cập.

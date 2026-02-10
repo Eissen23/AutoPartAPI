@@ -5,7 +5,7 @@ using Application.Identities;
 using Application.Identities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Shared.Common.Exception;
+using Host.Common.Exception;
 
 namespace Infrastructure.Identities;
 

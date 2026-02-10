@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 
-namespace Shared.Authentication;
+namespace Host.Authentication;
 
 /// <summary>
 /// Base class for custom application claims.

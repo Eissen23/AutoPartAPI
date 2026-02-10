@@ -5,7 +5,7 @@ using Application.Common.Interface;
 
 namespace Application.Identities.Tokens;
 
-public interface ITokenService : ITransientService
+public interface ITokenService : IScopedService
 {
     Task<TokenResponse> CreateTokenAsync(TokenRequest request);
     Task<TokenResponse> RefreshTokenAsync(RefreshTokenRequest request);

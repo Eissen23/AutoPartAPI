@@ -15,21 +15,41 @@ try
     builder.Services.AddOpenApi();
     builder.Services.AddInfrastructure();
     builder.Services.AddApplication();
-    var app = builder.Build();
-
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+    
+    try
     {
-        app.MapOpenApi();
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.MapOpenApi();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseHttpsRedirection();
+
+        app.UseInfrastructure();
+
+        app.MapControllers();
+
+
+
+        app.Run();
     }
-
-    app.UseHttpsRedirection();
-
-    app.UseInfrastructure();
-
-    app.MapControllers();
-
-    app.Run();
+    catch (Exception buildEx)
+    {
+        Log.Fatal(buildEx, "Error during application build");
+        if (buildEx is AggregateException aggEx)
+        {
+            foreach (var innerEx in aggEx.InnerExceptions)
+            {
+                Log.Fatal(innerEx, "Inner exception: {Message}", innerEx.Message);
+            }
+        }
+        throw;
+    }
 
 }
 catch (Exception ex) when (!ex.GetType().Name.Equals("StopTheHostException", StringComparison.Ordinal))

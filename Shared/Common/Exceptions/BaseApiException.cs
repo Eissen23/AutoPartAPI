@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace Shared.Common.Exceptions;
+namespace Host.Common.Exceptions;
 
 public abstract class BaseApiException : System.Exception
 {

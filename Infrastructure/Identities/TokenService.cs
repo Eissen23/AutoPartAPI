@@ -10,9 +10,9 @@ using Infrastructure.Persistence.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Authentication;
-using Shared.Common.Exception;
-using Shared.Common.Exceptions;
+using Host.Authentication;
+using Host.Common.Exception;
+using Host.Common.Exceptions;
 
 namespace Infrastructure.Identities;
 
@@ -28,13 +28,8 @@ public class TokenService(
 
     public async Task<TokenResponse> CreateTokenAsync(TokenRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.LoginCredentials) 
-            ?? await _userManager.FindByNameAsync(request.LoginCredentials);
-
-        if (user is null)
-        {
-            throw new UnauthorizedException("Invalid login credentials.");
-        }
+        var user = (await _userManager.FindByEmailAsync(request.LoginCredentials) 
+            ?? await _userManager.FindByNameAsync(request.LoginCredentials)) ?? throw new UnauthorizedException("Invalid login credentials.");
 
         if (!user.IsActive)
         {
@@ -61,17 +56,9 @@ public class TokenService(
 
     public async Task<TokenResponse> RefreshTokenAsync(RefreshTokenRequest request)
     {
-        var principal = GetPrincipalFromExpiredToken(request.Token);
-        if (principal is null)
-        {
-            throw new UnauthorizedException("Invalid token.");
-        }
-
-        var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier);
-        if (userIdClaim is null)
-        {
-            throw new UnauthorizedException("Invalid token.");
-        }
+        var principal = GetPrincipalFromExpiredToken(request.Token) ?? throw new UnauthorizedException("Invalid token.");
+        var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier)
+            ?? throw new UnauthorizedException("Invalid token.");
 
         var user = await _userManager.FindByIdAsync(userIdClaim.Value);
         if (user is null || user.RefreshToken != request.RefreshToken || user.RefreshTokenExpiryTime < DateTime.UtcNow)
@@ -119,8 +106,8 @@ public class TokenService(
             LastName = user.LastName ?? string.Empty,
             Gender = user.Gender ?? string.Empty,
             DateOfBirth = user.DateOfBirth,
-            JobPositionId = user.JobPositionId,
-            DepartmentId = user.DepartmentId,
+            JobPositionId = user.JobPositionId ?? Guid.Empty,
+            DepartmentId = user.DepartmentId ?? Guid.Empty,
             IsActive = user.IsActive
         };
         claims.Add(userProfileClaim.ToClaim());
@@ -145,11 +132,9 @@ public class TokenService(
     private string GenerateRefreshToken()
     {
         var randomNumber = new byte[64];
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
-        }
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
     }
 
     private ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)

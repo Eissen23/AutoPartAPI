@@ -16,10 +16,10 @@ public class IdentityConfigs : IEntityTypeConfiguration<ApplicationUser>
 
         // Configure foreign keys
         builder.Property(u => u.JobPositionId)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(u => u.DepartmentId)
-            .IsRequired();
+            .IsRequired(false);
 
         // Configure relationships
         builder.HasOne(u => u.JobPosition)

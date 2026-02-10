@@ -5,8 +5,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Common.Exception;
-using Shared.Common.Exceptions;
+using Host.Common.Exception;
+using Host.Common.Exceptions;
 
 namespace Infrastructure.Auth;
 
