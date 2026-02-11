@@ -2,6 +2,7 @@ using Application;
 using Host.Configurations;
 using Infrastructure;
 using Infrastructure.Logging.Serilog;
+using Microsoft.AspNetCore.Authentication;
 using Serilog;
 
 Log.Information("Starting Autopart Manager API...");
@@ -29,12 +30,11 @@ try
         }
 
         app.UseHttpsRedirection();
+        app.UseRouting();
 
         app.UseInfrastructure();
 
         app.MapControllers();
-
-
 
         app.Run();
     }

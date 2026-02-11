@@ -1,5 +1,6 @@
 ﻿using Application.Identities.Users;
 using Host.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Validations.Rules;
 
 namespace Host.Controllers.Identity;
@@ -69,5 +70,15 @@ public class UserController(
         var result = await _userService.UpdateUserByManagerAsync(request);
 
         return this.ApiOk(result, "User updated successfully");
+    }
+
+    [Authorize]
+    [HttpGet("profile")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetUserProfileAsync(CancellationToken ct)
+    {
+        var result = await _userService.GetCurrentUser(ct);
+        return this.ApiOk(result, "User profile retrieved successfully");
     }
 }

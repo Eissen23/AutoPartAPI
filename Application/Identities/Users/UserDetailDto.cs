@@ -14,9 +14,9 @@ public record UserDetailDto(
     string? Gender,
     DateTime? DateOfBirth,
     bool IsActive,
-    Guid JobPositionId,
-    Guid DepartmentId,
-    string? JobPositionName,
-    string? DepartmentName
-);
+    Guid? JobPositionId,
+    Guid? DepartmentId
+)
+{
 
+}

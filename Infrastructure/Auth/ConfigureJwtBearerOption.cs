@@ -2,29 +2,28 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Host.Common.Exception;
-using Host.Common.Exceptions;
+using Shared.Common.Exceptions;
 
 namespace Infrastructure.Auth;
 
-public class ConfigureJwtBearerOption(IOptions<JwtSettings> jwtSettings) : IConfigureOptions<JwtBearerOptions>
+public class ConfigureJwtBearerOption(IOptions<JwtSettings> jwtSettings) : IConfigureNamedOptions<JwtBearerOptions>
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 
     public void Configure(JwtBearerOptions options)
     {
-        Configure(JwtBearerDefaults.AuthenticationScheme, options);
+        Configure(Options.DefaultName, options);
     }
 
-    public void Configure(string name, JwtBearerOptions options)
+    public void Configure(string? name, JwtBearerOptions options)
     {
         if (name != JwtBearerDefaults.AuthenticationScheme)
-        {
             return;
-        }
 
         byte[] key = Encoding.ASCII.GetBytes(_jwtSettings.Key);
 
@@ -42,26 +41,13 @@ public class ConfigureJwtBearerOption(IOptions<JwtSettings> jwtSettings) : IConf
         };
         options.Events = new JwtBearerEvents
         {
-            OnChallenge = context =>
-            {
-                context.HandleResponse();
-                if (!context.Response.HasStarted)
-                {
-                    throw new UnauthorizedException("Authentication Failed.");
-                }
-
-                return Task.CompletedTask;
-            },
             OnForbidden = _ => throw new ForbiddenException("You are not authorized to access this resource."),
             OnMessageReceived = context =>
             {
-                if (context.HttpContext.Request.Cookies.TryGetValue("jwtToken", out string? accessToken))
-                {
-                    context.Token = accessToken; 
-                }
-
+                Console.WriteLine($"[JWT] {context.Request.Method} {context.Request.Path}");
+                Console.WriteLine("JWT HEADER: " + context.Request.Headers["Authorization"]);
                 return Task.CompletedTask;
-            }
+            },
         };
     }
 }

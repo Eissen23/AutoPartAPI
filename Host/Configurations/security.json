@@ -4,7 +4,7 @@
     "RequireConfirmedAccount": true,
     "JwtSettings": {
       "Key": "autopart_super@!secretkey$$123a7&kP92!",
-      "TokenExpirationInMinutes": 60,
+      "TokenExpirationInMinutes": 2000,
       "RefreshTokenExpirationInDays": 7
     }
   }

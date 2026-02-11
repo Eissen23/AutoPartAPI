@@ -13,7 +13,7 @@ namespace Infrastructure.OpenAPI;
 
 internal static class Startup
 {
-    public static IServiceCollection AddSwaggerGen(this IServiceCollection services)
+    public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
         services
             .AddEndpointsApiExplorer()
@@ -33,7 +33,7 @@ internal static class Startup
                 Contact = new OpenApiContact
                 {
                     Name = "Pham Duc Phuc",
-                    Url = new Uri("phuc.ducit@gmail.com")
+                    Email = "phuc.ducit@gmail.com"
                 }
             });
 

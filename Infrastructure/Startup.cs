@@ -1,8 +1,13 @@
-﻿using Asp.Versioning;
+﻿using System.Reflection;
+using Asp.Versioning;
 using Infrastructure.Auth;
 using Infrastructure.Common;
 using Infrastructure.Identities;
+using Infrastructure.Middlewares;
+using Infrastructure.OpenAPI;
 using Infrastructure.Persistence;
+using Infrastructure.Validator;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,13 +17,15 @@ public static class Startup
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
+        var applicationAssembly = typeof(Application.Startup).GetTypeInfo().Assembly;
 
         services
             .AddApiVersioning()
-            .AddSwaggerGen()
-            .AddPersistence()
             .AddAuth()
-            .AddIdentities()
+            .AddSwagger()
+            .AddPersistence()
+            .AddBehaviours(applicationAssembly)
+            .AddExceptionMiddleware()
             .AddServices();
 
         return services;
@@ -43,7 +50,9 @@ public static class Startup
     {
         builder
             .UseAuthentication()
-            .UseAuthorization();
+            .UseAuthorization()
+            .UseCurrentUser()
+            .UseExceptionMiddleware();
 
         return builder;
     }

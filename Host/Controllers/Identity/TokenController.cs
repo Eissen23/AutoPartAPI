@@ -14,7 +14,7 @@ public class TokenController(
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateToken([FromBody] TokenRequest request)
     {
-        var result = await _tokenService.CreateTokenAsync(request);
+        var result = await _tokenService.CreateTokenAsync(request, HttpContext);
         return this.ApiOk<TokenResponse>(result, "Successfully create token");
     }
 

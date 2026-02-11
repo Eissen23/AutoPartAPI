@@ -5,14 +5,14 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Application.Identities.Tokens;
+using Host.Authentication;
+using Shared.Common.Exceptions;
 using Infrastructure.Auth;
 using Infrastructure.Persistence.Context;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Host.Authentication;
-using Host.Common.Exception;
-using Host.Common.Exceptions;
 
 namespace Infrastructure.Identities;
 
@@ -26,10 +26,10 @@ public class TokenService(
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly ApplicationDbContext _context = context;
 
-    public async Task<TokenResponse> CreateTokenAsync(TokenRequest request)
+    public async Task<TokenResponse> CreateTokenAsync(TokenRequest request, HttpContext httpContext)
     {
-        var user = (await _userManager.FindByEmailAsync(request.LoginCredentials) 
-            ?? await _userManager.FindByNameAsync(request.LoginCredentials)) ?? throw new UnauthorizedException("Invalid login credentials.");
+        var user = await FindUserByEmailOrName(request.LoginCredentials.Trim().Normalize())
+            ?? throw new NotFoundException($"User with Username: {request.LoginCredentials} not found");
 
         if (!user.IsActive)
         {
@@ -42,7 +42,7 @@ public class TokenService(
             throw new UnauthorizedException("Invalid login credentials.");
         }
 
-        var token = GenerateJwtToken(user);
+        var token = await GenerateJwtToken(user);
         var refreshToken = GenerateRefreshToken();
         var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays);
 
@@ -51,7 +51,33 @@ public class TokenService(
 
         await _userManager.UpdateAsync(user);
 
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true, // Chỉ sử dụng trên HTTPS
+            Expires = DateTimeOffset.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays) // Thời gian tồn tại của cookie
+        };
+
+        httpContext.Response.Cookies.Append("jwtToken", token, cookieOptions);
+        httpContext.Response.Cookies.Append("refreshToken", user.RefreshToken, cookieOptions);
+        httpContext.Response.Cookies.Append("refreshTokenExpiryTime", user.RefreshTokenExpiryTime.ToString("o"), cookieOptions);
+
         return new TokenResponse(token, refreshToken, refreshTokenExpiryTime);
+    }
+
+    private async Task<ApplicationUser?> FindUserByEmailOrName(string loginCredentials)
+    {
+        var user = await _userManager.FindByEmailAsync(loginCredentials);
+
+        if (user != null)
+        {
+            return user;
+        }
+
+        // Nếu không tìm thấy bằng email, thử tìm bằng username
+        user = await _userManager.FindByNameAsync(loginCredentials);
+
+        return user;
     }
 
     public async Task<TokenResponse> RefreshTokenAsync(RefreshTokenRequest request)
@@ -66,7 +92,7 @@ public class TokenService(
             throw new UnauthorizedException("Invalid refresh token.");
         }
 
-        var token = GenerateJwtToken(user);
+        var token = await GenerateJwtToken(user);
         var refreshToken = GenerateRefreshToken();
         var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationInDays);
 
@@ -84,7 +110,7 @@ public class TokenService(
         return "Logged out successfully.";
     }
 
-    internal string GenerateJwtToken(ApplicationUser user)
+    internal async Task<string> GenerateJwtToken(ApplicationUser user)
     {
         var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Key));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -92,10 +118,6 @@ public class TokenService(
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id),
-            new(ClaimTypes.Email, user.Email ?? string.Empty),
-            new(ClaimTypes.Name, user.UserName ?? string.Empty),
-            new("FirstName", user.FirstName ?? string.Empty),
-            new("LastName", user.LastName ?? string.Empty),
         };
 
         // Add custom application profile claim
@@ -112,7 +134,7 @@ public class TokenService(
         };
         claims.Add(userProfileClaim.ToClaim());
 
-        var userRoles = _userManager.GetRolesAsync(user).Result;
+        var userRoles = await _userManager.GetRolesAsync(user);
         foreach (var role in userRoles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
@@ -125,6 +147,7 @@ public class TokenService(
             expires: DateTime.UtcNow.AddMinutes(_jwtSettings.TokenExpirationInMinutes),
             signingCredentials: credentials
         );
+
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }

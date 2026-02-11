@@ -5,15 +5,19 @@ using Application.Identities;
 using Application.Identities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Host.Common.Exception;
+using Shared.Common.Exceptions;
+using Application.Common.Interface;
+using Mapster;
 
 namespace Infrastructure.Identities;
 
 public class UserService(
-       UserManager<ApplicationUser> userManager
+       UserManager<ApplicationUser> userManager,
+       ICurrentUser currentUser
     ) : IUserService
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly ICurrentUser _currentUser = currentUser;
 
     public async Task<Guid> CreateUserAsync(CreateUserRequest request)
     {
@@ -81,11 +85,20 @@ public class UserService(
 
     public async Task<UserDetailDto> GetCurrentUser(CancellationToken ct)
     {
-        //var user = await _userManager.Users
-        //    .AsNoTracking()
-        //    .Where(u => u.Id == _userManager.GetUserId(Thread.CurrentPrincipal))
-        throw new NotImplementedException();
+        var userId = _currentUser.GetUserId().ToString();
+
+        var user = await _userManager.Users
+            .AsNoTracking()
+            .Where(u => u.Id == _currentUser.GetUserId().ToString())
+            .FirstOrDefaultAsync(ct);
+
+        _ = user ?? throw new NotFoundException("User not found");
+
+        var userDetail = user.Adapt<UserDetailDto>();
+
+        return userDetail;
     }
+
 
     public Task<Guid> UpdateUserAsync(UpdateUserRequest request)
     {

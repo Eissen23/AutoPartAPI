@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using Host.Common.Exceptions;
 
-namespace Host.Common.Exception;
+namespace Shared.Common.Exceptions;
 
 /// <summary>
 /// Exception khi không có quyền truy cập.
@@ -45,5 +44,32 @@ public class InternalServerException : BaseApiException
     public InternalServerException(string message)
         : base(HttpStatusCode.InternalServerError, "Internal Server Error", message)
     {
+    }
+}
+
+public class NotFoundException : BaseApiException
+{
+    public NotFoundException()
+        : base(HttpStatusCode.NotFound, "NOT_FOUND", "")
+    {
+    }
+    public NotFoundException(string message)
+        : base(HttpStatusCode.NotFound, "NOT_FOUND", message)
+    {
+    }
+}
+
+public class ValidationException : BaseApiException
+{
+    public List<string> Errors { get; set; } = new List<string>();
+
+    public ValidationException()
+        : base(HttpStatusCode.BadRequest, "VALIDATION_ERROR", "")
+    {
+    }
+    public ValidationException(string message, List<string>? errors)
+        : base(HttpStatusCode.BadRequest, "VALIDATION_ERROR", message)
+    {
+        Errors = errors is not null ? [.. errors] : [];
     }
 }
