@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Host.Events;
+namespace Shared.Events;
 
 public interface IEvent
 {

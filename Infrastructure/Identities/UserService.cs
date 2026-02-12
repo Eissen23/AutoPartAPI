@@ -102,6 +102,17 @@ public class UserService(
 
     public Task<Guid> UpdateUserAsync(UpdateUserRequest request)
     {
+        var userId = _currentUser.GetUserId().ToString();
+
+        if (userId != request.Id.ToString())
+        {
+            throw new UnauthorizedAccessException("You are not authorized to update this user.");
+        }
+
+        var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+
+        _ = user ?? throw new NotFoundException("User not found");
+
         throw new NotImplementedException();
     }
 

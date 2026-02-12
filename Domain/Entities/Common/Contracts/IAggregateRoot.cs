@@ -4,6 +4,6 @@ using System.Text;
 
 namespace Domain.Entities.Common.Contracts;
 
-internal interface IAggregateRoot : IEntity
+public interface IAggregateRoot : IEntity
 {
 }

@@ -11,8 +11,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="9.3.1" />
         <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.1" />
         <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.1" />
+        <PackageReference Include="Ardalis.Specification" Version="9.3.1" />
         <PackageReference Include="Azure.Identity" Version="1.17.1" />
         <PackageReference Include="MediatR" Version="14.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.12" />
@@ -21,9 +23,11 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.10" />
         <PackageReference Include="Microsoft.Identity.Client" Version="4.82.0" />
         <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.15.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.12" />
+        <PackageReference Include="Mapster" Version="7.4.0" />
         <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
         <PackageReference Include="Figgle" Version="0.5.1" />
         <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2" />

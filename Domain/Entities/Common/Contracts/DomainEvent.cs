@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Host.Events;
+using Shared.Events;
 
 namespace Domain.Entities.Common.Contracts;
 
