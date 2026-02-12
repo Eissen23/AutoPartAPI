@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Shared.Common.Exceptions;
 using Application.Common.Interface;
 using Mapster;
+using System.Runtime.ExceptionServices;
 
 namespace Infrastructure.Identities;
 
@@ -100,7 +101,8 @@ public class UserService(
     }
 
 
-    public Task<Guid> UpdateUserAsync(UpdateUserRequest request)
+    // TODO: Test later
+    public async Task<Guid> UpdateUserAsync(UpdateUserRequest request)
     {
         var userId = _currentUser.GetUserId().ToString();
 
@@ -113,7 +115,31 @@ public class UserService(
 
         _ = user ?? throw new NotFoundException("User not found");
 
-        throw new NotImplementedException();
+        if(request.FirstName is not null && request.FirstName ==  user.FirstName) user.FirstName = request.FirstName;
+        if(request.LastName is not null && request.LastName == user.LastName) user.LastName = request.LastName;
+        if(request.Gender is not null && request.Gender == user.Gender) user.Gender = request.Gender;
+        if(request.Dob.HasValue && request.Dob == user.DateOfBirth ) user.DateOfBirth = request.Dob;
+
+        var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+        if (request.PhoneNumber is not null && phoneNumber != request.PhoneNumber)
+        {
+            await _userManager.SetPhoneNumberAsync(user, request.PhoneNumber);
+        }
+
+        var email = await _userManager.GetEmailAsync(user);
+        if (request.Email is not null && email != request.Email)
+        {
+            await _userManager.SetEmailAsync(user, request.Email);
+        }
+
+        var result = await _userManager.UpdateAsync(user);
+
+        if (!result.Succeeded)
+        {
+            throw new InternalServerException("User update failed");
+        }
+
+        return Guid.Parse(user.Id);
     }
 
     public Task<Guid> UpdateUserByManagerAsync(UpdateUserByManagerRequest request)

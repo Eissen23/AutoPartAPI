@@ -9,12 +9,12 @@ public class Department : AuditableEntity, IAggregateRoot
     public string Name { get; protected set; } = default!;
     public string Description { get; protected set; } = default!;
 
-    public string? ParentId { get; protected set; }
+    public DefaultIdType? ParentId { get; protected set; }
 
     // Navigation Properties
     public Department? Parent { get; protected set; }
 
-    public void Update(string? name, string? description, string? parentId)
+    public void Update(string? name, string? description, Guid? parentId)
     {
         if(name is not null && Name?.Equals(name) is not true)
         {

@@ -6,6 +6,7 @@ using Application.Common.Interface;
 using Domain.Entities.Categories;
 using Domain.Entities.Common.Contracts;
 using Domain.Entities.Customers;
+using Domain.Entities.Identity;
 using Domain.Entities.Invoices;
 using Domain.Entities.Products;
 using Domain.Entities.Warehouses;
@@ -37,6 +38,10 @@ public class ApplicationDbContext(
     public DbSet<PartLocation> PartLocations => Set<PartLocation>();
     public DbSet<Invoice> Invoices => Set<Invoice>();
     public DbSet<InvoiceItem> InvoiceItems => Set<InvoiceItem>();
+
+    // For identities
+    public DbSet<Department> Departments => Set<Department>();
+    public DbSet<JobPosition> JobPositions => Set<JobPosition>();
 
     // For audit only
     public DbSet<Trail> AuditTrails => Set<Trail>();

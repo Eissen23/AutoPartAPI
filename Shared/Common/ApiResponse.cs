@@ -66,9 +66,6 @@ public class ApiResponse : ApiResponse<object>
         StatusCode = 200
     };
 
-
-
-
     public new static ApiResponse Failure(string message, int statusCode = 400) => new()
     {
         IsSuccess = false,

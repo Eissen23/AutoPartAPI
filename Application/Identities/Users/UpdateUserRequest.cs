@@ -12,8 +12,7 @@ public record UpdateUserRequest
     string? PhoneNumber, 
     string? Email, 
     string? Gender, 
-    string? Phone, 
-    DateTime Dob
+    DateTime? Dob
 );
 
 public record UpdateUserByManagerRequest

@@ -9,13 +9,16 @@ public class JobPosition : AuditableEntity, IAggregateRoot
     public string Title { get; protected set; } = default!;
     public string? Description { get; protected set; }
 
-    public string? DepartmentId { get; protected set; }
+    public Guid? DepartmentId { get; protected set; }
 
     public decimal? Salary { get; protected set; }
 
     public AccessLevel AccessLevel { get; protected set; }
 
-    public void Update(string? title, string? description, string? departmentId, decimal? salary, AccessLevel? accessLevel)
+    // Navigation Properties
+    public Department? Department { get; protected set; }
+
+    public void Update(string? title, string? description, Guid? departmentId, decimal? salary, AccessLevel? accessLevel)
     {
         if(title is not null && Title?.Equals(title) is not true)
         {
