@@ -59,6 +59,19 @@ public class NotFoundException : BaseApiException
     }
 }
 
+public class ConflicException : BaseApiException
+{
+    public ConflicException()
+        : base(HttpStatusCode.Conflict, "CONFLICT_ERROR", "")
+    {
+    }
+    public ConflicException(string message)
+        : base(HttpStatusCode.Conflict, "CONFLICT_ERROR", message)
+    {
+    }
+}
+
+
 public class ValidationException : BaseApiException
 {
     public List<string> Errors { get; set; } = new List<string>();

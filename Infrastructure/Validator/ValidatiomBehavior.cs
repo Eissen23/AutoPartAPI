@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Infrastructure.Validator;
 
-public class ValidatiorBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
+public class ValidatiomBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators = validators;
@@ -27,6 +27,6 @@ public class ValidatiorBehavior<TRequest, TResponse>(IEnumerable<IValidator<TReq
             }
         }
 
-        return await next();
+        return await next(cancellationToken);
     }
 }

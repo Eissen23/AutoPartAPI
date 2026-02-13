@@ -41,13 +41,7 @@ public class ConfigureJwtBearerOption(IOptions<JwtSettings> jwtSettings) : IConf
         };
         options.Events = new JwtBearerEvents
         {
-            OnForbidden = _ => throw new ForbiddenException("You are not authorized to access this resource."),
-            OnMessageReceived = context =>
-            {
-                Console.WriteLine($"[JWT] {context.Request.Method} {context.Request.Path}");
-                Console.WriteLine("JWT HEADER: " + context.Request.Headers["Authorization"]);
-                return Task.CompletedTask;
-            },
+            OnForbidden = _ => throw new ForbiddenException("You are not authorized to access this resource.")
         };
     }
 }

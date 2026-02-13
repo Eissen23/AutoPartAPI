@@ -11,7 +11,7 @@ internal static class Startup
 {
     public static IServiceCollection AddBehaviours(this IServiceCollection services, Assembly assemblyContainingValidators)
     {
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatiorBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatiomBehavior<,>));
         return services;
     }
 }

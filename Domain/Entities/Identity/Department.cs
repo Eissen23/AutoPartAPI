@@ -6,6 +6,7 @@ namespace Domain.Entities.Identity;
 
 public class Department : AuditableEntity, IAggregateRoot
 {
+
     public string Name { get; protected set; } = default!;
     public string Description { get; protected set; } = default!;
 
@@ -13,6 +14,17 @@ public class Department : AuditableEntity, IAggregateRoot
 
     // Navigation Properties
     public Department? Parent { get; protected set; }
+
+    public Department()
+    {
+    }
+
+    public Department(string name, string description, DefaultIdType? parentId)
+    {
+        Name = name;
+        Description = description;
+        ParentId = parentId;
+    }
 
     public void Update(string? name, string? description, Guid? parentId)
     {

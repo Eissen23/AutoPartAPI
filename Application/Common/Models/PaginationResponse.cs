@@ -7,7 +7,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Application.Common.Models;
 
-public abstract class PaginationModel<T>(List<T> data, int page, int count, int pageSize)
+public class PaginatedResponse<T>(List<T> data, int page, int count, int pageSize)
 {
     public List<T> Data { get; set; } = data;
 
@@ -22,6 +22,4 @@ public abstract class PaginationModel<T>(List<T> data, int page, int count, int 
     public bool HasPreviousPage => CurrentPage > 1;
 
     public bool HasNextPage => CurrentPage < TotalPages;
-
-
 }

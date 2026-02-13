@@ -26,6 +26,7 @@ public static class Startup
             .AddPersistence()
             .AddBehaviours(applicationAssembly)
             .AddExceptionMiddleware()
+            .AddRouting(options => options.LowercaseUrls = true)
             .AddServices();
 
         return services;

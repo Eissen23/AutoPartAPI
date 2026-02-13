@@ -15,7 +15,7 @@ public class TokenController(
     public async Task<IActionResult> CreateToken([FromBody] TokenRequest request)
     {
         var result = await _tokenService.CreateTokenAsync(request, HttpContext);
-        return this.ApiOk<TokenResponse>(result, "Successfully create token");
+        return this.ApiOk(result, "Successfully create token");
     }
 
     [Authorize, HttpPost("logout")]
