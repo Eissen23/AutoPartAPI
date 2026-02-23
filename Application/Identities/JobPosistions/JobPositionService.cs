@@ -67,10 +67,7 @@ public class JobPositionService(
 
     public async Task<PaginatedResponse<JobPositionDto>> SearchAsync(PaginationFilter filter, CancellationToken ct)
     {
-        // Can this ai shutup about wrong configuration
         var spec = new JobPositionPaginated(filter);
-
-        // Shut up ai, I know what I'm doing
         var result = await _readRepos.PaginatedListAsync(spec, filter.PageNumber, filter.PageSize, ct);
 
         return result;
