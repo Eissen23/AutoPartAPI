@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Common.Interface;
 using Application.Common.Models;
 
 namespace Application.Categories;
 
-public interface ICategoryService
+public interface ICategoryService : ITransientService
 {
     Task<PaginatedResponse<CategoryDto>> SearchAsync(PaginationFilter filter, CancellationToken ct);
     Task<List<CategoryDto>> GetAllAsync(CancellationToken ct);

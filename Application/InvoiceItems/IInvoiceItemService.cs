@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Common.Interface;
 using Application.Common.Models;
 
 namespace Application.InvoiceItems;
 
-public interface IInvoiceItemService
+public interface IInvoiceItemService : ITransientService
 {
     Task<PaginatedResponse<InvoiceItemDto>> SearchAsync(PaginationFilter filter, CancellationToken ct);
     Task<List<InvoiceItemDto>> GetAllAsync(CancellationToken ct);

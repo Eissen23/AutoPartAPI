@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Common.Interface;
 using Application.Common.Models;
 using Application.Identities.Departments;
 
 namespace Application.Warehouses;
 
-public interface IWarehouseService
+public interface IWarehouseService : ITransientService
 {
     //Pagination
     Task<PaginatedResponse<WarehouseLocationDto>> SearchAsync(PaginationFilter filter, CancellationToken ct);

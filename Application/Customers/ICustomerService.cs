@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Common.Interface;
 using Application.Common.Models;
 
 namespace Application.Customers;
 
-public interface ICustomerService
+public interface ICustomerService : ITransientService
 {
     Task<PaginatedResponse<CustomerDto>> SearchAsync(PaginationFilter filter, CancellationToken ct);
     Task<List<CustomerDto>> GetAllAsync(CancellationToken ct);

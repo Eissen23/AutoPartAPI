@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Common.Interface;
 using Application.Common.Models;
 
 namespace Application.PartLocations;
 
-public interface IPartLocationService
+public interface IPartLocationService : ITransientService
 {
     //Pagination
     Task<PaginatedResponse<PartLocationDto>> SearchAsync(PaginationFilter filter, CancellationToken ct);
