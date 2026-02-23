@@ -29,8 +29,8 @@ public class InvoiceItem : AuditableEntity, IAggregateRoot
             UnitPrice = unitPrice.Value;
         if (productId.HasValue && ProductId != productId)
             ProductId = productId.Value;
-        if (invoiceId.HasValue && InvoiceId != productId)
-            ProductId = invoiceId.Value;
+        if (invoiceId.HasValue && InvoiceId != invoiceId)
+            InvoiceId = invoiceId.Value;
 
         return this;
     }
