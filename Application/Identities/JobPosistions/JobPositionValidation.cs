@@ -16,10 +16,6 @@ public class CreateJobPositionRequestValidator : AbstractValidator<CreateJobPosi
             .NotNull().WithMessage("Description is required.")
             .MaximumLength(500).WithMessage("Description cannot exceed 500 characters.");
 
-        RuleFor(x => x.DepartmentId)
-            .NotEmpty()
-            .NotEqual(Guid.Empty)
-            .WithMessage("DepartmentId is required.");
 
         RuleFor(x => x.Salary)
             .NotNull()
@@ -52,13 +48,6 @@ public class UpdateJobPositionRequestValidator : AbstractValidator<UpdateJobPosi
                 .WithMessage("Description cannot exceed 500 characters.");
         });
 
-        When(x => x.DepartmentId.HasValue, () =>
-        {
-            RuleFor(x => x.DepartmentId)
-                .NotEmpty()
-                .NotEqual(Guid.Empty)
-                .WithMessage("DepartmentId is invalid.");
-        });
 
         When(x => x.Salary.HasValue, () =>
         {

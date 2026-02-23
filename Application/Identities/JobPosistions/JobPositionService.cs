@@ -23,7 +23,6 @@ public class JobPositionService(
         var jobPosition = new JobPosition(
                 title: request.Title,
                 description: request.Description,
-                departmentId: request.DepartmentId,
                 salary: request.Salary,
                 accessLevel: request.AccessLevel
             );
@@ -61,7 +60,6 @@ public class JobPositionService(
             Id = jobPosition.Id,
             Name = jobPosition.Title,
             Description = jobPosition.Description ?? string.Empty,
-            DepartmentId = jobPosition.DepartmentId ?? Guid.Empty,
         };
     }
 
@@ -81,7 +79,6 @@ public class JobPositionService(
         jobPosition.Update(
                 request.Title,
                 request.Description,
-                request.DepartmentId,
                 request.Salary,
                 request.AccessLevel
             );

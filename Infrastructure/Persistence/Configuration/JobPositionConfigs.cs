@@ -19,9 +19,6 @@ public class JobPositionConfigs : IEntityTypeConfiguration<JobPosition>
         builder.Property(jobPosition => jobPosition.Description)
             .IsRequired(false);
 
-        builder.Property(jobPosition => jobPosition.DepartmentId)
-            .IsRequired(false);
-
         builder.Property(jobPosition => jobPosition.Salary)
             .IsRequired(false)
             .HasPrecision(18, 2);
@@ -31,11 +28,6 @@ public class JobPositionConfigs : IEntityTypeConfiguration<JobPosition>
                 converter => converter.ToString(),
                 converter => Enum.Parse<AccessLevel>(converter)
             );
-
-        builder
-            .HasOne(jobPosition => jobPosition.Department)
-            .WithOne()
-            .HasForeignKey<JobPosition>(jobPosition => jobPosition.DepartmentId);
 
     }
 }

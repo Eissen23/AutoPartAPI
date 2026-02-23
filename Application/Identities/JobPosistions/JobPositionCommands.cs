@@ -10,7 +10,6 @@ public class CreateJobPositionRequest : IRequest<Guid>
 {
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public Guid DepartmentId { get; set; }
     public decimal Salary { get; set; }
     public AccessLevel AccessLevel { get; set; }
 }
@@ -20,7 +19,6 @@ public class UpdateJobPositionRequest : IRequest<Guid>
     public Guid Id { get; set; }
     public string? Title { get; set; } 
     public string? Description { get; set; }
-    public Guid? DepartmentId { get; set; }
     public decimal? Salary { get; set; }
     public AccessLevel? AccessLevel { get; set; }
 }

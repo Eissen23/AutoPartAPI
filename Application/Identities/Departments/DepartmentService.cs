@@ -12,13 +12,11 @@ namespace Application.Identities.Departments;
 
 internal class DepartmentService(
         IRepositoryWithEvents<Department> eventRepos,
-        IReadRepository<Department> readRepos,
-        IReadRepository<JobPosition> jobRepo
+        IReadRepository<Department> readRepos
     ) : IDepartmentService
 {
     private readonly IRepositoryWithEvents<Department> _eventRepos = eventRepos;
     private readonly IReadRepository<Department> _readRepos = readRepos;
-    private readonly IReadRepository<JobPosition> _jobRepo = jobRepo;
 
     public async Task<Guid> CreateAsync(CreateDepartmentRequest request, CancellationToken ct)
     {
@@ -43,11 +41,6 @@ internal class DepartmentService(
         if( hasChildren )
         {
             throw new ConflicException("Cannot delete Department with children");
-        }
-
-        var hasJob = await _jobRepo.AnyAsync(new JobPositionByDepartmentId(department.Id), ct);
-        if (hasJob) {
-            throw new ConflicException("Cannot delete Department with assigned Job Positions");
         }
 
         await _eventRepos.DeleteAsync(department, ct);
