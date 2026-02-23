@@ -24,7 +24,7 @@ internal static class Startup
                 options.Password.RequireNonAlphanumeric = true;
                 options.User.RequireUniqueEmail = false;
             })
-            .AddRoles<IdentityRole>()
+            .AddRoles<ApplicationRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
