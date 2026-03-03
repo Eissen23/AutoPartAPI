@@ -1,6 +1,7 @@
 using Application;
 using Host.Configurations;
 using Infrastructure;
+using Infrastructure.Extensions;
 using Infrastructure.Logging.Serilog;
 using Microsoft.AspNetCore.Authentication;
 using Serilog;
@@ -16,6 +17,7 @@ try
     builder.Services.AddOpenApi();
     builder.Services.AddInfrastructure();
     builder.Services.AddApplication();
+    builder.Services.AddDatabaseSeeder();
     
     try
     {
@@ -35,6 +37,9 @@ try
         app.UseInfrastructure();
 
         app.MapControllers();
+
+        // Seed the database
+        await app.SeedDatabaseAsync();
 
         app.Run();
     }

@@ -34,3 +34,10 @@ public abstract class BaseApiException : System.Exception
         StatusCode = statusCode;
     }
 }
+
+public class BaseExceptionDto
+{
+    public HttpStatusCode StatusCode { set; get; }
+    public string ErrorCode { get; set; } = default!;
+
+}

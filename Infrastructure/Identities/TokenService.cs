@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,8 +12,10 @@ using Infrastructure.Auth;
 using Infrastructure.Persistence.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Application.Persistence.Repository;
 
 namespace Infrastructure.Identities;
 
@@ -115,15 +118,15 @@ public class TokenService(
         var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Key));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var claims = new List<Claim>
+        var claims = new List<System.Security.Claims.Claim>
         {
-            new(ClaimTypes.NameIdentifier, user.Id),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
         };
 
         // Add custom application profile claim
         var userProfileClaim = new UserApplicationClaim
         {
-            UserId = Guid.Parse(user.Id),
+            UserId = user.Id,
             FirstName = user.FirstName ?? string.Empty,
             LastName = user.LastName ?? string.Empty,
             Gender = user.Gender ?? string.Empty,
@@ -140,11 +143,31 @@ public class TokenService(
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
+
+        var roleIds = await _context.Roles
+            .Where(r => userRoles.Contains(r.Name!))
+            .Select(r => r.Id)
+            .ToListAsync();
+
+        var permissions = await _context.RolePermissions
+            .Where(rp => roleIds.Contains(rp.RoleId))
+            .Select(rp => rp.Permission.Name)
+            .Distinct()
+            .ToListAsync();
+
+        foreach (var permission in permissions)
+        {
+            claims.Add(new Claim("Permission", permission!));
+        }
+
+        // =========================
+
         var token = new JwtSecurityToken(
             issuer: null,
             audience: null,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.TokenExpirationInMinutes),
+            expires: DateTime.UtcNow.AddMinutes(
+                _jwtSettings.TokenExpirationInMinutes),
             signingCredentials: credentials
         );
 

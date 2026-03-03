@@ -24,3 +24,12 @@ public class GetAllPartLocations : Specification<PartLocation, PartLocationDto>
 public class PartLocationPaginated(PaginationFilter filter) : PaginationSpecification<PartLocation, PartLocationDto>(filter)
 {
 }
+
+public class GetPartLocationsByWarehouseLocationId : Specification<PartLocation>
+{
+    public GetPartLocationsByWarehouseLocationId(Guid warehouseLocationId)
+    {
+        Query.Where(pl => pl.WarehouseLocationId == warehouseLocationId)
+            .Include(pl => pl.Part);
+    }
+}

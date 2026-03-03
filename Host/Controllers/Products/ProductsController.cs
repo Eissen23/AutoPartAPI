@@ -10,7 +10,7 @@ public class ProductsController : VersionedApiController
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreateProductRequest request, CancellationToken ct)
     {
         var result = await Mediator.Send(request, ct);
@@ -21,7 +21,7 @@ public class ProductsController : VersionedApiController
     [HttpPost]
     [Route("search")]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<ProductDto>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchProductRequest request, CancellationToken ct)
     {
         var result = await Mediator.Send(request, ct);
@@ -29,9 +29,9 @@ public class ProductsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpPut("{id:Guid}")]
+    [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync(UpdateProductRequest request, [FromRoute] Guid id, CancellationToken ct)
     {
         if (request.Id != id)
@@ -43,9 +43,9 @@ public class ProductsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpDelete("{id:Guid}")]
+    [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id, CancellationToken ct)
     {
         var result = await Mediator.Send(new DeleteProductRequest(id), ct);
@@ -53,9 +53,9 @@ public class ProductsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpGet("{id:Guid}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<ProductDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct)
     {
         var result = await Mediator.Send(new GetProductByIdRequest(id), ct);

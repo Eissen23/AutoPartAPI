@@ -1,5 +1,6 @@
 ﻿using Application.Identities.Tokens;
 using Host.Extensions;
+using Shared.Common;
 
 namespace Host.Controllers.Identity;
 
@@ -10,8 +11,8 @@ public class TokenController(
     private readonly ITokenService _tokenService = tokenService;
 
     [AllowAnonymous, HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<TokenResponse>),StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateToken([FromBody] TokenRequest request)
     {
         var result = await _tokenService.CreateTokenAsync(request, HttpContext);
@@ -19,8 +20,8 @@ public class TokenController(
     }
 
     [Authorize, HttpPost("logout")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Logout()
     {
         var result = await _tokenService.LogoutAsync();

@@ -12,6 +12,7 @@ using Domain.Entities.Products;
 using Domain.Entities.Warehouses;
 using Infrastructure.Audit;
 using Infrastructure.Identities;
+using Infrastructure.Persistence.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Shared.Events;
@@ -23,7 +24,7 @@ public class ApplicationDbContext(
     ISerializerService serializerService,
     ICurrentUser currentUser,
     IEventPublisher eventPublisher
-    ) : IdentityDbContext<ApplicationUser>(options)
+    ) : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options)
 {
 
     private readonly ISerializerService _serializer = serializerService;
@@ -42,6 +43,8 @@ public class ApplicationDbContext(
     // For identities
     public DbSet<Department> Departments => Set<Department>();
     public DbSet<JobPosition> JobPositions => Set<JobPosition>();
+    public DbSet<Permission> Permissions => Set<Permission>();
+    public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
 
     // For audit only
     public DbSet<Trail> AuditTrails => Set<Trail>();
@@ -54,6 +57,9 @@ public class ApplicationDbContext(
 
         //This scans the assembly and applies all IEntityTypeConfiguration<T> implementations in Configuring
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        modelBuilder.ApplyConfiguration(new PermissionConfiguration());
+        modelBuilder.ApplyConfiguration(new RolePermissionConfiguration());
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

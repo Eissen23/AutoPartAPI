@@ -10,7 +10,7 @@ public class PartLocationsController : VersionedApiController
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreatePartLocationRequest request)
     {
         var result = await Mediator.Send(request);
@@ -20,7 +20,7 @@ public class PartLocationsController : VersionedApiController
     [Authorize]
     [HttpPost("search")]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<PartLocationDto>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchPartLocationRequest request)
     {
         var result = await Mediator.Send(request);
@@ -30,7 +30,7 @@ public class PartLocationsController : VersionedApiController
     [Authorize]
     [HttpPut("{id:Guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync(UpdatePartLocationRequest request, [FromRoute] Guid id)
     {
         if (request.Id != id)
@@ -43,9 +43,9 @@ public class PartLocationsController : VersionedApiController
 
 
     [Authorize]
-    [HttpDelete("{id:Guid}")]
+    [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         var result = await Mediator.Send(new DeletePartLocationRequest(id));
@@ -53,9 +53,9 @@ public class PartLocationsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpGet("{id:Guid}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<PartLocationDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
         var result = await Mediator.Send(new GetPartLocationByIdRequest(id));

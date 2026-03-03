@@ -18,6 +18,11 @@ internal class ExceptionMiddleware : IMiddleware
         }
         catch (BaseApiException ex)
         {
+            if (context.Response.HasStarted)
+            {
+                throw;
+            }
+
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)ex.StatusCode;
 
@@ -27,6 +32,11 @@ internal class ExceptionMiddleware : IMiddleware
         }
         catch (Exception)
         {
+            if (context.Response.HasStarted)
+            {
+                throw;
+            }
+
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 

@@ -51,7 +51,7 @@ public class UserService(
             throw new InternalServerException("Failed to create user");
         }
 
-        return Guid.Parse(user.Id);
+        return user.Id;
     }
 
     public async Task<Guid> CreateUserByAdminAsync(CreateUserByAdminRequest request)
@@ -81,7 +81,7 @@ public class UserService(
             throw new InternalServerException("Failed to create user");
         }
 
-        return Guid.Parse(user.Id);
+        return user.Id;
     }
 
     public async Task<UserDetailDto> GetCurrentUser(CancellationToken ct)
@@ -90,7 +90,7 @@ public class UserService(
 
         var user = await _userManager.Users
             .AsNoTracking()
-            .Where(u => u.Id == _currentUser.GetUserId().ToString())
+            .Where(u => u.Id == _currentUser.GetUserId())
             .FirstOrDefaultAsync(ct);
 
         _ = user ?? throw new NotFoundException("User not found");
@@ -104,9 +104,9 @@ public class UserService(
     // TODO: Test later
     public async Task<Guid> UpdateUserAsync(UpdateUserRequest request)
     {
-        var userId = _currentUser.GetUserId().ToString();
+        var userId = _currentUser.GetUserId();
 
-        if (userId != request.Id.ToString())
+        if (userId != request.Id)
         {
             throw new UnauthorizedAccessException("You are not authorized to update this user.");
         }
@@ -139,7 +139,7 @@ public class UserService(
             throw new InternalServerException("User update failed");
         }
 
-        return Guid.Parse(user.Id);
+        return user.Id;
     }
 
     public Task<Guid> UpdateUserByManagerAsync(UpdateUserByManagerRequest request)

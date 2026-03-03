@@ -6,7 +6,15 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Identities;
 
-public class ApplicationRole : IdentityRole
+public class ApplicationRole : IdentityRole<Guid>
 {
-    public AccessLevel AccessLevel { get; set; }
+    public string? Description { get; set; }
+
+    public int? AccessLevel { get; set; } // Optional: hierarchy support
+
+    public bool IsSystemRole { get; set; } = false;
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public DateTime? UpdatedAt { get; set; }
 }

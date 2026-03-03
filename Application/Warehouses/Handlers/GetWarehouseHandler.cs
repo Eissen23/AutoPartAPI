@@ -6,11 +6,11 @@ namespace Application.Warehouses.Handlers;
 
 public class GetWarehouseHandler(
         IWarehouseService warehouseService
-    ) : IRequestHandler<GetWarehouseLocationByIdRequest, WarehouseLocationDto?>
+    ) : IRequestHandler<GetWarehouseLocationByIdRequest, WarehouseLocationDetailDto?>
 {
     private readonly IWarehouseService _warehouseService = warehouseService;
 
-    public async Task<WarehouseLocationDto?> Handle(GetWarehouseLocationByIdRequest request, CancellationToken cancellationToken)
+    public async Task<WarehouseLocationDetailDto?> Handle(GetWarehouseLocationByIdRequest request, CancellationToken cancellationToken)
     {
         var result = await _warehouseService.GetByIdAsync(request.Id, cancellationToken);
 

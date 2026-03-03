@@ -10,7 +10,7 @@ public class JobPositionsController : VersionedApiController
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>) ,StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] CreateJobPositionRequest request, CancellationToken ct)
     {
         var result = await Mediator.Send(request, ct);
@@ -21,7 +21,7 @@ public class JobPositionsController : VersionedApiController
     [Authorize]
     [HttpPost("search")]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<JobPositionDto>>) ,StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync([FromBody] SearchJobPositionsRequest request, CancellationToken ct)
     {
         var result = await Mediator.Send(request, ct);
@@ -29,9 +29,9 @@ public class JobPositionsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpPut("{id: Guid}")]
+    [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>) ,StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateJobPositionRequest request, Guid id, CancellationToken ct)
     {
         if (request.Id != id)
@@ -44,9 +44,9 @@ public class JobPositionsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpDelete("{id: Guid}")]
+    [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>) ,StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id,  CancellationToken ct)
     {
         var result = await Mediator.Send(new DeleteJobPositionRequest(id), ct);
@@ -54,9 +54,9 @@ public class JobPositionsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpGet("{id: Guid}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<JobPositionDto>) ,StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct)
     {
         var result = await Mediator.Send(new GetJobPositionByIdRequest(id), ct);

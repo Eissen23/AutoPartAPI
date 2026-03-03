@@ -1,7 +1,6 @@
 ﻿using Application.Identities.Users;
 using Host.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Validations.Rules;
+using Shared.Common;
 
 namespace Host.Controllers.Identity;
 
@@ -16,8 +15,8 @@ public class UserController(
     /// Signup user with the create user request
     /// </summary>
     [AllowAnonymous, HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<Guid>),StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserRequest request)
     {
         var result = await _userService.CreateUserAsync(request);
@@ -31,8 +30,8 @@ public class UserController(
     /// <param name="request"></param>
     /// <returns></returns>
     [Authorize, HttpPost("create-by-admin")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<Guid>),StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateUserByAdminAsync([FromBody] CreateUserByAdminRequest request)
     {
         var result = await _userService.CreateUserByAdminAsync(request);
@@ -47,8 +46,8 @@ public class UserController(
     /// <param name="request"></param>
     /// <returns></returns>
     [Authorize, HttpPut]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<Guid>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateUserAsync([FromBody] UpdateUserRequest request)
     {
         var result = await _userService.UpdateUserAsync(request);
@@ -63,8 +62,8 @@ public class UserController(
     /// <param name="request"></param>
     /// <returns></returns>
     [Authorize, HttpPut("update-by-manager")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<Guid>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateUserAdminAsync([FromBody] UpdateUserByManagerRequest request)
     {
         var result = await _userService.UpdateUserByManagerAsync(request);
@@ -74,8 +73,8 @@ public class UserController(
 
     [Authorize]
     [HttpGet("profile")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<UserDetailDto>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetUserProfileAsync(CancellationToken ct)
     {
         var result = await _userService.GetCurrentUser(ct);

@@ -10,7 +10,7 @@ public class WarehousesController : VersionedApiController
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreateWarehouseLocationRequest request)
     {
         var result = await Mediator.Send(request);
@@ -20,7 +20,7 @@ public class WarehousesController : VersionedApiController
     [Authorize]
     [HttpPost("search")]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<WarehouseLocationDto>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchWarehouseLocationRequest request)
     {
         var result = await Mediator.Send(request);
@@ -28,9 +28,9 @@ public class WarehousesController : VersionedApiController
     }
 
     [Authorize]
-    [HttpPut("{id:Guid}")]
+    [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync(UpdateWarehouseLocationRequest request, [FromRoute] Guid id)
     {
         if (request.Id != id)
@@ -42,9 +42,9 @@ public class WarehousesController : VersionedApiController
     }
 
     [Authorize]
-    [HttpDelete("{id:Guid}")]
+    [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         var result = await Mediator.Send(new DeleteWarehouseLocationRequest(id));
@@ -52,9 +52,9 @@ public class WarehousesController : VersionedApiController
     }
 
     [Authorize]
-    [HttpGet("{id:Guid}")]
-    [ProducesResponseType(typeof(ApiResponse<WarehouseLocationDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(ApiResponse<WarehouseLocationDetailDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
         var result = await Mediator.Send(new GetWarehouseLocationByIdRequest(id));

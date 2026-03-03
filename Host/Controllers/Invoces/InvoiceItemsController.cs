@@ -10,7 +10,7 @@ public class InvoiceItemsController : VersionedApiController
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreateInvoiceItemRequest request, CancellationToken ct)
     {
         var result = await Mediator.Send(request, ct);
@@ -21,7 +21,7 @@ public class InvoiceItemsController : VersionedApiController
     [HttpPost]
     [Route("search")]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<InvoiceItemDto>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchInvoiceItemRequest request, CancellationToken ct)
     {
         var result = await Mediator.Send(request, ct);
@@ -29,9 +29,9 @@ public class InvoiceItemsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpPut("{id:Guid}")]
+    [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync(UpdateInvoiceItemRequest request, [FromRoute] Guid id, CancellationToken ct)
     {
         if (request.Id != id)
@@ -43,9 +43,9 @@ public class InvoiceItemsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpDelete("{id:Guid}")]
+    [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id, CancellationToken ct)
     {
         var result = await Mediator.Send(new DeleteInvoiceItemRequest(id), ct);
@@ -53,9 +53,9 @@ public class InvoiceItemsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpGet("{id:Guid}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<InvoiceItemDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct)
     {
         var result = await Mediator.Send(new GetInvoiceItemByIdRequest(id), ct);

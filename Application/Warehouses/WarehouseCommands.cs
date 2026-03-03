@@ -20,7 +20,7 @@ public class DeleteWarehouseLocationRequest(Guid id) : IRequest<Guid>
     public Guid Id { get; set; } = id;
 }
 
-public class GetWarehouseLocationByIdRequest(Guid id) : IRequest<WarehouseLocationDto?>
+public class GetWarehouseLocationByIdRequest(Guid id) : IRequest<WarehouseLocationDetailDto?>
 {
     public Guid Id { get; set; } = id;
 }

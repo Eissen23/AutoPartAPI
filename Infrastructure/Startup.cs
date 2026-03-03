@@ -50,10 +50,10 @@ public static class Startup
     public static IApplicationBuilder UseInfrastructure (this IApplicationBuilder builder)
     {
         builder
+            .UseExceptionMiddleware()
             .UseAuthentication()
             .UseAuthorization()
-            .UseCurrentUser()
-            .UseExceptionMiddleware();
+            .UseCurrentUser();
 
         return builder;
     }

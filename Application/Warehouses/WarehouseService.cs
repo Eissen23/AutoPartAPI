@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Extension;
 using Application.Common.Models;
+using Application.PartLocations;
 using Application.Persistence.Repository;
 using Domain.Entities.Warehouses;
 using Shared.Common.Exceptions;
@@ -11,11 +12,13 @@ namespace Application.Warehouses;
 
 public class WarehouseService(
         IRepositoryWithEvents<WarehouseLocation> eventRepos,
-        IReadRepository<WarehouseLocation> readRepos
+        IReadRepository<WarehouseLocation> readRepos,
+        IReadRepository<PartLocation> partLocationReadRepos
     ) : IWarehouseService
 {
     private readonly IRepositoryWithEvents<WarehouseLocation> _eventRepos = eventRepos;
     private readonly IReadRepository<WarehouseLocation> _readRepos = readRepos;
+    private readonly IReadRepository<PartLocation> _partLocationReadRepos = partLocationReadRepos;
 
     public async Task<Guid> CreateAsync(CreateWarehouseLocationRequest request, CancellationToken ct)
     {
@@ -51,19 +54,34 @@ public class WarehouseService(
         return locations;
     }
 
-    public async Task<WarehouseLocationDto> GetByIdAsync(Guid departmentId, CancellationToken ct)
+    public async Task<WarehouseLocationDetailDto> GetByIdAsync(Guid departmentId, CancellationToken ct)
     {
         var warehouseLocation = await _readRepos.GetByIdAsync(departmentId, ct);
         _ = warehouseLocation ?? throw new NotFoundException($"Warehouse location with id {departmentId} not found.");
 
-        return new WarehouseLocationDto
+        var partLocations = await _partLocationReadRepos.ListAsync(
+            new GetPartLocationsByWarehouseLocationId(departmentId),
+            ct);
+
+        var existingParts = partLocations
+            .Select(pl => new ExistingPart
+            {
+                Id = pl.Part.Id,
+                PartName = pl.Part.Name,
+                PartNumber = pl.Part.PartNumber,
+                Quantity = pl.QuantityAtLocation
+            })
+            .ToList();
+
+        return new WarehouseLocationDetailDto
         {
             Id = warehouseLocation.Id,
             ZoneCode = warehouseLocation.ZoneCode,
             Aisle = warehouseLocation.Aisle,
             Shelf = warehouseLocation.Shelf,
             Bin = warehouseLocation.Bin,
-            IsOverstocked = warehouseLocation.IsOverstocked
+            IsOverstocked = warehouseLocation.IsOverstocked,
+            ExistingPart = existingParts
         };
     }
 

@@ -1,7 +1,7 @@
 {
   "DatabaseSettings": {
     "DBProvider": "postgresql",
-    "ConnectionString": "Server=localhost;Port=5432;Database=autopart_vendor;Uid=postgres;Pwd=DucPhuc2@;",
+    "ConnectionString": "Server=localhost;Port=5432;Database=autopart_vendor;Uid=postgres;Pwd=DucPhuc2@;Include Error Detail=true",
     "SchemaName": "public"
   }
 }

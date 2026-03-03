@@ -10,7 +10,7 @@ public class DepartmentsController : VersionedApiController
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>) ,StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] CreateDepartmentRequest request, CancellationToken ct)
     {
         var result = await Mediator.Send(request, ct);
@@ -21,7 +21,7 @@ public class DepartmentsController : VersionedApiController
     [Authorize]
     [HttpPost("search")]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<DepartmentDto>>) ,StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync([FromBody] SearchDepartmentRequest request, CancellationToken ct)
     {
         var result = await Mediator.Send(request, ct);
@@ -30,9 +30,9 @@ public class DepartmentsController : VersionedApiController
 
 
     [Authorize]
-    [HttpPut("{id: Guid}")]
+    [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>) ,StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateDepartmentRequest request, [FromRoute] Guid id, CancellationToken ct)
     {
         if (request.Id != id)
@@ -45,9 +45,9 @@ public class DepartmentsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpDelete("{id: Guid}")]
+    [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>) ,StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id,  CancellationToken ct)
     {
         var request = new DeleteDepartmentRequest(id);
@@ -56,9 +56,9 @@ public class DepartmentsController : VersionedApiController
     }
 
     [Authorize]
-    [HttpGet("{id: Guid}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<DepartmentDto>) ,StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct)
     {
         var request = new GetDepartmentByIdRequest(id);

@@ -41,6 +41,11 @@ public class ConfigureJwtBearerOption(IOptions<JwtSettings> jwtSettings) : IConf
         };
         options.Events = new JwtBearerEvents
         {
+            OnChallenge = context =>
+            {
+                context.HandleResponse();
+                throw new UnauthorizedException("The token is missing or invalid.");
+            },
             OnForbidden = _ => throw new ForbiddenException("You are not authorized to access this resource.")
         };
     }

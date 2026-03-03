@@ -11,7 +11,7 @@ public class CustomersController : VersionedApiController
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreateCustomerRequest request)
     {
         var result = await Mediator.Send(request);
@@ -21,7 +21,7 @@ public class CustomersController : VersionedApiController
     [Authorize]
     [HttpPost("search")]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<CustomerDto>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchCustomerRequest request)
     {
         var result = await Mediator.Send(request);
@@ -29,9 +29,9 @@ public class CustomersController : VersionedApiController
     }
 
     [Authorize]
-    [HttpPut("{id: Guid}")]
+    [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateCustomerRequest request, [FromRoute] Guid id, CancellationToken ct)
     {
         if (request.Id != id)
@@ -44,9 +44,9 @@ public class CustomersController : VersionedApiController
     }
 
     [Authorize]
-    [HttpDelete("{id: Guid}")]
+    [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id, CancellationToken ct)
     {
         var request = new DeleteCustomerRequest(id);
@@ -55,9 +55,9 @@ public class CustomersController : VersionedApiController
     }
 
     [Authorize]
-    [HttpGet("{id: Guid}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<CustomerDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct)
     {
         var request = new GetCustomerByIdRequest(id);

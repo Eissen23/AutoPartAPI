@@ -21,11 +21,9 @@ internal static class Startup
             .AddCurrentUser()
             .AddIdentities()
             .AddJwtAuth()
-            .AddAuthorization(options =>
-            {
-                options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
-            });
+            .AddAuthorizationBuilder()
+            .AddPolicy("Permission", policy =>
+                policy.Requirements.Add(new PermissionRequirement()));
 
         return services;
     }

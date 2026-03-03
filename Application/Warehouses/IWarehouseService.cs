@@ -13,7 +13,7 @@ public interface IWarehouseService : ITransientService
     Task<PaginatedResponse<WarehouseLocationDto>> SearchAsync(PaginationFilter filter, CancellationToken ct);
     // Crud actions for Department entity
     Task<List<WarehouseLocationDto>> GetAllAsync(CancellationToken ct);
-    Task<WarehouseLocationDto> GetByIdAsync(Guid departmentId, CancellationToken ct);
+    Task<WarehouseLocationDetailDto> GetByIdAsync(Guid departmentId, CancellationToken ct);
     Task<Guid> CreateAsync(CreateWarehouseLocationRequest request, CancellationToken ct);
     Task<Guid> UpdateAsync(UpdateWarehouseLocationRequest request, CancellationToken ct);
     Task<Guid> DeleteAsync(Guid departmentId, CancellationToken ct);

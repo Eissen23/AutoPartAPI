@@ -16,6 +16,15 @@ public abstract class BaseEntity<TId> : IEntity<TId>
     public TId Id { get; protected set; } = default!;
 
     [NotMapped]
-    public List<DomainEvent> DomainEvents => throw new NotImplementedException();
+    private List<DomainEvent> _domainEvents = new List<DomainEvent>();
+
+    [NotMapped]
+    public List<DomainEvent> DomainEvents => _domainEvents;
+
+    public void AddDomainEvent(DomainEvent domainEvent) => _domainEvents.Add(domainEvent);
+
+    public void RemoveDomainEvent(DomainEvent domainEvent) => _domainEvents.Remove(domainEvent);
+
+    public void ClearDomainEvents() => _domainEvents.Clear();
 }
 
