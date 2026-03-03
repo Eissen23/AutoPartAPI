@@ -66,6 +66,18 @@ public class CategoryService(
         };
     }
 
+    public Task<List<CategoryNameDto>> GetMappingCategory(CancellationToken ct)
+    {
+        return _readRepos.ListAsync(new GetAllCategories(), ct)
+            .ContinueWith(task => task.Result
+                .Select(c => new CategoryNameDto
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToList(), ct);
+    }
+
     public async Task<PaginatedResponse<CategoryDto>> SearchAsync(PaginationFilter filter, CancellationToken ct)
     {
         var spec = new CategoryPaginated(filter);

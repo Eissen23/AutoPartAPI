@@ -14,4 +14,7 @@ public interface ICategoryService : ITransientService
     Task<Guid> CreateAsync(CreateCategoryRequest request, CancellationToken ct);
     Task<Guid> UpdateAsync(UpdateCategoryRequest request, CancellationToken ct);
     Task<Guid> DeleteAsync(Guid categoryId, CancellationToken ct);
+
+    //Optimize later
+    Task<List<CategoryNameDto>> GetMappingCategory(CancellationToken ct);
 }

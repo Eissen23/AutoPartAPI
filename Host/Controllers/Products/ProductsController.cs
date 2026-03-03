@@ -54,7 +54,7 @@ public class ProductsController : VersionedApiController
 
     [Authorize]
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(ApiResponse<ProductDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<ProductDetailDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct)
     {

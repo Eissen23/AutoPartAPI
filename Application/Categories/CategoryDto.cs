@@ -15,3 +15,9 @@ public class CategoryDto : IDto
     public SystemType? Type { get; set; }
     public decimal DefaultMarkupPercentage { get; set; }
 }
+
+public class CategoryNameDto
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = default!;
+}

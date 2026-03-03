@@ -21,7 +21,7 @@ public class DeleteProductRequest(Guid id) : IRequest<Guid>
     public Guid Id { get; set; } = id;
 }
 
-public class GetProductByIdRequest(Guid id) : IRequest<ProductDto?>
+public class GetProductByIdRequest(Guid id) : IRequest<ProductDetailDto?>
 {
     public Guid Id { get; set; } = id;
 }

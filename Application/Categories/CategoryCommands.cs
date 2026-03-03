@@ -37,3 +37,7 @@ public class UpdateCategoryRequest : IRequest<Guid>
     public decimal? DefaultMarkupPercentage { get; set; }
 }
 
+public class GetCategoryMapRequest : IRequest<List<CategoryNameDto>>
+{
+}
+

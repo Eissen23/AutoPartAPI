@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Models;
 using Application.Common.Specifications;
+using Application.Products;
 using Domain.Entities.Warehouses;
 
 namespace Application.PartLocations;
@@ -31,5 +32,22 @@ public class GetPartLocationsByWarehouseLocationId : Specification<PartLocation>
     {
         Query.Where(pl => pl.WarehouseLocationId == warehouseLocationId)
             .Include(pl => pl.Part);
+    }
+}
+
+public class GetPartLocationByPartId : Specification<PartLocation, WarehouseStockDto>
+{
+    public GetPartLocationByPartId(Guid partId)
+    {
+        Query.Where(pl => pl.PartId == partId)
+            .Select(pl => new WarehouseStockDto
+            {
+                Id = pl.Id,
+                ZoneCode = pl.WarehouseLocation!.ZoneCode,
+                Aisle = pl.WarehouseLocation.Aisle,
+                Shelf = pl.WarehouseLocation.Shelf,
+                Bin = pl.WarehouseLocation.Bin,
+                Quantity = pl.QuantityAtLocation
+            });
     }
 }

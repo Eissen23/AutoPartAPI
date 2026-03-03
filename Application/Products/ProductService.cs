@@ -1,21 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Categories;
 using Application.Common.Extension;
 using Application.Common.Models;
+using Application.PartLocations;
 using Application.Persistence.Repository;
+using Domain.Entities.Categories;
 using Domain.Entities.Products;
+using Domain.Entities.Warehouses;
 using Shared.Common.Exceptions;
 
 namespace Application.Products;
 
 public class ProductService(
         IRepositoryWithEvents<Product> eventRepos,
-        IReadRepository<Product> readRepos
+        IReadRepository<Product> readRepos,
+        IReadRepository<Category> categoryRepos,
+        IReadRepository<PartLocation> partLocationRepos
     ) : IProductService
 {
     private readonly IRepositoryWithEvents<Product> _eventRepos = eventRepos;
     private readonly IReadRepository<Product> _readRepos = readRepos;
+    private readonly IReadRepository<Category> _categoryRepos = categoryRepos;
+    private readonly IReadRepository<PartLocation> _partLocationRepos = partLocationRepos;
 
     public async Task<Guid> CreateAsync(CreateProductRequest request, CancellationToken ct)
     {
@@ -52,12 +60,17 @@ public class ProductService(
         return products;
     }
 
-    public async Task<ProductDto> GetByIdAsync(Guid productId, CancellationToken ct)
+    public async Task<ProductDetailDto> GetByIdAsync(Guid productId, CancellationToken ct)
     {
         var product = await _readRepos.GetByIdAsync(productId, ct);
         _ = product ?? throw new NotFoundException($"Product with id {productId} not found.");
 
-        return new ProductDto
+        var category = await _categoryRepos.FirstOrDefaultAsync(new GetCategoryById(product.CategoryId), ct);
+
+        var partLocations = await _partLocationRepos.ListAsync(new GetPartLocationByPartId(productId), ct);
+
+
+        return new ProductDetailDto
         {
             Id = product.Id,
             PartNumber = product.PartNumber,
@@ -65,7 +78,10 @@ public class ProductService(
             Description = product.Description,
             UnitCost = product.UnitCost,
             RetailPrice = product.RetailPrice,
-            CategoryId = product.CategoryId
+            Category = category is null
+                ? null
+                : category,
+            WarehouseStocks = partLocations
         };
     }
 
