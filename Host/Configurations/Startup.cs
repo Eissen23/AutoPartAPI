@@ -14,8 +14,10 @@ public static class Startup
             .AddJsonFile($"{configPath}/logger.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
             .AddJsonFile($"{configPath}/database.json", optional: false, reloadOnChange: true)
             .AddJsonFile($"{configPath}/database.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-            .AddJsonFile($"{configPath}/security.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
             .AddJsonFile($"{configPath}/security.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"{configPath}/security.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+            .AddJsonFile($"{configPath}/cors.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"{configPath}/cors.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables();
 
         return builder;

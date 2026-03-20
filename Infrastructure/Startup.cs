@@ -2,6 +2,7 @@
 using Asp.Versioning;
 using Infrastructure.Auth;
 using Infrastructure.Common;
+using Infrastructure.Cors;
 using Infrastructure.Identities;
 using Infrastructure.Middlewares;
 using Infrastructure.OpenAPI;
@@ -9,18 +10,20 @@ using Infrastructure.Persistence;
 using Infrastructure.Validator;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure;
 
 public static class Startup
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
         var applicationAssembly = typeof(Application.Startup).GetTypeInfo().Assembly;
 
         services
             .AddApiVersioning()
+            .AddCorsPolicy(config)
             .AddAuth()
             .AddSwagger()
             .AddPersistence()
@@ -50,6 +53,7 @@ public static class Startup
     public static IApplicationBuilder UseInfrastructure (this IApplicationBuilder builder)
     {
         builder
+            .UseCorsPolicy()
             .UseExceptionMiddleware()
             .UseAuthentication()
             .UseAuthorization()

@@ -12,17 +12,10 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddControllers();
-    builder.Services.AddCors(options =>
-    {
-        options.AddDefaultPolicy(policy => policy
-            .AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod());
-    });
     builder.AddConfigurations().RegisterSerilog();
     // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
     builder.Services.AddOpenApi();
-    builder.Services.AddInfrastructure();
+    builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddApplication();
     builder.Services.AddDatabaseSeeder();
     
@@ -38,11 +31,11 @@ try
             app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
         app.UseRouting();
-        app.UseCors();
 
-        app.UseInfrastructure();
+        //app.UseHttpsRedirection();
+
+        app.UseInfrastructure(); 
 
         app.MapControllers();
 
