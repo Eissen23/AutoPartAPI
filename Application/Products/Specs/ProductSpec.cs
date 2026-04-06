@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Models;
 using Application.Common.Specifications;
+using Application.Products.Models;
 using Domain.Entities.Products;
 
-namespace Application.Products;
+namespace Application.Products.Specs;
 
 public class GetAllProducts : Specification<Product, ProductDto>
 {

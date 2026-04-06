@@ -1,53 +1,50 @@
-﻿using Application.Categories;
+﻿using Application.Categories.Models;
+using Application.Categories.Services;
 using Application.Common.Models;
 using Host.Extensions;
 using Shared.Common;
 
 namespace Host.Controllers.Categories;
 
-public class CategoriesController : VersionedApiController
+public class CategoriesController(
+        ICategoryService categoryService
+    ) : VersionedApiController
 {
-    [Authorize]
-    [HttpPost]
+    private readonly ICategoryService _categoryService = categoryService;
+
+    [Authorize, HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreateCategoryRequest request)
     {
-        var result = await Mediator.Send(request);
+        var result = await _categoryService.CreateAsync(request);
         return this.ApiOk(result, "Create Category Success");
     }
 
-    [Authorize]
-    [HttpPost("search")]
+    [Authorize, HttpPost("search")]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<CategoryDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchCategoryRequest request)
     {
-        var result = await Mediator.Send(request);
+        var result = await _categoryService.SearchAsync(request);
         return this.ApiOk(result, "Search Category Success");
     }
 
-    [Authorize]
-    [HttpPut("{id:guid}")]
+    [Authorize, HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateAsync(UpdateCategoryRequest request, [FromRoute] Guid id)
+    public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateCategoryRequest request)
     {
-        if (request.Id != id)
-        {
-            throw new Shared.Common.Exceptions.ValidationException("Id mismatch", ["the route id not the same as the request id"]);
-        }
-        var result = await Mediator.Send(request);
+        var result = await _categoryService.UpdateAsync(id, request);
         return this.ApiOk(result, "Update Category Success");
     }
 
-    [Authorize]
-    [HttpDelete("{id:guid}")]
+    [Authorize, HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(new DeleteCategoryRequest(id));
+        var result = await _categoryService.DeleteAsync(id);
         return this.ApiOk(result, "Delete Category Success");
     }
 
@@ -57,7 +54,7 @@ public class CategoriesController : VersionedApiController
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(new GetCategoryByIdRequest(id));
+        var result = await _categoryService.GetByIdAsync(id);
         return this.ApiOk(result, "Get Category By Id Success");
     }
 
@@ -65,9 +62,9 @@ public class CategoriesController : VersionedApiController
     [HttpGet("category-map")]
     [ProducesResponseType(typeof(ApiResponse<List<CategoryNameDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetCategoryMapAsync()
+    public async Task<IActionResult> GetMappingCategory()
     {
-        var result = await Mediator.Send(new GetCategoryMapRequest());
+        var result = await _categoryService.GetMappingCategory();
         return this.ApiOk(result, "Get Category Map Success");
     }
 }

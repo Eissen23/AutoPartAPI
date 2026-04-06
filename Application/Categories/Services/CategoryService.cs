@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Categories.Models;
+using Application.Categories.Specs;
 using Application.Common.Extension;
 using Application.Common.Models;
 using Application.Persistence.Repository;
 using Domain.Entities.Categories;
 using Shared.Common.Exceptions;
 
-namespace Application.Categories;
+namespace Application.Categories.Services;
 
 public class CategoryService(
         IRepositoryWithEvents<Category> eventRepos,
@@ -17,7 +19,7 @@ public class CategoryService(
     private readonly IRepositoryWithEvents<Category> _eventRepos = eventRepos;
     private readonly IReadRepository<Category> _readRepos = readRepos;
 
-    public async Task<Guid> CreateAsync(CreateCategoryRequest request, CancellationToken ct)
+    public async Task<Guid> CreateAsync(CreateCategoryRequest request, CancellationToken ct = default)
     {
         var category = new Category()
             .Update(
@@ -32,7 +34,7 @@ public class CategoryService(
         return result.Id;
     }
 
-    public async Task<Guid> DeleteAsync(Guid categoryId, CancellationToken ct)
+    public async Task<Guid> DeleteAsync(Guid categoryId, CancellationToken ct = default)
     {
         var category = await _readRepos.GetByIdAsync(categoryId, ct);
 
@@ -43,14 +45,14 @@ public class CategoryService(
         return category.Id;
     }
 
-    public async Task<List<CategoryDto>> GetAllAsync(CancellationToken ct)
+    public async Task<List<CategoryDto>> GetAllAsync(CancellationToken ct = default)
     {
         var categories = await _readRepos.ListAsync(new GetAllCategories(), ct);
 
         return categories;
     }
 
-    public async Task<CategoryDto> GetByIdAsync(Guid categoryId, CancellationToken ct)
+    public async Task<CategoryDto> GetByIdAsync(Guid categoryId, CancellationToken ct = default)
     {
         var category = await _readRepos.GetByIdAsync(categoryId, ct);
         _ = category ?? throw new NotFoundException($"Category with id {categoryId} not found.");
@@ -66,7 +68,7 @@ public class CategoryService(
         };
     }
 
-    public Task<List<CategoryNameDto>> GetMappingCategory(CancellationToken ct)
+    public Task<List<CategoryNameDto>> GetMappingCategory(CancellationToken ct = default)
     {
         return _readRepos.ListAsync(new GetAllCategories(), ct)
             .ContinueWith(task => task.Result
@@ -78,7 +80,7 @@ public class CategoryService(
                 .ToList(), ct);
     }
 
-    public async Task<PaginatedResponse<CategoryDto>> SearchAsync(PaginationFilter filter, CancellationToken ct)
+    public async Task<PaginatedResponse<CategoryDto>> SearchAsync(PaginationFilter filter, CancellationToken ct = default)
     {
         var spec = new CategoryPaginated(filter);
         var result = await _readRepos.PaginatedListAsync(spec, filter.PageNumber, filter.PageSize, ct);
@@ -86,10 +88,10 @@ public class CategoryService(
         return result;
     }
 
-    public async Task<Guid> UpdateAsync(UpdateCategoryRequest request, CancellationToken ct)
+    public async Task<Guid> UpdateAsync(Guid id, UpdateCategoryRequest request, CancellationToken ct = default)
     {
-        var category = await _readRepos.GetByIdAsync(request.Id, ct);
-        _ = category ?? throw new NotFoundException($"Category with id {request.Id} not found.");
+        var category = await _readRepos.GetByIdAsync(id, ct);
+        _ = category ?? throw new NotFoundException($"Category with id {id} not found.");
 
         category.Update(
             request.Name,

@@ -1,11 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Categories.Models;
 using Application.Common.Models;
 using Application.Common.Specifications;
 using Domain.Entities.Categories;
 
-namespace Application.Categories;
+namespace Application.Categories.Specs;
 
 public class GetAllCategories : Specification<Category, CategoryDto>
 {
@@ -43,3 +44,4 @@ public class GetCategoryById : Specification<Category, CategoryDto>
              });
     }
 }
+

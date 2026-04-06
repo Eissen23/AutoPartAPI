@@ -1,19 +1,24 @@
 ﻿using Application.Common.Models;
-using Application.Products;
+using Application.Products.Models;
+using Application.Products.Services;
 using Host.Extensions;
 using Shared.Common;
 
 namespace Host.Controllers.Products;
 
-public class ProductsController : VersionedApiController
+public class ProductsController(
+        IProductService productService
+    ) : VersionedApiController
 {
+    private readonly IProductService _productService = productService;
+
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreateProductRequest request, CancellationToken ct)
     {
-        var result = await Mediator.Send(request, ct);
+        var result = await _productService.CreateAsync(request, ct);
         return this.ApiOk(result, "Create Product Success");
     }
 
@@ -24,7 +29,7 @@ public class ProductsController : VersionedApiController
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchProductRequest request, CancellationToken ct)
     {
-        var result = await Mediator.Send(request, ct);
+        var result = await _productService.SearchAsync(request, ct);
         return this.ApiOk(result, "Search Product Success");
     }
 
@@ -32,13 +37,9 @@ public class ProductsController : VersionedApiController
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateAsync(UpdateProductRequest request, [FromRoute] Guid id, CancellationToken ct)
+    public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, UpdateProductRequest request, CancellationToken ct)
     {
-        if (request.Id != id)
-        {
-            throw new Shared.Common.Exceptions.ValidationException("Id mismatch", ["the route id not the same as the request id"]);
-        }
-        var result = await Mediator.Send(request, ct);
+        var result = await _productService.UpdateAsync(id, request, ct);
         return this.ApiOk(result, "Update Product Success");
     }
 
@@ -48,7 +49,7 @@ public class ProductsController : VersionedApiController
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id, CancellationToken ct)
     {
-        var result = await Mediator.Send(new DeleteProductRequest(id), ct);
+        var result = await _productService.DeleteAsync(id, ct);
         return this.ApiOk(result, "Delete Product Success");
     }
 
@@ -58,7 +59,7 @@ public class ProductsController : VersionedApiController
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct)
     {
-        var result = await Mediator.Send(new GetProductByIdRequest(id), ct);
+        var result = await _productService.GetByIdAsync(id, ct);
         return this.ApiOk(result, "Get Product Success");
     }
 }

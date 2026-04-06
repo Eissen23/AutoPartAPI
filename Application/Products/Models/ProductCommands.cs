@@ -4,9 +4,9 @@ using System.Text;
 using Application.Common.Models;
 using Domain.Entities.Products;
 
-namespace Application.Products;
+namespace Application.Products.Models;
 
-public class CreateProductRequest : IRequest<Guid>
+public class CreateProductRequest 
 {
     public string PartNumber { get; set; } = default!;
     public string Name { get; set; } = default!;
@@ -16,23 +16,12 @@ public class CreateProductRequest : IRequest<Guid>
     public Guid CategoryId { get; set; }
 }
 
-public class DeleteProductRequest(Guid id) : IRequest<Guid>
-{
-    public Guid Id { get; set; } = id;
-}
-
-public class GetProductByIdRequest(Guid id) : IRequest<ProductDetailDto?>
-{
-    public Guid Id { get; set; } = id;
-}
-
 public class SearchProductRequest : PaginationFilter, IRequest<PaginatedResponse<ProductDto>>
 {
 }
 
-public class UpdateProductRequest : IRequest<Guid>
+public class UpdateProductRequest 
 {
-    public Guid Id { get; set; }
     public string? PartNumber { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }

@@ -5,13 +5,15 @@ using Application.Categories;
 using Application.Common.Extension;
 using Application.Common.Models;
 using Application.PartLocations;
+using Application.PartLocations.Specs;
 using Application.Persistence.Repository;
+using Application.Products.Models;
 using Domain.Entities.Categories;
 using Domain.Entities.Products;
 using Domain.Entities.Warehouses;
 using Shared.Common.Exceptions;
 
-namespace Application.Products;
+namespace Application.Products.Services;
 
 public class ProductService(
         IRepositoryWithEvents<Product> eventRepos,
@@ -25,7 +27,7 @@ public class ProductService(
     private readonly IReadRepository<Category> _categoryRepos = categoryRepos;
     private readonly IReadRepository<PartLocation> _partLocationRepos = partLocationRepos;
 
-    public async Task<Guid> CreateAsync(CreateProductRequest request, CancellationToken ct)
+    public async Task<Guid> CreateAsync(CreateProductRequest request, CancellationToken ct = default)
     {
         var product = new Product()
             .Update(
@@ -42,7 +44,7 @@ public class ProductService(
         return result.Id;
     }
 
-    public async Task<Guid> DeleteAsync(Guid productId, CancellationToken ct)
+    public async Task<Guid> DeleteAsync(Guid productId, CancellationToken ct = default)
     {
         var product = await _readRepos.GetByIdAsync(productId, ct);
 
@@ -53,14 +55,14 @@ public class ProductService(
         return product.Id;
     }
 
-    public async Task<List<ProductDto>> GetAllAsync(CancellationToken ct)
+    public async Task<List<ProductDto>> GetAllAsync(CancellationToken ct = default)
     {
         var products = await _readRepos.ListAsync(new GetAllProducts(), ct);
 
         return products;
     }
 
-    public async Task<ProductDetailDto> GetByIdAsync(Guid productId, CancellationToken ct)
+    public async Task<ProductDetailDto> GetByIdAsync(Guid productId, CancellationToken ct = default)
     {
         var product = await _readRepos.GetByIdAsync(productId, ct);
         _ = product ?? throw new NotFoundException($"Product with id {productId} not found.");
@@ -85,7 +87,7 @@ public class ProductService(
         };
     }
 
-    public async Task<PaginatedResponse<ProductDto>> SearchAsync(PaginationFilter filter, CancellationToken ct)
+    public async Task<PaginatedResponse<ProductDto>> SearchAsync(PaginationFilter filter, CancellationToken ct = default)
     {
         var spec = new ProductPaginated(filter);
         var result = await _readRepos.PaginatedListAsync(spec, filter.PageNumber, filter.PageSize, ct);
@@ -93,10 +95,10 @@ public class ProductService(
         return result;
     }
 
-    public async Task<Guid> UpdateAsync(UpdateProductRequest request, CancellationToken ct)
+    public async Task<Guid> UpdateAsync(Guid id, UpdateProductRequest request, CancellationToken ct = default)
     {
-        var product = await _readRepos.GetByIdAsync(request.Id, ct);
-        _ = product ?? throw new NotFoundException($"Product with id {request.Id} not found.");
+        var product = await _readRepos.GetByIdAsync(id, ct);
+        _ = product ?? throw new NotFoundException($"Product with id {id} not found.");
 
         product.Update(
             request.PartNumber,

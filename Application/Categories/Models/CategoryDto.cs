@@ -4,7 +4,7 @@ using System.Text;
 using Application.Common.Interface;
 using Domain.Entities.Categories;
 
-namespace Application.Categories;
+namespace Application.Categories.Models;
 
 public class CategoryDto : IDto
 {
