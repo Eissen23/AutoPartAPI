@@ -4,8 +4,10 @@ using System.Text;
 using Application.Common.Extension;
 using Application.Common.Models;
 using Application.PartLocations;
+using Application.PartLocations.Specs;
 using Application.Persistence.Repository;
 using Application.Warehouses.Models;
+using Application.Warehouses.Spec;
 using Domain.Entities.Warehouses;
 using Shared.Common.Exceptions;
 

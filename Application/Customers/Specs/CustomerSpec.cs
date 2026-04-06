@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Models;
 using Application.Common.Specifications;
+using Application.Customers.Models;
 using Domain.Entities.Customers;
 
-namespace Application.Customers;
+namespace Application.Customers.Specs;
 
 public class GetAllCustomers : Specification<Customer, CustomerDto>
 {

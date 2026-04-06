@@ -4,7 +4,7 @@ using System.Text;
 using Application.Common.Interface;
 using Domain.Entities.Customers;
 
-namespace Application.Customers;
+namespace Application.Customers.Models;
 
 public class CustomerDto : IDto
 {

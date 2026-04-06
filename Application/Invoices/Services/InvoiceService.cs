@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Extension;
 using Application.Common.Models;
+using Application.Invoices.Models;
+using Application.Invoices.Specs;
 using Application.Persistence.Repository;
 using Domain.Entities.Invoices;
 using Shared.Common.Exceptions;
 
-namespace Application.Invoices;
+namespace Application.Invoices.Services;
 
 public class InvoiceService(
         IRepositoryWithEvents<Invoice> eventRepos,
@@ -17,7 +19,7 @@ public class InvoiceService(
     private readonly IRepositoryWithEvents<Invoice> _eventRepos = eventRepos;
     private readonly IReadRepository<Invoice> _readRepos = readRepos;
 
-    public async Task<Guid> CreateAsync(CreateInvoiceRequest request, CancellationToken ct)
+    public async Task<Guid> CreateAsync(CreateInvoiceRequest request, CancellationToken ct  = default)
     {
         var invoice = new Invoice()
             .Update(
@@ -32,7 +34,7 @@ public class InvoiceService(
         return result.Id;
     }
 
-    public async Task<Guid> DeleteAsync(Guid invoiceId, CancellationToken ct)
+    public async Task<Guid> DeleteAsync(Guid invoiceId, CancellationToken ct = default)
     {
         var invoice = await _readRepos.GetByIdAsync(invoiceId, ct);
 
@@ -43,14 +45,14 @@ public class InvoiceService(
         return invoice.Id;
     }
 
-    public async Task<List<InvoiceDto>> GetAllAsync(CancellationToken ct)
+    public async Task<List<InvoiceDto>> GetAllAsync(CancellationToken ct = default)
     {
         var invoices = await _readRepos.ListAsync(new GetAllInvoices(), ct);
 
         return invoices;
     }
 
-    public async Task<InvoiceDto> GetByIdAsync(Guid invoiceId, CancellationToken ct)
+    public async Task<InvoiceDto> GetByIdAsync(Guid invoiceId, CancellationToken ct = default)
     {
         var invoice = await _readRepos.GetByIdAsync(invoiceId, ct);
         _ = invoice ?? throw new NotFoundException($"Invoice with id {invoiceId} not found.");
@@ -65,7 +67,7 @@ public class InvoiceService(
         };
     }
 
-    public async Task<PaginatedResponse<InvoiceDto>> SearchAsync(PaginationFilter filter, CancellationToken ct)
+    public async Task<PaginatedResponse<InvoiceDto>> SearchAsync(PaginationFilter filter, CancellationToken ct = default)
     {
         var spec = new InvoicePaginated(filter);
         var result = await _readRepos.PaginatedListAsync(spec, filter.PageNumber, filter.PageSize, ct);
@@ -73,10 +75,10 @@ public class InvoiceService(
         return result;
     }
 
-    public async Task<Guid> UpdateAsync(UpdateInvoiceRequest request, CancellationToken ct)
+    public async Task<Guid> UpdateAsync(Guid id, UpdateInvoiceRequest request, CancellationToken ct = default)
     {
-        var invoice = await _readRepos.GetByIdAsync(request.Id, ct);
-        _ = invoice ?? throw new NotFoundException($"Invoice with id {request.Id} not found.");
+        var invoice = await _readRepos.GetByIdAsync(id, ct);
+        _ = invoice ?? throw new NotFoundException($"Invoice with id {id} not found.");
 
         invoice.Update(
             request.CustomerId,

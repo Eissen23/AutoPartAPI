@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Extension;
 using Application.Common.Models;
+using Application.InvoiceItems.Models;
+using Application.InvoiceItems.Specs;
 using Application.Persistence.Repository;
 using Domain.Entities.Invoices;
 using Shared.Common.Exceptions;
 
-namespace Application.InvoiceItems;
+namespace Application.InvoiceItems.Services;
 
 public class InvoiceItemService(
         IRepositoryWithEvents<InvoiceItem> eventRepos,
@@ -32,11 +34,11 @@ public class InvoiceItemService(
         return result.Id;
     }
 
-    public async Task<Guid> DeleteAsync(Guid invoiceItemId, CancellationToken ct)
+    public async Task<Guid> DeleteAsync(Guid id, CancellationToken ct)
     {
-        var invoiceItem = await _readRepos.GetByIdAsync(invoiceItemId, ct);
+        var invoiceItem = await _readRepos.GetByIdAsync(id, ct);
 
-        _ = invoiceItem ?? throw new NotFoundException($"Invoice item with id {invoiceItemId} not found.");
+        _ = invoiceItem ?? throw new NotFoundException($"Invoice item with id {id} not found.");
 
         await _eventRepos.DeleteAsync(invoiceItem, ct);
 
@@ -50,10 +52,10 @@ public class InvoiceItemService(
         return invoiceItems;
     }
 
-    public async Task<InvoiceItemDto> GetByIdAsync(Guid invoiceItemId, CancellationToken ct)
+    public async Task<InvoiceItemDto> GetByIdAsync(Guid id, CancellationToken ct)
     {
-        var invoiceItem = await _readRepos.GetByIdAsync(invoiceItemId, ct);
-        _ = invoiceItem ?? throw new NotFoundException($"Invoice item with id {invoiceItemId} not found.");
+        var invoiceItem = await _readRepos.GetByIdAsync(id, ct);
+        _ = invoiceItem ?? throw new NotFoundException($"Invoice item with id {id} not found.");
 
         return new InvoiceItemDto
         {
@@ -73,10 +75,10 @@ public class InvoiceItemService(
         return result;
     }
 
-    public async Task<Guid> UpdateAsync(UpdateInvoiceItemRequest request, CancellationToken ct)
+    public async Task<Guid> UpdateAsync(Guid id, UpdateInvoiceItemRequest request, CancellationToken ct)
     {
-        var invoiceItem = await _readRepos.GetByIdAsync(request.Id, ct);
-        _ = invoiceItem ?? throw new NotFoundException($"Invoice item with id {request.Id} not found.");
+        var invoiceItem = await _readRepos.GetByIdAsync(id, ct);
+        _ = invoiceItem ?? throw new NotFoundException($"Invoice item with id {id} not found.");
 
         invoiceItem.Update(
             request.Quantity,

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Models;
 using Application.Common.Specifications;
+using Application.Invoices.Models;
 using Domain.Entities.Invoices;
 
-namespace Application.Invoices;
+namespace Application.Invoices.Specs;
 
 public class GetAllInvoices : Specification<Invoice, InvoiceDto>
 {

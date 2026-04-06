@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Interface;
 
-namespace Application.Invoices;
+namespace Application.Invoices.Models;
 
 public class InvoiceDto : IDto
 {

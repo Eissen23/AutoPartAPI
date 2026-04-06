@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Extension;
 using Application.Common.Models;
+using Application.Customers.Models;
+using Application.Customers.Specs;
 using Application.Persistence.Repository;
 using Domain.Entities.Customers;
 using Shared.Common.Exceptions;
 
-namespace Application.Customers;
+namespace Application.Customers.Services;
 
 public class CustomerService(
         IRepositoryWithEvents<Customer> eventRepos,
@@ -73,10 +75,10 @@ public class CustomerService(
         return result;
     }
 
-    public async Task<Guid> UpdateAsync(UpdateCustomerRequest request, CancellationToken ct)
+    public async Task<Guid> UpdateAsync(Guid id, UpdateCustomerRequest request, CancellationToken ct)
     {
-        var customer = await _readRepos.GetByIdAsync(request.Id, ct);
-        _ = customer ?? throw new NotFoundException($"Customer with id {request.Id} not found.");
+        var customer = await _readRepos.GetByIdAsync(id, ct);
+        _ = customer ?? throw new NotFoundException($"Customer with id {id} not found.");
 
         customer.Update(
             request.Name,

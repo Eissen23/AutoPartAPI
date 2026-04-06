@@ -4,9 +4,9 @@ using System.Text;
 using Application.Common.Models;
 using Domain.Entities.Customers;
 
-namespace Application.Customers;
+namespace Application.Customers.Models;
 
-public class CreateCustomerRequest : IRequest<Guid>
+public class CreateCustomerRequest
 {
     public string Name { get; set; } = default!;
     public string? PhoneNumber { get; set; }
@@ -14,23 +14,22 @@ public class CreateCustomerRequest : IRequest<Guid>
     public CustomerType CustomerType { get; set; }
 }
 
-public class DeleteCustomerRequest(Guid id) : IRequest<Guid>
+public class DeleteCustomerRequest(Guid id)
 {
     public Guid Id { get; set; } = id;
 }
 
-public class GetCustomerByIdRequest(Guid id) : IRequest<CustomerDto?>
+public class GetCustomerByIdRequest(Guid id) 
 {
     public Guid Id { get; set; } = id;
 }
 
-public class SearchCustomerRequest : PaginationFilter, IRequest<PaginatedResponse<CustomerDto>>
+public class SearchCustomerRequest : PaginationFilter
 {
 }
 
-public class UpdateCustomerRequest : IRequest<Guid>
+public class UpdateCustomerRequest
 {
-    public Guid Id { get; set; }
     public string? Name { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
