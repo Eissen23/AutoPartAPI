@@ -4,7 +4,7 @@ using System.Text;
 using Application.Common.Interface;
 using Application.PartLocations;
 
-namespace Application.Warehouses;
+namespace Application.Warehouses.Models;
 
 public class WarehouseLocationDto : IDto
 {

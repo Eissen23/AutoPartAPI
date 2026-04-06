@@ -11,8 +11,8 @@ public class TokenController(
     private readonly ITokenService _tokenService = tokenService;
 
     [AllowAnonymous, HttpPost]
-    [ProducesResponseType(typeof(ApiResponse<TokenResponse>),StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<TokenResponse>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateToken([FromBody] TokenRequest request)
     {
         var result = await _tokenService.CreateTokenAsync(request, HttpContext);
@@ -21,11 +21,20 @@ public class TokenController(
 
     [Authorize, HttpPost("logout")]
     [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Logout()
     {
         var result = await _tokenService.LogoutAsync();
 
-        return this.ApiOk(result ,"Successfully logged out");
+        return this.ApiOk(result, "Successfully logged out");
+    }
+
+    [Authorize, HttpPost("refresh")]
+    [ProducesResponseType(typeof(ApiResponse<TokenResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+    {
+        var result = await _tokenService.RefreshTokenAsync(request);
+        return this.ApiOk(result, "Successfully refresh token");
     }
 }

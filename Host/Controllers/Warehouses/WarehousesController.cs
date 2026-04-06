@@ -1,43 +1,43 @@
 ﻿using Application.Common.Models;
-using Application.Warehouses;
+using Application.Warehouses.Models;
+using Application.Warehouses.Services;
+using Azure.Core;
 using Host.Extensions;
 using Shared.Common;
 
 namespace Host.Controllers.Warehouses;
 
-public class WarehousesController : VersionedApiController
+public class WarehousesController(
+        IWarehouseService warehouseService
+    ) : VersionedApiController
 {
-    [Authorize]
-    [HttpPost]
+    private readonly IWarehouseService _warehouseService = warehouseService;
+
+    [Authorize, HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreateWarehouseLocationRequest request)
     {
-        var result = await Mediator.Send(request);
+        var result = await _warehouseService.CreateAsync(request);
         return this.ApiOk(result, "Create Warehouse Location Success");
     }
 
-    [Authorize]
-    [HttpPost("search")]
+    [Authorize, HttpPost("search")]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<WarehouseLocationDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchWarehouseLocationRequest request)
     {
-        var result = await Mediator.Send(request);
+        var result = await _warehouseService.SearchAsync(request);
         return this.ApiOk(result, "Search Warehouse Location Success");
     }
 
-    [Authorize]
-    [HttpPut("{id:guid}")]
+    [Authorize, HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateAsync(UpdateWarehouseLocationRequest request, [FromRoute] Guid id)
+    public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateWarehouseLocationRequest request)
     {
-        if (request.Id != id)
-        {
-            throw new Shared.Common.Exceptions.ValidationException("Id mismatch", ["the route id not the same as the request id"]);
-        }
-        var result = await Mediator.Send(request);
+
+        var result = await _warehouseService.UpdateAsync(id, request);
         return this.ApiOk(result, "Update Warehouse Location Success");
     }
 
@@ -47,7 +47,7 @@ public class WarehousesController : VersionedApiController
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(new DeleteWarehouseLocationRequest(id));
+        var result = await _warehouseService.DeleteAsync(id);
         return this.ApiOk(result, "Delete Warehouse Location Success");
     }
 
@@ -57,7 +57,7 @@ public class WarehousesController : VersionedApiController
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
-        var result = await Mediator.Send(new GetWarehouseLocationByIdRequest(id));
+        var result = await _warehouseService.GetByIdAsync(id);
         return this.ApiOk(result, "Get Warehouse Location By Id Success");
     }
 }

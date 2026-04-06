@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Warehouses.Models;
 using FluentValidation;
 
-namespace Application.Warehouses;
+namespace Application.Warehouses.Validations;
 
 public class CreateWarehouseLocationRequestValidator : AbstractValidator<CreateWarehouseLocationRequest>
 {
@@ -28,8 +29,6 @@ public class UpdateWarehouseLocationRequestValidator : AbstractValidator<UpdateW
 {
     public UpdateWarehouseLocationRequestValidator()
     {
-        RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Id is required.");
 
         When(x => !string.IsNullOrWhiteSpace(x.ZoneCode), () =>
         {
@@ -58,28 +57,6 @@ public class UpdateWarehouseLocationRequestValidator : AbstractValidator<UpdateW
                 .NotNull()
                 .WithMessage("IsOverstocked is required.");
         });
-    }
-}
-
-public class DeleteWarehouseLocationRequestValidator : AbstractValidator<DeleteWarehouseLocationRequest>
-{
-    public DeleteWarehouseLocationRequestValidator()
-    {
-        RuleFor(x => x.Id)
-            .NotEmpty()
-            .NotEqual(Guid.Empty)
-            .WithMessage("WarehouseLocation Id cannot be an empty GUID.");
-    }
-}
-
-public class GetWarehouseLocationByIdRequestValidator : AbstractValidator<GetWarehouseLocationByIdRequest>
-{
-    public GetWarehouseLocationByIdRequestValidator()
-    {
-        RuleFor(x => x.Id)
-            .NotEmpty()
-            .NotEqual(Guid.Empty)
-            .WithMessage("WarehouseLocation Id cannot be an empty GUID.");
     }
 }
 

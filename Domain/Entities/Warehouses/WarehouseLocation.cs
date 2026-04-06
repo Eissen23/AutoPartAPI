@@ -28,7 +28,7 @@ public class WarehouseLocation : AuditableEntity, IAggregateRoot
             Aisle = aisle.Value;
         if (shelf.HasValue && Shelf != shelf)
             Shelf = shelf.Value;
-        if (bin is not null && Bin?.Equals(bin) is not true)
+        if (Bin?.Equals(bin) is not true)
             Bin = bin;
         if (isOverstocked.HasValue && IsOverstocked != isOverstocked)
             IsOverstocked = isOverstocked.Value;

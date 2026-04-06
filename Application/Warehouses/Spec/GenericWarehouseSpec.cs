@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Models;
 using Application.Common.Specifications;
+using Application.Warehouses.Models;
 using Domain.Entities.Warehouses;
 
-namespace Application.Warehouses;
+namespace Application.Warehouses.Spec;
 
 public class GetAllWarehouseLocations : Specification<WarehouseLocation, WarehouseLocationDto>
 {

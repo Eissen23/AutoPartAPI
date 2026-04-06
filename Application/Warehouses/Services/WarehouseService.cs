@@ -5,10 +5,11 @@ using Application.Common.Extension;
 using Application.Common.Models;
 using Application.PartLocations;
 using Application.Persistence.Repository;
+using Application.Warehouses.Models;
 using Domain.Entities.Warehouses;
 using Shared.Common.Exceptions;
 
-namespace Application.Warehouses;
+namespace Application.Warehouses.Services;
 
 public class WarehouseService(
         IRepositoryWithEvents<WarehouseLocation> eventRepos,
@@ -93,10 +94,10 @@ public class WarehouseService(
         return result;
     }
 
-    public async Task<Guid> UpdateAsync(UpdateWarehouseLocationRequest request, CancellationToken ct)
+    public async Task<Guid> UpdateAsync(Guid id, UpdateWarehouseLocationRequest request, CancellationToken ct)
     {
-        var warehouseLocation = await _readRepos.GetByIdAsync(request.Id, ct);
-        _ = warehouseLocation ?? throw new NotFoundException($"Warehouse location with id {request.Id} not found.");
+        var warehouseLocation = await _readRepos.GetByIdAsync(id, ct);
+        _ = warehouseLocation ?? throw new NotFoundException($"Warehouse location with id {id} not found.");
 
         warehouseLocation.Update(
             request.ZoneCode,
@@ -110,4 +111,5 @@ public class WarehouseService(
 
         return warehouseLocation.Id;
     }
+
 }

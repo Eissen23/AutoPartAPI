@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Models;
 using Application.Common.Specifications;
+using Application.PartLocations.Models;
 using Application.Products;
 using Domain.Entities.Warehouses;
 
-namespace Application.PartLocations;
+namespace Application.PartLocations.Specs;
 
 public class GetAllPartLocations : Specification<PartLocation, PartLocationDto>
 {

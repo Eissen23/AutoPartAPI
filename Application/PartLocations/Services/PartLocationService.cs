@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Extension;
 using Application.Common.Models;
+using Application.PartLocations.Models;
+using Application.PartLocations.Specs;
 using Application.Persistence.Repository;
 using Domain.Entities.Warehouses;
 using Shared.Common.Exceptions;
 
-namespace Application.PartLocations;
+namespace Application.PartLocations.Services;
 
 public class PartLocationService(
         IRepositoryWithEvents<PartLocation> eventRepos,
@@ -17,7 +19,7 @@ public class PartLocationService(
     private readonly IRepositoryWithEvents<PartLocation> _eventRepos = eventRepos;
     private readonly IReadRepository<PartLocation> _readRepos = readRepos;
 
-    public async Task<Guid> CreateAsync(CreatePartLocationRequest request, CancellationToken ct)
+    public async Task<Guid> CreateAsync(CreatePartLocationRequest request, CancellationToken ct = default)
     {
         var partLocation = new PartLocation()
             .Update(
@@ -31,7 +33,7 @@ public class PartLocationService(
         return result.Id;
     }
 
-    public async Task<Guid> DeleteAsync(Guid departmentId, CancellationToken ct)
+    public async Task<Guid> DeleteAsync(Guid departmentId, CancellationToken ct = default)
     {
         var partLocation = await _readRepos.GetByIdAsync(departmentId, ct);
 
@@ -42,14 +44,14 @@ public class PartLocationService(
         return partLocation.Id;
     }
 
-    public async Task<List<PartLocationDto>> GetAllAsync(CancellationToken ct)
+    public async Task<List<PartLocationDto>> GetAllAsync(CancellationToken ct = default)
     {
         var locations = await _readRepos.ListAsync(new GetAllPartLocations(), ct);
 
         return locations;
     }
 
-    public async Task<PartLocationDto> GetByIdAsync(Guid departmentId, CancellationToken ct)
+    public async Task<PartLocationDto> GetByIdAsync(Guid departmentId, CancellationToken ct = default)
     {
         var partLocation = await _readRepos.GetByIdAsync(departmentId, ct);
         _ = partLocation ?? throw new NotFoundException($"Part location with id {departmentId} not found.");
@@ -63,7 +65,7 @@ public class PartLocationService(
         };
     }
 
-    public async Task<PaginatedResponse<PartLocationDto>> SearchAsync(PaginationFilter filter, CancellationToken ct)
+    public async Task<PaginatedResponse<PartLocationDto>> SearchAsync(PaginationFilter filter, CancellationToken ct = default)
     {
         var spec = new PartLocationPaginated(filter);
         var result = await _readRepos.PaginatedListAsync(spec, filter.PageNumber, filter.PageSize, ct);
@@ -71,10 +73,10 @@ public class PartLocationService(
         return result;
     }
 
-    public async Task<Guid> UpdateAsync(UpdatePartLocationRequest request, CancellationToken ct)
+    public async Task<Guid> UpdateAsync(Guid id, UpdatePartLocationRequest request, CancellationToken ct = default)
     {
-        var partLocation = await _readRepos.GetByIdAsync(request.Id, ct);
-        _ = partLocation ?? throw new NotFoundException($"Part location with id {request.Id} not found.");
+        var partLocation = await _readRepos.GetByIdAsync(id, ct);
+        _ = partLocation ?? throw new NotFoundException($"Part location with id {id} not found.");
 
         partLocation.Update(
             request.PartId,

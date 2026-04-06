@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Interface;
 
-namespace Application.PartLocations;
+namespace Application.PartLocations.Models;
 
 // Based on PartLocation attribute
 public class PartLocationDto : IDto
