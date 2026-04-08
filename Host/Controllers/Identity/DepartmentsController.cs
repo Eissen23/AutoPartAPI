@@ -1,19 +1,25 @@
 ﻿using Application.Common.Models;
-using Application.Identities.Departments;
+using Application.Identities.Departments.Models;
+using Application.Identities.Departments.Services;
 using Host.Extensions;
 using Shared.Common;
 
 namespace Host.Controllers.Identity;
 
-public class DepartmentsController : VersionedApiController
+public class DepartmentsController(
+        IDepartmentService departmentService
+    ) : VersionedApiController
 {
+
+    private readonly IDepartmentService _departmentService = departmentService;
+
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>) ,StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] CreateDepartmentRequest request, CancellationToken ct)
     {
-        var result = await Mediator.Send(request, ct);
+        var result = await _departmentService.CreateAsync(request, ct);
 
         return this.ApiOk(result, "Create Departments success.");
     }
@@ -24,7 +30,7 @@ public class DepartmentsController : VersionedApiController
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync([FromBody] SearchDepartmentRequest request, CancellationToken ct)
     {
-        var result = await Mediator.Send(request, ct);
+        var result = await _departmentService.GetPaginated(request, ct);
         return this.ApiOk(result, "Search Departments success.");
     }
 
@@ -33,14 +39,9 @@ public class DepartmentsController : VersionedApiController
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>) ,StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateDepartmentRequest request, [FromRoute] Guid id, CancellationToken ct)
+    public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateDepartmentRequest request, CancellationToken ct)
     {
-        if (request.Id != id)
-        {
-            throw new Shared.Common.Exceptions.ValidationException("Id mismatch", ["the route id not the same as the request id"]);
-        }
-
-        var result = await Mediator.Send(request, ct);
+        var result = await _departmentService.UpdateAsync(id, request, ct);
         return this.ApiOk(result, "Update Departments success.");
     }
 
@@ -50,8 +51,7 @@ public class DepartmentsController : VersionedApiController
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id,  CancellationToken ct)
     {
-        var request = new DeleteDepartmentRequest(id);
-        var result = await Mediator.Send(request, ct);
+        var result = await _departmentService.DeleteAsync(id, ct);
         return this.ApiOk(result, "Delete Departments success.");
     }
 
@@ -59,10 +59,9 @@ public class DepartmentsController : VersionedApiController
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<DepartmentDto>) ,StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct)
+    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct )
     {
-        var request = new GetDepartmentByIdRequest(id);
-        var result = await Mediator.Send(request, ct);
+        var result = await _departmentService.GetByIdAsync(id, ct);
         return this.ApiOk(result, "Get Departments by Id success.");
     }
 

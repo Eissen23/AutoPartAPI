@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Identities.Departments.Models;
 using Application.Persistence.Repository;
 using Domain.Entities.Identity;
 
-namespace Application.Identities.Departments;
+namespace Application.Identities.Departments.Validations;
 
 /// <summary>
 /// Only handler the things not in range of 
@@ -59,32 +60,11 @@ public class UpdateDepartmentRequestValidator : AbstractValidator<UpdateDepartme
         When(x => x.ParentId.HasValue, () =>
         {
             RuleFor(x => x.ParentId)
-                .NotEmpty() 
                 .NotEqual(Guid.Empty)
                 .WithMessage("ParentId cannot be an empty GUID.")
                 .MustAsync(async (dp, ct) =>
                     await readRepository.GetByIdAsync(dp!.Value, ct) is not null
                 );
         });
-    }
-}
-
-public class DeleteDepartmentRequestValidator : AbstractValidator<DeleteDepartmentRequest>
-{
-    public DeleteDepartmentRequestValidator()
-    {
-        RuleFor(x => x.Id)
-            .NotEqual(Guid.Empty)
-            .WithMessage("Department Id cannot be an empty GUID.");
-    }
-}
-
-public class GetDepartmentByIdRequestValidator : AbstractValidator<GetDepartmentByIdRequest>
-{
-    public GetDepartmentByIdRequestValidator()
-    {
-        RuleFor(x => x.Id)
-            .NotEqual(Guid.Empty)
-            .WithMessage("Department Id cannot be an empty GUID.");
     }
 }

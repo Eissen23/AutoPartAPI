@@ -36,7 +36,7 @@ public class Department : AuditableEntity, IAggregateRoot
         {
             Description = description;
         }
-        if(parentId is not null && ParentId?.Equals(parentId) is not true)
+        if(ParentId?.Equals(parentId) is not true)
         {
             ParentId = parentId;
         }

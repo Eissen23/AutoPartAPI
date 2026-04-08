@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Interface;
 
-namespace Application.Identities.JobPosistions;
+namespace Application.Identities.JobPosistions.Models;
 
 public class JobPositionDto : IDto
 {

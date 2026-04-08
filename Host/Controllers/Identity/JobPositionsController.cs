@@ -1,19 +1,24 @@
 ﻿using Application.Common.Models;
-using Application.Identities.JobPosistions;
+using Application.Identities.JobPosistions.Models;
+using Application.Identities.JobPosistions.Services;
 using Host.Extensions;
 using Shared.Common;
 
 namespace Host.Controllers.Identity;
 
-public class JobPositionsController : VersionedApiController
+public class JobPositionsController(
+        IJobPositionService jobPositionService
+    ) : VersionedApiController
 {
+    private readonly IJobPositionService _jobPositionService =  jobPositionService;
+
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>) ,StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] CreateJobPositionRequest request, CancellationToken ct)
     {
-        var result = await Mediator.Send(request, ct);
+        var result = await _jobPositionService.CreateAsync(request, ct);
 
         return this.ApiOk(result, "Create Job Positions success.");
     }
@@ -24,7 +29,7 @@ public class JobPositionsController : VersionedApiController
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync([FromBody] SearchJobPositionsRequest request, CancellationToken ct)
     {
-        var result = await Mediator.Send(request, ct);
+        var result = await _jobPositionService.SearchAsync(request, ct);
         return this.ApiOk(result, "Search Job Positions success.");
     }
 
@@ -32,14 +37,10 @@ public class JobPositionsController : VersionedApiController
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>) ,StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateJobPositionRequest request, Guid id, CancellationToken ct)
+    public async Task<IActionResult> UpdateAsync([FromRoute]Guid id, [FromBody] UpdateJobPositionRequest request, CancellationToken ct)
     {
-        if (request.Id != id)
-        {
-            throw new Shared.Common.Exceptions.ValidationException("Id mismatch", ["the route id not the same as the request id"]);
-        }
-
-        var result = await Mediator.Send(request, ct);
+  
+        var result = await _jobPositionService.UpdateAsync(id, request, ct);
         return this.ApiOk(result, "Update Job Positions success.");
     }
 
@@ -49,7 +50,7 @@ public class JobPositionsController : VersionedApiController
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id,  CancellationToken ct)
     {
-        var result = await Mediator.Send(new DeleteJobPositionRequest(id), ct);
+        var result = await _jobPositionService.DeleteAsync(id, ct);
         return this.ApiOk(result, "Delete Job Positions success.");
     }
 
@@ -59,7 +60,7 @@ public class JobPositionsController : VersionedApiController
     [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct)
     {
-        var result = await Mediator.Send(new GetJobPositionByIdRequest(id), ct);
+        var result = await _jobPositionService.GetByIdAsync(id, ct);
         return this.ApiOk(result, "Get Job Positions by Id success.");
     }
 }

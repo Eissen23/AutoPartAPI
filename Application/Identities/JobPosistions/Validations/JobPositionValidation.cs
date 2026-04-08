@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.Identities.JobPosistions.Models;
 
-namespace Application.Identities.JobPosistions;
+namespace Application.Identities.JobPosistions.Validations;
 
 public class CreateJobPositionRequestValidator : AbstractValidator<CreateJobPositionRequest>
 {
@@ -31,8 +32,6 @@ public class UpdateJobPositionRequestValidator : AbstractValidator<UpdateJobPosi
 {
     public UpdateJobPositionRequestValidator()
     {
-        RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Id is required.");
 
         When(x => !string.IsNullOrWhiteSpace(x.Title), () =>
         {
@@ -63,26 +62,5 @@ public class UpdateJobPositionRequestValidator : AbstractValidator<UpdateJobPosi
                 .WithMessage("AccessLevel need to be established");
         });
 
-    }
-}
-
-public class DeleteJobPositionRequestValidator : AbstractValidator<DeleteJobPositionRequest>
-{
-    public DeleteJobPositionRequestValidator()
-    {
-        RuleFor(x => x.Id)
-            .NotEmpty()
-            .NotEqual(Guid.Empty)
-            .WithMessage("JobPosition Id cannot be an empty GUID.");
-    }
-}
-public class GetJobPositionByIdRequestValidator : AbstractValidator<GetJobPositionByIdRequest>
-{
-    public GetJobPositionByIdRequestValidator()
-    {
-        RuleFor(x => x.Id)
-            .NotEmpty()
-            .NotEqual(Guid.Empty)
-            .WithMessage("JobPosition Id cannot be an empty GUID.");
     }
 }

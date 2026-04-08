@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Extension;
 using Application.Common.Models;
+using Application.Identities.JobPosistions.Models;
 using Application.Persistence.Repository;
 using Domain.Entities.Identity;
 using Shared.Common.Exceptions;
 
-namespace Application.Identities.JobPosistions;
+namespace Application.Identities.JobPosistions.Services;
 
 public class JobPositionService(
         IRepositoryWithEvents<JobPosition> eventRepos,
@@ -18,7 +19,7 @@ public class JobPositionService(
     private readonly IRepositoryWithEvents<JobPosition> _eventRepos = eventRepos;
     private readonly IReadRepository<JobPosition> _readRepos = readRepos;
 
-    public async Task<Guid> CreateAsync(CreateJobPositionRequest request, CancellationToken ct)
+    public async Task<Guid> CreateAsync(CreateJobPositionRequest request, CancellationToken ct = default)
     {
         var jobPosition = new JobPosition(
                 title: request.Title,
@@ -33,7 +34,7 @@ public class JobPositionService(
         return result.Id;
     }
 
-    public async Task<Guid> DeleteAsync(Guid jobPositionId, CancellationToken ct)
+    public async Task<Guid> DeleteAsync(Guid jobPositionId, CancellationToken ct = default)
     {
         var jobPosition = await _readRepos.GetByIdAsync(jobPositionId, ct);
 
@@ -50,7 +51,7 @@ public class JobPositionService(
         throw new NotImplementedException();
     }
 
-    public async Task<JobPositionDto> GetByIdAsync(Guid jobPositionId, CancellationToken ct)
+    public async Task<JobPositionDto> GetByIdAsync(Guid jobPositionId, CancellationToken ct = default)
     {
         var jobPosition = await _readRepos.GetByIdAsync(jobPositionId, ct);
         _ = jobPosition ?? throw new NotFoundException($"Job position with id {jobPositionId} not found.");
@@ -63,7 +64,7 @@ public class JobPositionService(
         };
     }
 
-    public async Task<PaginatedResponse<JobPositionDto>> SearchAsync(PaginationFilter filter, CancellationToken ct)
+    public async Task<PaginatedResponse<JobPositionDto>> SearchAsync(PaginationFilter filter, CancellationToken ct = default)
     {
         var spec = new JobPositionPaginated(filter);
         var result = await _readRepos.PaginatedListAsync(spec, filter.PageNumber, filter.PageSize, ct);
@@ -71,10 +72,10 @@ public class JobPositionService(
         return result;
     }
 
-    public async Task<Guid> UpdateAsync(UpdateJobPositionRequest request, CancellationToken ct)
+    public async Task<Guid> UpdateAsync(Guid id, UpdateJobPositionRequest request, CancellationToken ct = default)
     {
-        var jobPosition = await _readRepos.GetByIdAsync(request.Id, ct);
-        _ = jobPosition ?? throw new NotFoundException($"Job position with id {request.Id} not found.");
+        var jobPosition = await _readRepos.GetByIdAsync(id, ct);
+        _ = jobPosition ?? throw new NotFoundException($"Job position with id {id} not found.");
 
         jobPosition.Update(
                 request.Title,

@@ -21,4 +21,13 @@
         <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Identities\Departments\Handlers\" />
+      <Folder Include="Identities\JobPosistions\Handlers\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="Identities\JobPosistions\Specs\GenericSpecs.cs" />
+    </ItemGroup>
+
 </Project>

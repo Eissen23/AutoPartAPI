@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Interface;
 
-namespace Application.Identities.Departments;
+namespace Application.Identities.Departments.Models;
 
 public class DepartmentDto : IDto
 {

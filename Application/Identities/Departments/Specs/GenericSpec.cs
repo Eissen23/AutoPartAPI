@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Application.Common.Models;
 using Application.Common.Specifications;
+using Application.Identities.Departments.Models;
 using Domain.Entities.Identity;
 
-namespace Application.Identities.Departments;
+namespace Application.Identities.Departments.Specs;
 
 public class DepartmentByParentId : Specification<Department>
 {
