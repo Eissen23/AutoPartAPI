@@ -24,8 +24,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Shared\Shared.csproj" />
-        <ProjectReference Include="..\Application\Base.Application.csproj" />
-        <ProjectReference Include="..\Infrastructure\Base.Infrastructure.csproj" />
+        <ProjectReference Include="..\Base.Application\Base.Application.csproj" />
+        <ProjectReference Include="..\Base.Infrastructure\Base.Infrastructure.csproj" />
         <ProjectReference Include="..\Migrators.PostgreSQL\Migrators.PostgreSQL.csproj" />
     </ItemGroup>
 

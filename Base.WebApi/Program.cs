@@ -1,5 +1,6 @@
 using Application;
 using Host.Configurations;
+using Host.Extensions;
 using Infrastructure;
 using Base.Infrastructure.Extensions;
 using Base.Infrastructure.Logging.Serilog;
@@ -13,7 +14,7 @@ try
     var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddControllers();
     builder.AddConfigurations().RegisterSerilog();
-    // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
     builder.Services.AddOpenApi();
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddApplication();
@@ -39,7 +40,8 @@ try
 
         app.MapControllers();
 
-        // Seed the database
+        // Initialize database: apply migrations and seed
+        await app.InitializeDatabaseAsync();
         await app.SeedDatabaseAsync();
 
         app.Run();

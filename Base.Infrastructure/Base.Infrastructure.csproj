@@ -55,8 +55,8 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Shared\Shared.csproj" />
-        <ProjectReference Include="..\Domain\Base.Domain.csproj" />
-        <ProjectReference Include="..\Application\Base.Application.csproj" />
+        <ProjectReference Include="..\Base.Domain\Base.Domain.csproj" />
+        <ProjectReference Include="..\Base.Application\Base.Application.csproj" />
     </ItemGroup>
 
     <PropertyGroup>
