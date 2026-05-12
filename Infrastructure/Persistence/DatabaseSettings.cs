@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Infrastructure.Persistence;
+namespace Base.Infrastructure.Persistence;
 
 public class DatabaseSettings : IValidatableObject
 {

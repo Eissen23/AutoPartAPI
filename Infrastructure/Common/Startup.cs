@@ -1,7 +1,7 @@
-﻿using Application.Common.Interface;
+﻿using Base.Application.Common.Interface;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.Common;
+namespace Base.Infrastructure.Common;
 
 internal static class Startup
 {

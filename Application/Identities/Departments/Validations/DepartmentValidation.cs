@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Identities.Departments.Models;
-using Application.Persistence.Repository;
-using Domain.Entities.Identity;
+using Base.Application.Identities.Departments.Models;
+using Base.Application.Persistence.Repository;
+using Base.Domain.Entities.Identity;
 
-namespace Application.Identities.Departments.Validations;
+namespace Base.Application.Identities.Departments.Validations;
 
 /// <summary>
 /// Only handler the things not in range of 

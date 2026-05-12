@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
-using Application.Common.Models;
-using Application.Identities.Departments;
-using Application.Warehouses.Models;
+using Base.Application.Common.Interface;
+using Base.Application.Common.Models;
+using Base.Application.Identities.Departments;
+using Base.Application.Warehouses.Models;
 
-namespace Application.Warehouses.Services;
+namespace Base.Application.Warehouses.Services;
 
 public interface IWarehouseService : ITransientService
 {

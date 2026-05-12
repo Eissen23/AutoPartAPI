@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Persistence.Configuration;
+namespace Base.Infrastructure.Persistence.Configuration;
 
 internal class SchemaNames
 {

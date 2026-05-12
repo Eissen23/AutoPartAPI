@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Entities.Identity;
+namespace Base.Domain.Entities.Identity;
 
 public class JobPosition : AuditableEntity, IAggregateRoot
 {

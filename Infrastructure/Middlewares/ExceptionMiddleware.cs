@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Shared.Common;
 using Shared.Common.Exceptions;
 
-namespace Infrastructure.Middlewares;
+namespace Base.Infrastructure.Middlewares;
 
 internal class ExceptionMiddleware : IMiddleware
 {

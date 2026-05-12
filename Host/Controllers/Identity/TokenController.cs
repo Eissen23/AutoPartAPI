@@ -1,4 +1,4 @@
-﻿using Application.Identities.Tokens;
+﻿using Base.Application.Identities.Tokens;
 using Host.Extensions;
 using Shared.Common;
 

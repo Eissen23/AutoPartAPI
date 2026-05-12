@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Categories.Models;
-using Application.Common.Interface;
-using Application.Common.Models;
+using Base.Application.Categories.Models;
+using Base.Application.Common.Interface;
+using Base.Application.Common.Models;
 
-namespace Application.Categories.Services;
+namespace Base.Application.Categories.Services;
 
 public interface ICategoryService : ITransientService
 {

@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Interface;
+﻿namespace Base.Application.Common.Interface;
 
 public interface IDto
 {

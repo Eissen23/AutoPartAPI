@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Identities.JobPosistions.Models;
+using Base.Application.Identities.JobPosistions.Models;
 
-namespace Application.Identities.JobPosistions.Validations;
+namespace Base.Application.Identities.JobPosistions.Validations;
 
 public class CreateJobPositionRequestValidator : AbstractValidator<CreateJobPositionRequest>
 {

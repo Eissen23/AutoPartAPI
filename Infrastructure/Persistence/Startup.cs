@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Persistence.Repository;
-using Domain.Entities.Common.Contracts;
-using Infrastructure.Common;
-using Infrastructure.Persistence.Configuration;
-using Infrastructure.Persistence.Context;
-using Infrastructure.Persistence.Repository;
+using Base.Application.Persistence.Repository;
+using Base.Domain.Entities.Common.Contracts;
+using Base.Infrastructure.Persistence.Configuration;
+using Base.Infrastructure.Persistence.Context;
+using Base.Infrastructure.Persistence.Repository;
+using Base.Infrastructure.Common;
+using Base.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Serilog;
 
-namespace Infrastructure.Persistence;
+namespace Base.Infrastructure.Persistence;
 
 public static class Startup
 {

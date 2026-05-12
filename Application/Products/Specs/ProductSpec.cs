@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
-using Application.Common.Specifications;
-using Application.Products.Models;
-using Domain.Entities.Products;
+using Base.Application.Common.Models;
+using Base.Application.Common.Specifications;
+using Base.Application.Products.Models;
+using Base.Domain.Entities.Products;
 
-namespace Application.Products.Specs;
+namespace Base.Application.Products.Specs;
 
 public class GetAllProducts : Specification<Product, ProductDto>
 {

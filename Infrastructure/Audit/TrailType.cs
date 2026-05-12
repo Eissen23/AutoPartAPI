@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Audit;
+namespace Base.Infrastructure.Audit;
 
 internal enum TrailType
 {

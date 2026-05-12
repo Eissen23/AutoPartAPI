@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Common.Models;
+namespace Base.Application.Common.Models;
 
 public class PaginationFilter : BaseFilter
 {

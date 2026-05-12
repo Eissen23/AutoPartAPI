@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
+using Base.Application.Common.Interface;
 
-namespace Application.Identities.Users;
+namespace Base.Application.Identities.Users;
 
 public interface IUserService : ITransientService
 {

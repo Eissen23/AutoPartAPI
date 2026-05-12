@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
-using Application.Identities;
-using Infrastructure.Auth;
-using Infrastructure.Persistence.Context;
+using Base.Application.Common.Interface;
+using Base.Application.Identities;
+using Base.Infrastructure.Persistence.Context;
+using Base.Infrastructure.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.Identities;
+namespace Base.Infrastructure.Identities;
 
 internal static class Startup
 {

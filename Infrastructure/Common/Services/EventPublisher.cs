@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Event;
+using Base.Application.Common.Event;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Shared.Events;
 
-namespace Infrastructure.Common.Services;
+namespace Base.Infrastructure.Common.Services;
 
 public class EventPublisher (
         ILogger<EventPublisher> logger,

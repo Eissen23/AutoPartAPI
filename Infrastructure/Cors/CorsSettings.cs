@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Cors;
+namespace Base.Infrastructure.Cors;
 
 public class CorsSettings
 {

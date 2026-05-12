@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Event;
-using Application.Common.Interface;
-using Domain.Entities.Categories;
-using Domain.Entities.Common.Contracts;
-using Domain.Entities.Customers;
-using Domain.Entities.Identity;
-using Domain.Entities.Invoices;
-using Domain.Entities.Products;
-using Domain.Entities.Warehouses;
-using Infrastructure.Audit;
-using Infrastructure.Identities;
-using Infrastructure.Persistence.Configuration;
+using Base.Application.Common.Event;
+using Base.Application.Common.Interface;
+using Base.Domain.Entities.Categories;
+using Base.Domain.Entities.Common.Contracts;
+using Base.Domain.Entities.Customers;
+using Base.Domain.Entities.Identity;
+using Base.Domain.Entities.Invoices;
+using Base.Domain.Entities.Products;
+using Base.Domain.Entities.Warehouses;
+using Base.Infrastructure.Audit;
+using Base.Infrastructure.Audit;
+using Base.Infrastructure.Identities;
+using Base.Infrastructure.Persistence.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Shared.Events;
 
-namespace Infrastructure.Persistence.Context;
+namespace Base.Infrastructure.Persistence.Context;
 
 public class ApplicationDbContext(
     DbContextOptions<ApplicationDbContext> options,

@@ -134,8 +134,8 @@ dotnet new sln -n AutoPart
 
 # Add all projects to solution
 dotnet sln add Shared/Shared.csproj
-dotnet sln add Domain/Domain.csproj
-dotnet sln add Application/Application.csproj
+dotnet sln add Domain/Base.Domain.csproj
+dotnet sln add Application/Base.Application.csproj
 dotnet sln add Infrastructure/Infrastructure.csproj
 dotnet sln add Migrators.PostgreSQL/Migrators.PostgreSQL.csproj
 dotnet sln add Host/Host.csproj
@@ -145,18 +145,18 @@ dotnet sln add Host/Host.csproj
 
 ```bash
 # Domain references
-dotnet add Domain/Domain.csproj reference Shared/Shared.csproj
+dotnet add Domain/Base.Domain.csproj reference Shared/Shared.csproj
 
 # Infrastructure references
 dotnet add Infrastructure/Infrastructure.csproj reference Shared/Shared.csproj
-dotnet add Infrastructure/Infrastructure.csproj reference Domain/Domain.csproj
+dotnet add Infrastructure/Infrastructure.csproj reference Domain/Base.Domain.csproj
 
 # Migrators.PostgreSQL references
 dotnet add Migrators.PostgreSQL/Migrators.PostgreSQL.csproj reference Infrastructure/Infrastructure.csproj
 
 # Host references
 dotnet add Host/Host.csproj reference Shared/Shared.csproj
-dotnet add Host/Host.csproj reference Application/Application.csproj
+dotnet add Host/Host.csproj reference Application/Base.Application.csproj
 dotnet add Host/Host.csproj reference Infrastructure/Infrastructure.csproj
 dotnet add Host/Host.csproj reference Migrators.PostgreSQL/Migrators.PostgreSQL.csproj
 ```
@@ -165,13 +165,13 @@ dotnet add Host/Host.csproj reference Migrators.PostgreSQL/Migrators.PostgreSQL.
 
 #### Domain Project
 ```bash
-dotnet add Domain/Domain.csproj package NewId -v 4.0.1
+dotnet add Domain/Base.Domain.csproj package NewId -v 4.0.1
 ```
 
 #### Application Project
 ```bash
-dotnet add Application/Application.csproj package FluentValidation.DependencyInjectionExtensions -v 11.5.2
-dotnet add Application/Application.csproj package MediatR.Extensions.Microsoft.DependencyInjection -v 11.1.0
+dotnet add Application/Base.Application.csproj package FluentValidation.DependencyInjectionExtensions -v 11.5.2
+dotnet add Application/Base.Application.csproj package MediatR.Extensions.Microsoft.DependencyInjection -v 11.1.0
 ```
 
 #### Infrastructure Project

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Shared.Common;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace Application.Common.Models;
+namespace Base.Application.Common.Models;
 
 public class PaginatedResponse<T>(List<T> data, int page, int count, int pageSize)
 {

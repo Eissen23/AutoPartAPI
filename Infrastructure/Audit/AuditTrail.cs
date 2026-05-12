@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
+using Base.Application.Common.Interface;
+using Base.Infrastructure.Audit;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Serilog.Formatting.Elasticsearch;
 
-namespace Infrastructure.Audit;
+namespace Base.Infrastructure.Audit;
 
 internal class AuditTrail(EntityEntry entry, ISerializerService serializerService)
 {

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Identities;
-using Application.Identities.Users;
+using Base.Application.Identities;
+using Base.Application.Identities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Shared.Common.Exceptions;
-using Application.Common.Interface;
+using Base.Application.Common.Interface;
 using Mapster;
 using System.Runtime.ExceptionServices;
 
-namespace Infrastructure.Identities;
+namespace Base.Infrastructure.Identities;
 
 public class UserService(
        UserManager<ApplicationUser> userManager,

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
+using Base.Application.Common.Interface;
 using Shared.Events;
 
-namespace Application.Common.Event;
+namespace Base.Application.Common.Event;
 
 public interface IEventPublisher : ITransientService
 {

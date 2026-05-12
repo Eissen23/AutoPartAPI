@@ -5,19 +5,19 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Application.Identities.Tokens;
+using Base.Application.Identities.Tokens;
 using Host.Authentication;
 using Shared.Common.Exceptions;
-using Infrastructure.Auth;
-using Infrastructure.Persistence.Context;
+using Base.Infrastructure.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Application.Persistence.Repository;
+using Base.Application.Persistence.Repository;
+using Base.Infrastructure.Persistence.Context;
 
-namespace Infrastructure.Identities;
+namespace Base.Infrastructure.Identities;
 
 public class TokenService(
     IOptions<JwtSettings> jwtSettings,

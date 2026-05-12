@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 
-namespace Infrastructure.Auth;
+namespace Base.Infrastructure.Auth;
 
 public class CurrentUserMiddleware(
         ICurrentUserInitializer currentUserInitializer

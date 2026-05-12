@@ -1,7 +1,7 @@
-using Domain.Entities.Categories;
-using Domain.ValueObjects;
+using Base.Domain.Entities.Categories;
+using Base.Domain.ValueObjects;
 
-namespace Domain.Entities.Products;
+namespace Base.Domain.Entities.Products;
 
 public class Product : AuditableEntity, IAggregateRoot
 {

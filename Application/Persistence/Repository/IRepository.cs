@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Persistence.Repository;
+namespace Base.Application.Persistence.Repository;
 
 /// <summary>
 /// The regular read/write repository for an aggregate root.

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Logging;
+namespace Base.Infrastructure.Logging;
 
 public class LoggerSettings
 {

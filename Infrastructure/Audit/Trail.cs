@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Domain.Entities.Common.Contracts;
+using Base.Domain.Entities.Common.Contracts;
 
-namespace Infrastructure.Audit;
+namespace Base.Infrastructure.Audit;
 
 public class Trail : BaseEntity
 {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Warehouses.Models;
+using Base.Application.Warehouses.Models;
 using FluentValidation;
 
-namespace Application.Warehouses.Validations;
+namespace Base.Application.Warehouses.Validations;
 
 public class CreateWarehouseLocationRequestValidator : AbstractValidator<CreateWarehouseLocationRequest>
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Domain.Entities.Common.Contracts;
+using Base.Domain.Entities.Common.Contracts;
 
-namespace Infrastructure.Identities;
+namespace Base.Infrastructure.Identities;
 
 public class Permission : AuditableEntity
 {

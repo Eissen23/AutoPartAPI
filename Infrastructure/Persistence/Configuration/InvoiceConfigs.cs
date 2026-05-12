@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Domain.Entities.Invoices;
+using Base.Domain.Entities.Invoices;
+using Base.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configuration;
+namespace Base.Infrastructure.Persistence.Configuration;
 
 public class InvoiceConfigs : IEntityTypeConfiguration<Invoice>
 {

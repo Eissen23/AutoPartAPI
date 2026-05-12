@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
-using Domain.Entities.Warehouses;
+using Base.Application.Common.Models;
+using Base.Domain.Entities.Warehouses;
 
-namespace Application.Warehouses.Models;
+namespace Base.Application.Warehouses.Models;
 
 public class CreateWarehouseLocationRequest
 {

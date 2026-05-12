@@ -24,9 +24,13 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Shared\Shared.csproj" />
-        <ProjectReference Include="..\Application\Application.csproj" />
-        <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+        <ProjectReference Include="..\Application\Base.Application.csproj" />
+        <ProjectReference Include="..\Infrastructure\Base.Infrastructure.csproj" />
         <ProjectReference Include="..\Migrators.PostgreSQL\Migrators.PostgreSQL.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Logs\" />
     </ItemGroup>
 
 </Project>

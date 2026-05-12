@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Domain.Entities.Customers;
+using Base.Domain.Entities.Customers;
+using Base.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configuration;
+namespace Base.Infrastructure.Persistence.Configuration;
 
 internal class CustomerConfigs : IEntityTypeConfiguration<Customer>
 {

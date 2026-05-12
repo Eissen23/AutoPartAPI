@@ -8,16 +8,17 @@
     <File Path="global.json" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="Application/Application.csproj">
-    <BuildDependency Project="Domain/Domain.csproj" />
+  <Project Path="Application/Base.Application.csproj">
+    <BuildDependency Project="Domain/Base.Domain.csproj" />
     <BuildDependency Project="Shared/Shared.csproj" />
   </Project>
-  <Project Path="Domain/Domain.csproj" />
-  <Project Path="Host/Host.csproj">
+  <Project Path="Base.AppHost/Base.AppHost.csproj" Id="270d6d6a-a814-44f1-96ea-612a08dcbc37" />
+  <Project Path="Domain/Base.Domain.csproj" />
+  <Project Path="Host/Base.Host.csproj">
     <BuildDependency Project="Migrators.PostgreSQL/Migrators.PostgreSQL.csproj" />
   </Project>
-  <Project Path="Infrastructure/Infrastructure.csproj">
-    <BuildDependency Project="Application/Application.csproj" />
+  <Project Path="Infrastructure/Base.Infrastructure.csproj">
+    <BuildDependency Project="Application/Base.Application.csproj" />
   </Project>
   <Project Path="Shared/Shared.csproj" Id="c69cd7a1-331d-4dc9-bdb6-618775d77af5" />
 </Solution>

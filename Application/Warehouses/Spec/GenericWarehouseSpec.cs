@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
-using Application.Common.Specifications;
-using Application.Warehouses.Models;
-using Domain.Entities.Warehouses;
+using Base.Application.Common.Models;
+using Base.Application.Common.Specifications;
+using Base.Application.Warehouses.Models;
+using Base.Domain.Entities.Warehouses;
 
-namespace Application.Warehouses.Spec;
+namespace Base.Application.Warehouses.Spec;
 
 public class GetAllWarehouseLocations : Specification<WarehouseLocation, WarehouseLocationDto>
 {

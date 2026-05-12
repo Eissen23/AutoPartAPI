@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Persistence.Repository;
+using Base.Application.Persistence.Repository;
 using Ardalis.Specification;
-using Domain.Entities.Common.Contracts;
-using Domain.Entities.Common.Events;
+using Base.Domain.Entities.Common.Contracts;
+using Base.Domain.Entities.Common.Events;
 
-namespace Infrastructure.Persistence.Repository;
+namespace Base.Infrastructure.Persistence.Repository;
 
 public class EventAddingRepositoryDecorator<T>(IRepository<T> innerRepository) : IRepositoryWithEvents<T>
     where T : class, IAggregateRoot

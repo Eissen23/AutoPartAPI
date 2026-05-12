@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Categories.Models;
-using Application.Categories.Specs;
-using Application.Common.Extension;
-using Application.Common.Models;
-using Application.Persistence.Repository;
-using Domain.Entities.Categories;
+using Base.Application.Categories.Models;
+using Base.Application.Categories.Specs;
+using Base.Application.Common.Extension;
+using Base.Application.Common.Models;
+using Base.Application.Persistence.Repository;
+using Base.Domain.Entities.Categories;
 using Shared.Common.Exceptions;
 
-namespace Application.Categories.Services;
+namespace Base.Application.Categories.Services;
 
 public class CategoryService(
         IRepositoryWithEvents<Category> eventRepos,

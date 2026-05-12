@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Common;
+namespace Base.Infrastructure.Common;
 
 internal class DbProviderKeys
 {

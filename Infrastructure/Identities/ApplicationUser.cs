@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Domain.Entities.Identity;
+using Base.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 
-namespace Infrastructure.Identities;
+namespace Base.Infrastructure.Identities;
 
 public class ApplicationUser : IdentityUser<Guid>
 {

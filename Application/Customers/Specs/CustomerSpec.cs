@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
-using Application.Common.Specifications;
-using Application.Customers.Models;
-using Domain.Entities.Customers;
+using Base.Application.Common.Models;
+using Base.Application.Common.Specifications;
+using Base.Application.Customers.Models;
+using Base.Domain.Entities.Customers;
 
-namespace Application.Customers.Specs;
+namespace Base.Application.Customers.Specs;
 
 public class GetAllCustomers : Specification<Customer, CustomerDto>
 {

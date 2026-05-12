@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
-using Application.Common.Models;
-using Application.Customers.Models;
+using Base.Application.Common.Interface;
+using Base.Application.Common.Models;
+using Base.Application.Customers.Models;
 
-namespace Application.Customers.Services;
+namespace Base.Application.Customers.Services;
 
 public interface ICustomerService : ITransientService
 {

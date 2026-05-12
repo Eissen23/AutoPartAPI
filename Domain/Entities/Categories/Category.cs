@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Entities.Categories;
+namespace Base.Domain.Entities.Categories;
 
 public class Category : AuditableEntity, IAggregateRoot
 {

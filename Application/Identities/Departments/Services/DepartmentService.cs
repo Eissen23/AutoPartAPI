@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Extension;
-using Application.Common.Models;
-using Application.Identities.Departments.Models;
-using Application.Identities.Departments.Specs;
-using Application.Identities.JobPosistions;
-using Application.Persistence.Repository;
-using Domain.Entities.Identity;
+using Base.Application.Common.Extension;
+using Base.Application.Common.Models;
+using Base.Application.Identities.Departments.Models;
+using Base.Application.Identities.Departments.Specs;
+using Base.Application.Identities.JobPosistions;
+using Base.Application.Persistence.Repository;
+using Base.Domain.Entities.Identity;
 using Shared.Common.Exceptions;
 
-namespace Application.Identities.Departments.Services;
+namespace Base.Application.Identities.Departments.Services;
 
 internal class DepartmentService(
         IRepositoryWithEvents<Department> eventRepos,

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Categories.Models;
-using Application.Common.Models;
-using Application.Common.Specifications;
-using Domain.Entities.Categories;
+using Base.Application.Categories.Models;
+using Base.Application.Common.Models;
+using Base.Application.Common.Specifications;
+using Base.Domain.Entities.Categories;
 
-namespace Application.Categories.Specs;
+namespace Base.Application.Categories.Specs;
 
 public class GetAllCategories : Specification<Category, CategoryDto>
 {

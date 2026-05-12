@@ -1,1 +1,1 @@
-﻿global using Domain.Entities.Common.Contracts;
+﻿global using Base.Domain.Entities.Common.Contracts;

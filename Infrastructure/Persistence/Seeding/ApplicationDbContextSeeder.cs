@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Infrastructure.Identities;
-using Infrastructure.Persistence.Context;
+using Base.Infrastructure.Persistence.Context;
+using Base.Infrastructure.Identities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Persistence.Seeding;
+namespace Base.Infrastructure.Persistence.Seeding;
 
 public class ApplicationDbContextSeeder(
     ApplicationDbContext context,

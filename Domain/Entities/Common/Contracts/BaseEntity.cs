@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using MassTransit;
-namespace Domain.Entities.Common.Contracts;
+namespace Base.Domain.Entities.Common.Contracts;
 
 
 public abstract class BaseEntity : BaseEntity<DefaultIdType>

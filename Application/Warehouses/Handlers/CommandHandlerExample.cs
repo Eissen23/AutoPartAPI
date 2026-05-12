@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Warehouses.Handlers;
+namespace Base.Application.Warehouses.Handlers;
 
 /// <summary>
 /// Only for the usage of mediator with complicated logic.

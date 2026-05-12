@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.Cors;
+namespace Base.Infrastructure.Cors;
 
 internal static class Startup
 {

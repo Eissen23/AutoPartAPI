@@ -1,11 +1,11 @@
 using System;
-using Infrastructure.Persistence.Context;
-using Infrastructure.Persistence.Seeding;
+using Base.Infrastructure.Persistence.Context;
+using Base.Infrastructure.Persistence.Seeding;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Infrastructure.Extensions;
+namespace Base.Infrastructure.Extensions;
 
 public static class SeedingExtensions
 {

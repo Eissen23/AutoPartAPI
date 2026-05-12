@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Domain.Entities.Products;
+using Base.Domain.Entities.Products;
+using Base.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configuration;
+namespace Base.Infrastructure.Persistence.Configuration;
 
 public class ProductConfigs : IEntityTypeConfiguration<Product>
 {

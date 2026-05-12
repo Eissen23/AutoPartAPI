@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Identities.Users;
+namespace Base.Application.Identities.Users;
 
 public record CreateUserRequest(
     string Email,

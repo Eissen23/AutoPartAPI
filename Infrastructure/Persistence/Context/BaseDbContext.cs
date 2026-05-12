@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Infrastructure.Persistence.Context;
+namespace Base.Infrastructure.Persistence.Context;
 
 internal class BaseDbContext
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Entities.Common.Events;
+namespace Base.Domain.Entities.Common.Events;
 
 public static class EntityCreatedEvent
 {

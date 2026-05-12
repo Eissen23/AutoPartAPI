@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
-namespace Infrastructure.OpenAPI;
+namespace Base.Infrastructure.OpenAPI;
 
 internal static class Startup
 {

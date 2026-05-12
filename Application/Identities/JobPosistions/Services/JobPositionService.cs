@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Extension;
-using Application.Common.Models;
-using Application.Identities.JobPosistions.Models;
-using Application.Persistence.Repository;
-using Domain.Entities.Identity;
+using Base.Application.Common.Extension;
+using Base.Application.Common.Models;
+using Base.Application.Identities.JobPosistions.Models;
+using Base.Application.Persistence.Repository;
+using Base.Domain.Entities.Identity;
 using Shared.Common.Exceptions;
 
-namespace Application.Identities.JobPosistions.Services;
+namespace Base.Application.Identities.JobPosistions.Services;
 
 public class JobPositionService(
         IRepositoryWithEvents<JobPosition> eventRepos,

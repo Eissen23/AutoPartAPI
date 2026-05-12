@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
-using Domain.Entities.Categories;
+using Base.Application.Common.Interface;
+using Base.Domain.Entities.Categories;
 
-namespace Application.Categories.Models;
+namespace Base.Application.Categories.Models;
 
 public class CategoryDto : IDto
 {

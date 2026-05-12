@@ -1,6 +1,6 @@
-﻿using Application.Common.Models;
-using Application.Identities.JobPosistions.Models;
-using Application.Identities.JobPosistions.Services;
+﻿using Base.Application.Common.Models;
+using Base.Application.Identities.JobPosistions.Models;
+using Base.Application.Identities.JobPosistions.Services;
 using Host.Extensions;
 using Shared.Common;
 

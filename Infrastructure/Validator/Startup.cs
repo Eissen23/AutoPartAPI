@@ -5,7 +5,7 @@ using System.Text;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.Validator;
+namespace Base.Infrastructure.Validator;
 
 internal static class Startup
 {

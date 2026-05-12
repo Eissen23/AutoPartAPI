@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
-using Application.PartLocations;
+using Base.Application.Common.Interface;
+using Base.Application.PartLocations;
 
-namespace Application.Warehouses.Models;
+namespace Base.Application.Warehouses.Models;
 
 public class WarehouseLocationDto : IDto
 {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Extension;
-using Application.Common.Models;
+using Base.Application.Common.Extension;
+using Base.Application.Common.Models;
 
-namespace Application.Common.Specifications;
+namespace Base.Application.Common.Specifications;
 
 public class FilterSpecification<T, TResult> : Specification<T, TResult>
     where T : class

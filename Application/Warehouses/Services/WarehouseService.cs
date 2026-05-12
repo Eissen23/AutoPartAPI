@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Extension;
-using Application.Common.Models;
-using Application.PartLocations;
-using Application.PartLocations.Specs;
-using Application.Persistence.Repository;
-using Application.Warehouses.Models;
-using Application.Warehouses.Spec;
-using Domain.Entities.Warehouses;
+using Base.Application.Common.Extension;
+using Base.Application.Common.Models;
+using Base.Application.PartLocations;
+using Base.Application.PartLocations.Specs;
+using Base.Application.Persistence.Repository;
+using Base.Application.Warehouses.Models;
+using Base.Application.Warehouses.Spec;
+using Base.Domain.Entities.Warehouses;
 using Shared.Common.Exceptions;
 
-namespace Application.Warehouses.Services;
+namespace Base.Application.Warehouses.Services;
 
 public class WarehouseService(
         IRepositoryWithEvents<WarehouseLocation> eventRepos,

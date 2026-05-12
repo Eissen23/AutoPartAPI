@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
-using Application.Common.Models;
-using Application.Identities.Departments;
-using Application.Identities.JobPosistions.Models;
+using Base.Application.Common.Interface;
+using Base.Application.Common.Models;
+using Base.Application.Identities.Departments;
+using Base.Application.Identities.JobPosistions.Models;
 
-namespace Application.Identities.JobPosistions.Services;
+namespace Base.Application.Identities.JobPosistions.Services;
 
 public interface IJobPositionService : ITransientService
 {

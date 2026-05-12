@@ -1,6 +1,6 @@
-﻿using Application.Common.Models;
-using Application.Identities.Departments.Models;
-using Application.Identities.Departments.Services;
+﻿using Base.Application.Common.Models;
+using Base.Application.Identities.Departments.Models;
+using Base.Application.Identities.Departments.Services;
 using Host.Extensions;
 using Shared.Common;
 

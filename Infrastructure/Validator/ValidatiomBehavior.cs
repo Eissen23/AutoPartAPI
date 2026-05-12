@@ -5,7 +5,7 @@ using Azure;
 using FluentValidation;
 using MediatR;
 
-namespace Infrastructure.Validator;
+namespace Base.Infrastructure.Validator;
 
 public class ValidatiomBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>

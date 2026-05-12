@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Extension;
-using Application.Common.Models;
-using Application.Invoices.Models;
-using Application.Invoices.Specs;
-using Application.Persistence.Repository;
-using Domain.Entities.Invoices;
+using Base.Application.Common.Extension;
+using Base.Application.Common.Models;
+using Base.Application.Invoices.Models;
+using Base.Application.Invoices.Specs;
+using Base.Application.Persistence.Repository;
+using Base.Domain.Entities.Invoices;
 using Shared.Common.Exceptions;
 
-namespace Application.Invoices.Services;
+namespace Base.Application.Invoices.Services;
 
 public class InvoiceService(
         IRepositoryWithEvents<Invoice> eventRepos,

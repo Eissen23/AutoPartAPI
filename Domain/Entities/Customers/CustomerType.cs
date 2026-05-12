@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Entities.Customers;
+namespace Base.Domain.Entities.Customers;
 
 public enum CustomerType
 {

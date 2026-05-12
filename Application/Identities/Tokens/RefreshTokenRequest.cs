@@ -2,6 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Identities.Tokens;
+namespace Base.Application.Identities.Tokens;
 
 public record RefreshTokenRequest (string Token, string RefreshToken);

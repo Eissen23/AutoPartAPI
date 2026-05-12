@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
-namespace Infrastructure.Auth;
+namespace Base.Infrastructure.Auth;
 
 public class PermissionRequirement : IAuthorizationRequirement 
 {

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Shared.Common.Exceptions;
 
-namespace Infrastructure.Auth;
+namespace Base.Infrastructure.Auth;
 
 public class ConfigureJwtBearerOption(IOptions<JwtSettings> jwtSettings) : IConfigureNamedOptions<JwtBearerOptions>
 {

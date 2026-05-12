@@ -1,8 +1,8 @@
 using Application;
 using Host.Configurations;
 using Infrastructure;
-using Infrastructure.Extensions;
-using Infrastructure.Logging.Serilog;
+using Base.Infrastructure.Extensions;
+using Base.Infrastructure.Logging.Serilog;
 using Microsoft.AspNetCore.Authentication;
 using Serilog;
 

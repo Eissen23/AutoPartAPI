@@ -1,6 +1,6 @@
-﻿using Application.Categories.Models;
-using Application.Categories.Services;
-using Application.Common.Models;
+﻿using Base.Application.Categories.Models;
+using Base.Application.Categories.Services;
+using Base.Application.Common.Models;
 using Host.Extensions;
 using Shared.Common;
 

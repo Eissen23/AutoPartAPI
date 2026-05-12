@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
-using Domain.Entities.Customers;
+using Base.Application.Common.Interface;
+using Base.Domain.Entities.Customers;
 
-namespace Application.Customers.Models;
+namespace Base.Application.Customers.Models;
 
 public class CustomerDto : IDto
 {

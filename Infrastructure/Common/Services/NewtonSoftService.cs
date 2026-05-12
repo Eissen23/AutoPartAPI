@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
+using Base.Application.Common.Interface;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace Infrastructure.Common.Services;
+namespace Base.Infrastructure.Common.Services;
 
 public class NewtonSoftService : ISerializerService
 {

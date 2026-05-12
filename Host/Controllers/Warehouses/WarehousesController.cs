@@ -1,6 +1,6 @@
-﻿using Application.Common.Models;
-using Application.Warehouses.Models;
-using Application.Warehouses.Services;
+﻿using Base.Application.Common.Models;
+using Base.Application.Warehouses.Models;
+using Base.Application.Warehouses.Services;
 using Azure.Core;
 using Host.Extensions;
 using Shared.Common;

@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Extension;
-using Application.Common.Models;
-using Application.Customers.Models;
-using Application.Customers.Specs;
-using Application.Persistence.Repository;
-using Domain.Entities.Customers;
+using Base.Application.Common.Extension;
+using Base.Application.Common.Models;
+using Base.Application.Customers.Models;
+using Base.Application.Customers.Specs;
+using Base.Application.Persistence.Repository;
+using Base.Domain.Entities.Customers;
 using Shared.Common.Exceptions;
 
-namespace Application.Customers.Services;
+namespace Base.Application.Customers.Services;
 
 public class CustomerService(
         IRepositoryWithEvents<Customer> eventRepos,

@@ -10,7 +10,7 @@ using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Formatting.Compact;
 
-namespace Infrastructure.Logging.Serilog;
+namespace Base.Infrastructure.Logging.Serilog;
 
 public static class Extensions
 {

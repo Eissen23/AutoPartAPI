@@ -1,4 +1,4 @@
-namespace Domain.ValueObjects;
+namespace Base.Domain.ValueObjects;
 
 public readonly record struct DocumentId(Guid Value)
 {

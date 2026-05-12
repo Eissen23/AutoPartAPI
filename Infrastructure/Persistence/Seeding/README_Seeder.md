@@ -39,9 +39,9 @@ Creates a default administrator account:
 ### Step 1: Register the Seeder in Program.cs
 
 ```csharp
-using Infrastructure.Extensions;
+using Base.Infrastructure.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebBase.Application.CreateBuilder(args);
 
 // ... other configurations ...
 

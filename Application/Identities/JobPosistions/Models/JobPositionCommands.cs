@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
-using Domain.Entities.Identity;
+using Base.Application.Common.Models;
+using Base.Domain.Entities.Identity;
 
-namespace Application.Identities.JobPosistions.Models;
+namespace Base.Application.Identities.JobPosistions.Models;
 
 public class CreateJobPositionRequest 
 {

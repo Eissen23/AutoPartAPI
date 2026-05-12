@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Extension;
-using Application.Common.Models;
-using Application.PartLocations.Models;
-using Application.PartLocations.Specs;
-using Application.Persistence.Repository;
-using Domain.Entities.Warehouses;
+using Base.Application.Common.Extension;
+using Base.Application.Common.Models;
+using Base.Application.PartLocations.Models;
+using Base.Application.PartLocations.Specs;
+using Base.Application.Persistence.Repository;
+using Base.Domain.Entities.Warehouses;
 using Shared.Common.Exceptions;
 
-namespace Application.PartLocations.Services;
+namespace Base.Application.PartLocations.Services;
 
 public class PartLocationService(
         IRepositoryWithEvents<PartLocation> eventRepos,

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Application.Common.Interface;
-using Infrastructure.Identities;
+using Base.Application.Common.Interface;
+using Base.Infrastructure.Identities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Infrastructure.Auth;
+namespace Base.Infrastructure.Auth;
 
 internal static class Startup
 {

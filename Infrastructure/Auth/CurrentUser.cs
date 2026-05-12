@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
-using Application.Common.Interface;
+using Base.Application.Common.Interface;
 using Shared.Authentication;
 
-namespace Infrastructure.Auth;
+namespace Base.Infrastructure.Auth;
 
 public class CurrentUser : ICurrentUser, ICurrentUserInitializer
 {

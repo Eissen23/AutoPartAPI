@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Domain.Entities.Products;
+using Base.Domain.Entities.Products;
 
-namespace Domain.Entities.Invoices;
+namespace Base.Domain.Entities.Invoices;
 
 public class InvoiceItem : AuditableEntity, IAggregateRoot
 {

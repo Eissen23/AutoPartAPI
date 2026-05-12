@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Entities.Warehouses;
+namespace Base.Domain.Entities.Warehouses;
 
 public class WarehouseLocation : AuditableEntity, IAggregateRoot
 {

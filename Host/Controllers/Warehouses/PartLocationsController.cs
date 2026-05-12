@@ -1,6 +1,6 @@
-﻿using Application.Common.Models;
-using Application.PartLocations.Models;
-using Application.PartLocations.Services;
+﻿using Base.Application.Common.Models;
+using Base.Application.PartLocations.Models;
+using Base.Application.PartLocations.Services;
 using Host.Extensions;
 using Shared.Common;
 

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Application.Common.Event;
-using Application.Common.Interface;
-using Infrastructure.Persistence;
-using Infrastructure.Persistence.Context;
+using Base.Application.Common.Event;
+using Base.Application.Common.Interface;
+using Base.Infrastructure.Persistence;
+using Base.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.DependencyInjection;

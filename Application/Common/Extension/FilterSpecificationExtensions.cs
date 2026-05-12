@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using Ardalis.Specification;
-using Application.Common.Models;
+using Base.Application.Common.Models;
 using System.Linq.Expressions;
 
-namespace Application.Common.Extension;
+namespace Base.Application.Common.Extension;
 
 public static class FilterSpecificationExtensions
 {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
-using Domain.Entities.Products;
+using Base.Application.Common.Models;
+using Base.Domain.Entities.Products;
 
-namespace Application.Products.Models;
+namespace Base.Application.Products.Models;
 
 public class CreateProductRequest 
 {

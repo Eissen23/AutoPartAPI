@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
-using Application.Common.Models;
-using Application.Persistence.Repository;
+using Base.Application.Common.Interface;
+using Base.Application.Common.Models;
+using Base.Application.Persistence.Repository;
 
-namespace Application.Common.Extension;
+namespace Base.Application.Common.Extension;
 
 public static class PaginationResponseExtension
 {

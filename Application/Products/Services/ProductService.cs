@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Categories;
-using Application.Categories.Specs;
-using Application.Common.Extension;
-using Application.Common.Models;
-using Application.PartLocations;
-using Application.PartLocations.Specs;
-using Application.Persistence.Repository;
-using Application.Products.Models;
-using Application.Products.Specs;
-using Domain.Entities.Categories;
-using Domain.Entities.Products;
-using Domain.Entities.Warehouses;
+using Base.Application.Categories;
+using Base.Application.Categories.Specs;
+using Base.Application.Common.Extension;
+using Base.Application.Common.Models;
+using Base.Application.PartLocations;
+using Base.Application.PartLocations.Specs;
+using Base.Application.Persistence.Repository;
+using Base.Application.Products.Models;
+using Base.Application.Products.Specs;
+using Base.Domain.Entities.Categories;
+using Base.Domain.Entities.Products;
+using Base.Domain.Entities.Warehouses;
 using Shared.Common.Exceptions;
 
-namespace Application.Products.Services;
+namespace Base.Application.Products.Services;
 
 public class ProductService(
         IRepositoryWithEvents<Product> eventRepos,

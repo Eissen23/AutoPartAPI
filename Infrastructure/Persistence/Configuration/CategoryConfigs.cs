@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Domain.Entities.Categories;
+using Base.Domain.Entities.Categories;
+using Base.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configuration;
+namespace Base.Infrastructure.Persistence.Configuration;
 
 public class CategoryConfigs : IEntityTypeConfiguration<Category>
 {

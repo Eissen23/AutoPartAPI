@@ -1,7 +1,7 @@
-﻿using Application.Common.Models;
-using Application.Customers.Models;
-using Application.Customers.Services;
-using Application.Identities.Departments;
+﻿using Base.Application.Common.Models;
+using Base.Application.Customers.Models;
+using Base.Application.Customers.Services;
+using Base.Application.Identities.Departments;
 using Host.Extensions;
 using Shared.Common;
 

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
-using Application.Common.Models;
-using Application.PartLocations.Models;
+using Base.Application.Common.Interface;
+using Base.Application.Common.Models;
+using Base.Application.PartLocations.Models;
 
-namespace Application.PartLocations.Services;
+namespace Base.Application.PartLocations.Services;
 
 public interface IPartLocationService : ITransientService
 {

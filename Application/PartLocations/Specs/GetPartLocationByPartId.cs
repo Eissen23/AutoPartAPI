@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Products.Models;
-using Domain.Entities.Warehouses;
+using Base.Application.Products.Models;
+using Base.Domain.Entities.Warehouses;
 
-namespace Application.PartLocations.Specs;
+namespace Base.Application.PartLocations.Specs;
 
 public class GetPartLocationByPartId : Specification<PartLocation, WarehouseStockDto>
 {

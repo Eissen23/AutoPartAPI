@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Categories.Models;
-using Application.Common.Interface;
-using Application.Warehouses;
-using Domain.Entities.Categories;
+using Base.Application.Categories.Models;
+using Base.Application.Common.Interface;
+using Base.Application.Warehouses;
+using Base.Domain.Entities.Categories;
 
-namespace Application.Products.Models;
+namespace Base.Application.Products.Models;
 
 public class ProductDto : IDto
 {

@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.Middlewares;
+namespace Base.Infrastructure.Middlewares;
 
 internal static class Startup
 {

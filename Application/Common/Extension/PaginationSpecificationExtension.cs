@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
+using Base.Application.Common.Models;
 
-namespace Application.Common.Extension;
+namespace Base.Application.Common.Extension;
 
 public static class PaginationSpecificationExtension
 {

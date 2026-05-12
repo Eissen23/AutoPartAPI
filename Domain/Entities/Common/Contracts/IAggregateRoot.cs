@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Entities.Common.Contracts;
+namespace Base.Domain.Entities.Common.Contracts;
 
 public interface IAggregateRoot : IEntity
 {

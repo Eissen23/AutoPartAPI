@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
-using Application.Common.Models;
-using Application.Invoices.Models;
+using Base.Application.Common.Interface;
+using Base.Application.Common.Models;
+using Base.Application.Invoices.Models;
 
-namespace Application.Invoices.Services;
+namespace Base.Application.Invoices.Services;
 
 public interface IInvoiceService : ITransientService
 {

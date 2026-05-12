@@ -1,6 +1,6 @@
-﻿using Application.Common.Models;
-using Application.Invoices.Models;
-using Application.Invoices.Services;
+﻿using Base.Application.Common.Models;
+using Base.Application.Invoices.Models;
+using Base.Application.Invoices.Services;
 using Host.Extensions;
 using Shared.Common;
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
+using Base.Application.Common.Models;
 
-namespace Application.InvoiceItems.Models;
+namespace Base.Application.InvoiceItems.Models;
 
 public class CreateInvoiceItemRequest
 {

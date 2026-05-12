@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Domain.Entities.Products;
+using Base.Domain.Entities.Products;
 
-namespace Domain.Entities.Warehouses;
+namespace Base.Domain.Entities.Warehouses;
 
 public class PartLocation : AuditableEntity, IAggregateRoot
 {

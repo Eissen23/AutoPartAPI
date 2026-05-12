@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
+using Base.Application.Common.Interface;
 
-namespace Application.Identities.JobPosistions.Models;
+namespace Base.Application.Identities.JobPosistions.Models;
 
 public class JobPositionDto : IDto
 {

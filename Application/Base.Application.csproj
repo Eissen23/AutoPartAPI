@@ -18,16 +18,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Shared\Shared.csproj" />
-        <ProjectReference Include="..\Domain\Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Identities\Departments\Handlers\" />
-      <Folder Include="Identities\JobPosistions\Handlers\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="Identities\JobPosistions\Specs\GenericSpecs.cs" />
+        <ProjectReference Include="..\Domain\Base.Domain.csproj" />
     </ItemGroup>
 
 </Project>

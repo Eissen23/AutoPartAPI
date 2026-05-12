@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
+using Base.Application.Common.Models;
 
-namespace Application.Identities.Departments.Models;
+namespace Base.Application.Identities.Departments.Models;
 
 public class CreateDepartmentRequest()
 {

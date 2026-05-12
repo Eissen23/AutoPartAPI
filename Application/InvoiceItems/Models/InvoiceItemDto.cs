@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
+using Base.Application.Common.Interface;
 
-namespace Application.InvoiceItems.Models;
+namespace Base.Application.InvoiceItems.Models;
 
 public class InvoiceItemDto : IDto
 {

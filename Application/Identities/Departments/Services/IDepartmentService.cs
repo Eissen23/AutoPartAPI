@@ -1,8 +1,8 @@
-﻿using Application.Common.Interface;
-using Application.Common.Models;
-using Application.Identities.Departments.Models;
+﻿using Base.Application.Common.Interface;
+using Base.Application.Common.Models;
+using Base.Application.Identities.Departments.Models;
 
-namespace Application.Identities.Departments.Services;
+namespace Base.Application.Identities.Departments.Services;
 
 public interface IDepartmentService : ITransientService
 {

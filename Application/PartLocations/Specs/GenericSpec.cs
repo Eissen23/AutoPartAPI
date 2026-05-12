@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
-using Application.Common.Specifications;
-using Application.PartLocations.Models;
-using Application.Products;
-using Domain.Entities.Warehouses;
+using Base.Application.Common.Models;
+using Base.Application.Common.Specifications;
+using Base.Application.PartLocations.Models;
+using Base.Application.Products;
+using Base.Domain.Entities.Warehouses;
 
-namespace Application.PartLocations.Specs;
+namespace Base.Application.PartLocations.Specs;
 
 public class GetAllPartLocations : Specification<PartLocation, PartLocationDto>
 {

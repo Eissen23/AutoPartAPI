@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Interface;
+using Base.Application.Common.Interface;
 
-namespace Application.PartLocations.Models;
+namespace Base.Application.PartLocations.Models;
 
 // Based on PartLocation attribute
 public class PartLocationDto : IDto

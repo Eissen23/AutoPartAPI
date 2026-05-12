@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
-using Application.Common.Specifications;
-using Application.InvoiceItems.Models;
-using Domain.Entities.Invoices;
+using Base.Application.Common.Models;
+using Base.Application.Common.Specifications;
+using Base.Application.InvoiceItems.Models;
+using Base.Domain.Entities.Invoices;
 
-namespace Application.InvoiceItems.Specs;
+namespace Base.Application.InvoiceItems.Specs;
 
 public class GetAllInvoiceItems : Specification<InvoiceItem, InvoiceItemDto>
 {

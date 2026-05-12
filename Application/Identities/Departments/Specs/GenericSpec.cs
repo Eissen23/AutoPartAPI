@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Application.Common.Models;
-using Application.Common.Specifications;
-using Application.Identities.Departments.Models;
-using Domain.Entities.Identity;
+using Base.Application.Common.Models;
+using Base.Application.Common.Specifications;
+using Base.Application.Identities.Departments.Models;
+using Base.Domain.Entities.Identity;
 
-namespace Application.Identities.Departments.Specs;
+namespace Base.Application.Identities.Departments.Specs;
 
 public class DepartmentByParentId : Specification<Department>
 {
