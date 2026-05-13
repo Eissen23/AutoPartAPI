@@ -16,6 +16,16 @@ public class PartLocation : AuditableEntity, IAggregateRoot
     public virtual Product Part { get; private set; } = default!;
     public virtual WarehouseLocation WarehouseLocation { get; private set; } = default!;
 
+    public static PartLocation Create(Guid partId, Guid warehouseLocationId, int quantityAtLocation)
+    {
+        return new PartLocation
+        {
+            PartId = partId,
+            WarehouseLocationId = warehouseLocationId,
+            QuantityAtLocation = quantityAtLocation
+        };
+    }
+
     public PartLocation Update(Guid? partId, Guid? warehouseLocationId, int? quantityAtLocation)
     {
         if (partId.HasValue && PartId != partId)

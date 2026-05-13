@@ -21,7 +21,7 @@ public class JobPositionService(
 
     public async Task<Guid> CreateAsync(CreateJobPositionRequest request, CancellationToken ct = default)
     {
-        var jobPosition = new JobPosition(
+        var jobPosition = JobPosition.Create(
                 title: request.Title,
                 description: request.Description,
                 salary: request.Salary,

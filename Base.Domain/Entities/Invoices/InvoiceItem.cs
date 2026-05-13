@@ -17,6 +17,22 @@ public class InvoiceItem : AuditableEntity, IAggregateRoot
     public virtual Invoice Invoice { get; private set; } = default!;
     public virtual Product Product { get; private set; } = default!;
 
+    public static InvoiceItem Create(
+        Guid invoiceId,
+        Guid productId,
+        int quantity,
+        decimal unitPrice)
+    {
+        var entity = new InvoiceItem()
+        {
+            InvoiceId = invoiceId,
+            ProductId = productId,
+            Quantity = quantity,
+            UnitPrice = unitPrice
+        };
+        return entity;
+    }
+
     public InvoiceItem Update(
         int? quantity,
         decimal? unitPrice,

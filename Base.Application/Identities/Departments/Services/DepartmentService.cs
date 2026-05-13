@@ -22,7 +22,7 @@ internal class DepartmentService(
 
     public async Task<Guid> CreateAsync(CreateDepartmentRequest request, CancellationToken ct = default)
     {
-        var department = new Department(
+        var department = Department.Create(
             request.Name,
             request.Description ?? "",
             request.ParentId

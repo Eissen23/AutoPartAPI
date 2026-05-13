@@ -21,12 +21,11 @@ public class InvoiceItemService(
 
     public async Task<Guid> CreateAsync(CreateInvoiceItemRequest request, CancellationToken ct)
     {
-        var invoiceItem = new InvoiceItem()
-            .Update(
-                request.Quantity,
-                request.UnitPrice,
+        var invoiceItem = InvoiceItem.Create(
                 request.ProductId,
-                request.InvoiceId
+                request.InvoiceId,
+                request.Quantity,
+                request.UnitPrice
             );
 
         var result = await _eventRepos.AddAsync(invoiceItem, ct);

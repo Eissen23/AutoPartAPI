@@ -25,8 +25,7 @@ public class WarehouseService(
 
     public async Task<Guid> CreateAsync(CreateWarehouseLocationRequest request, CancellationToken ct)
     {
-        var warehouseLocation = new WarehouseLocation()
-            .Update(
+        var warehouseLocation = WarehouseLocation.Create(
                 request.ZoneCode,
                 request.Aisle,
                 request.Shelf,

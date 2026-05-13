@@ -11,6 +11,22 @@ public class Customer : AuditableEntity, IAggregateRoot
     public string? Email { get; private set; }
     public CustomerType CustomerType { get; private set; }
 
+    public static Customer Create(
+        string name,
+        string? email,
+        string? phoneNumber,
+        CustomerType customerType)
+    {
+        var entity = new Customer()
+        {
+            Name = name,
+            Email = email,
+            PhoneNumber = phoneNumber,
+            CustomerType = customerType
+        };
+        return entity;
+    }
+
     public Customer Update(
         string? name,
         string? email,

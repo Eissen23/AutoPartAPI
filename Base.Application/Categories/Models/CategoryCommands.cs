@@ -8,10 +8,11 @@ namespace Base.Application.Categories.Models;
 
 public class CreateCategoryRequest
 {
+    public string CategoryCode { get; set; } = default!;
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
     public SystemType? Type { get; set; }
-    public decimal? DefaultMarkupPercentage { get; set; }
+    public decimal DefaultMarkupPercentage { get; set; }
 }
 
 
@@ -21,6 +22,7 @@ public class SearchCategoryRequest : PaginationFilter
 
 public class UpdateCategoryRequest
 {
+    public string CategoryCode { get; set; } = default!;
     public string? Name { get; set; }
     public string? Description { get; set; }
     public SystemType? Type { get; set; }

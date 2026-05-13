@@ -21,8 +21,7 @@ public class PartLocationService(
 
     public async Task<Guid> CreateAsync(CreatePartLocationRequest request, CancellationToken ct = default)
     {
-        var partLocation = new PartLocation()
-            .Update(
+        var partLocation = PartLocation.Create(
                 request.PartId,
                 request.WarehouseLocationId,
                 request.QuantityAtLocation

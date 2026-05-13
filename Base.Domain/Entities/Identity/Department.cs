@@ -15,15 +15,15 @@ public class Department : AuditableEntity, IAggregateRoot
     // Navigation Properties
     public Department? Parent { get; protected set; }
 
-    public Department()
+    public static Department Create(string name, string description, DefaultIdType? parentId)
     {
-    }
-
-    public Department(string name, string description, DefaultIdType? parentId)
-    {
-        Name = name;
-        Description = description;
-        ParentId = parentId;
+        var entity = new Department()
+        {
+            Name = name,
+            Description = description,
+            ParentId = parentId
+        };
+        return entity;
     }
 
     public void Update(string? name, string? description, Guid? parentId)

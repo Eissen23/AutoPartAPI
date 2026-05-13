@@ -10,7 +10,7 @@ using Base.Domain.Entities.Identity;
 using Base.Domain.Entities.Invoices;
 using Base.Domain.Entities.Products;
 using Base.Domain.Entities.Warehouses;
-using Base.Infrastructure.Audit;
+using Base.Domain.Entities.FileStorage;
 using Base.Infrastructure.Audit;
 using Base.Infrastructure.Identities;
 using Base.Infrastructure.Persistence.Configuration;
@@ -25,17 +25,14 @@ public class ApplicationDbContext(
     ISerializerService serializerService,
     ICurrentUser currentUser,
     IEventPublisher eventPublisher
-    ) : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options)
+    ) : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options), IApplicationDbContext
 {
-
     private readonly ISerializerService _serializer = serializerService;
     private readonly ICurrentUser _currentUser = currentUser;
     private readonly IEventPublisher _events = eventPublisher;
-
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Category> Categories => Set<Category>();
-
     public DbSet<WarehouseLocation> WarehouseLocations => Set<WarehouseLocation>();
     public DbSet<PartLocation> PartLocations => Set<PartLocation>();
     public DbSet<Invoice> Invoices => Set<Invoice>();

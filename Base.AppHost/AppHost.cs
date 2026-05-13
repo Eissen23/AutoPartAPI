@@ -11,7 +11,10 @@ var databaseName = builder.AddParameter("database-name", $"{dbName}");
 
 var postgres = builder.AddPostgres("postgres-database", port: postgresPort, password: postgresPassword)
     .WithDataVolume("base-postgres-database")
-    .WithLifetime(ContainerLifetime.Session);
+    .WithLifetime(ContainerLifetime.Session)
+    .WithImage("postgres", "17.4-bullseye")
+    .WithContainerRuntimeArgs("--env", "TZ=Asia/Ho_Chi_Minh")
+    .WithContainerRuntimeArgs("--env", "PGTZ=Asia/Ho_Chi_Minh");
 
 var autopartDb = postgres.AddDatabase(dbName, "FREEDB1");
 

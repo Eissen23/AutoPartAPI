@@ -11,9 +11,24 @@ public class WarehouseLocation : AuditableEntity, IAggregateRoot
     public int Aisle { get; private set; }
     public int Shelf { get; private set; }
     public string? Bin { get; private set; }
-
-
     public bool IsOverstocked { get; private set; }
+
+    public static WarehouseLocation Create(
+        string zoneCode,
+        int aisle,
+        int shelf,
+        string? bin = null,
+        bool isOverstocked = false)
+    {
+        return new WarehouseLocation
+        {
+            ZoneCode = zoneCode,
+            Aisle = aisle,
+            Shelf = shelf,
+            Bin = bin,
+            IsOverstocked = isOverstocked
+        };
+    }
 
     public WarehouseLocation Update(
         string? zoneCode,

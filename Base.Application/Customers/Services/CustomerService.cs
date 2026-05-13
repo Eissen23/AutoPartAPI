@@ -21,8 +21,7 @@ public class CustomerService(
 
     public async Task<Guid> CreateAsync(CreateCustomerRequest request, CancellationToken ct)
     {
-        var customer = new Customer()
-            .Update(
+        var customer = Customer.Create(
                 request.Name,
                 request.Email,
                 request.PhoneNumber,

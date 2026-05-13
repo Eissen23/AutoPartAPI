@@ -13,18 +13,16 @@ public class JobPosition : AuditableEntity, IAggregateRoot
 
     public AccessLevel AccessLevel { get; protected set; }
 
-    // Navigation Properties
-
-    public JobPosition()
+    public static JobPosition Create(string title, string? description, decimal? salary, AccessLevel accessLevel)
     {
-    }
-
-    public JobPosition(string title, string? description, decimal? salary, AccessLevel accessLevel)
-    {
-        Title = title;
-        Description = description;
-        Salary = salary;
-        AccessLevel = accessLevel;
+        var entity = new JobPosition()
+        {
+            Title = title,
+            Description = description,
+            Salary = salary,
+            AccessLevel = accessLevel
+        };
+        return entity;
     }
 
     public void Update(string? title, string? description, decimal? salary, AccessLevel? accessLevel)

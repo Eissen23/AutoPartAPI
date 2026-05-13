@@ -21,8 +21,8 @@ public class CategoryService(
 
     public async Task<Guid> CreateAsync(CreateCategoryRequest request, CancellationToken ct = default)
     {
-        var category = new Category()
-            .Update(
+        var category = Category.Create(
+                request.CategoryCode,
                 request.Name,
                 request.Description,
                 request.Type,
@@ -94,6 +94,7 @@ public class CategoryService(
         _ = category ?? throw new NotFoundException($"Category with id {id} not found.");
 
         category.Update(
+            request.CategoryCode,
             request.Name,
             request.Description,
             request.Type,

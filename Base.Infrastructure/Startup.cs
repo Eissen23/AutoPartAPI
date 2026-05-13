@@ -3,6 +3,7 @@ using Asp.Versioning;
 using Base.Infrastructure.Auth;
 using Base.Infrastructure.Common;
 using Base.Infrastructure.Cors;
+using Base.Infrastructure.FileStorage;
 using Base.Infrastructure.Identities;
 using Base.Infrastructure.Middlewares;
 using Base.Infrastructure.OpenAPI;
@@ -30,6 +31,7 @@ public static class Startup
             .AddBehaviours(applicationAssembly)
             .AddExceptionMiddleware()
             .AddRouting(options => options.LowercaseUrls = true)
+            .AddStorage()
             .AddServices();
 
         return services;

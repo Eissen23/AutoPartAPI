@@ -7,12 +7,12 @@ using Base.Infrastructure.Persistence.Configuration;
 using Base.Infrastructure.Persistence.Context;
 using Base.Infrastructure.Persistence.Repository;
 using Base.Infrastructure.Common;
-using Base.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Serilog;
+using Base.Application.Common.Interface;
 
 namespace Base.Infrastructure.Persistence;
 
@@ -27,6 +27,16 @@ public static class Startup
            .BindConfiguration(nameof(DatabaseSettings))
            .PostConfigure(databaseSettings =>
            {
+               var env = Environment.GetEnvironmentVariable("env");
+               var aspireConnectionString = Environment.GetEnvironmentVariable("ConnectionStrings__BaseAutopart");
+               if (env?.Equals("aspire", StringComparison.OrdinalIgnoreCase) is true &&
+                   !string.IsNullOrWhiteSpace(aspireConnectionString) &&
+                   databaseSettings.ConnectionString?.Equals(aspireConnectionString, StringComparison.Ordinal) is not true)
+               {
+                   databaseSettings.ConnectionString = aspireConnectionString;
+                   _logger.Information("Database connection string overridden from AppHost resource: BaseAutopart");
+               }
+
                _logger.Information("Current DB Provider: {dbProvider}", databaseSettings.DBProvider);
                _logger.Information("Current Schema Name: {schemaName}", databaseSettings.SchemaName);
 
@@ -43,6 +53,7 @@ public static class Startup
                 var databaseSettings = p.GetRequiredService<IOptions<DatabaseSettings>>().Value;
                 m.UseDatabase(databaseSettings.DBProvider, databaseSettings.ConnectionString);
             })
+            .AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>())
             .AddRepositories();
 
         return services;

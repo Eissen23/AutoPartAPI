@@ -17,6 +17,19 @@ public class Product : AuditableEntity, IAggregateRoot
     // Navigation property
     public virtual Category Category { get; private set; } = default!;
 
+    public static Product Create(string partNumber, string name, string? description, decimal unitCost, decimal? retailPrice, Guid categoryId)
+    {
+        return new Product
+        {
+            PartNumber = partNumber,
+            Name = name,
+            Description = description,
+            UnitCost = unitCost,
+            RetailPrice = retailPrice,
+            CategoryId = categoryId
+        };
+    }
+
     public Product Update(
         string? partNumber,
         string? name,
@@ -29,11 +42,11 @@ public class Product : AuditableEntity, IAggregateRoot
             PartNumber = partNumber;
         if (name is not null && Name?.Equals(name) is not true)
             Name = name;
-        if (description is not null && Description?.Equals(description) is not true)
+        if (Description?.Equals(description) is not true)
             Description = description;
         if (unitCost.HasValue && UnitCost != unitCost)
             UnitCost = unitCost.Value;
-        if (retailPrice.HasValue && RetailPrice != retailPrice)
+        if (RetailPrice != retailPrice)
             RetailPrice = retailPrice;
         if (categoryId.HasValue && CategoryId != categoryId)
             CategoryId = categoryId.Value;

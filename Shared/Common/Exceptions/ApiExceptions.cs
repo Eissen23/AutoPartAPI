@@ -71,6 +71,17 @@ public class ConflicException : BaseApiException
     }
 }
 
+public class DomainException : BaseApiException
+{
+    public DomainException()
+        : base(HttpStatusCode.BadRequest, "DOMAIN_ERROR", "")
+    {
+    }
+    public DomainException(string message)
+        : base(HttpStatusCode.BadRequest, "DOMAIN_ERROR", message)
+    {
+    }
+}
 
 public class ValidationException : BaseApiException
 {

@@ -15,6 +15,22 @@ public class Invoice : AuditableEntity, IAggregateRoot
     // Navigation property
     public virtual Customer Customer { get; private set; } = default!;
 
+    public static Invoice Create(
+        Guid customerId,
+        DateTime? saleDate,
+        decimal? taxAmount,
+        decimal? totalAmount)
+    {
+        var entity = new Invoice()
+        {
+            CustomerId = customerId,
+            SaleDate = saleDate,
+            TaxAmount = taxAmount,
+            TotalAmount = totalAmount
+        };
+        return entity;
+    }
+
     public Invoice Update(
         Guid? customerId,
         DateTime? saleDate,

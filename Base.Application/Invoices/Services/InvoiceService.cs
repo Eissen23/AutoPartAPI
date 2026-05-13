@@ -21,8 +21,7 @@ public class InvoiceService(
 
     public async Task<Guid> CreateAsync(CreateInvoiceRequest request, CancellationToken ct  = default)
     {
-        var invoice = new Invoice()
-            .Update(
+        var invoice = Invoice.Create(
                 request.CustomerId,
                 request.SaleDate,
                 request.TaxAmount,
