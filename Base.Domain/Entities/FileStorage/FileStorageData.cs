@@ -33,6 +33,7 @@ public class FileStorageData : AuditableEntity, IAggregateRoot
     public string? CheckSum {  get; private set; }
 
     public static FileStorageData Create(
+        Guid id,
         string fileName,
         string fileExtension,
         string targetTable,
@@ -50,6 +51,7 @@ public class FileStorageData : AuditableEntity, IAggregateRoot
         )
     {
         var entity = new FileStorageData() {
+            Id = id,
             FileName = fileName,
             FileExtension = fileExtension,
             TargetTable = targetTable,

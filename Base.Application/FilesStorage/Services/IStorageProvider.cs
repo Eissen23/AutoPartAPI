@@ -6,6 +6,8 @@ namespace Base.Application.FilesStorage.Services;
 
 public interface IStorageProvider
 {
+    string Name { get; }
+
     /// <summary>
     /// Save a file stream into storage and return the storage key (relative path)
     /// </summary>

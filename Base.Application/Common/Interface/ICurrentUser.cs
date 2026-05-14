@@ -16,4 +16,6 @@ public interface ICurrentUser
     bool IsAuthenticated();
 
     IEnumerable<Claim>? GetUserClaims();
+
+
 }

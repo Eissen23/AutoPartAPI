@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Base.Application.Common.Interface;
 using Base.Application.FilesStorage.Models;
@@ -43,8 +44,7 @@ public class FileStorageService(
     private readonly ILogger<FileStorageService> _logger = logger;
 
 
-
-    public Task<int> BatchPublishAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+    public async Task<int> BatchPublishAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -54,9 +54,55 @@ public class FileStorageService(
         throw new NotImplementedException();
     }
 
-    public Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var entity = await _dbContext.Set<FileStorageData>().FirstOrDefaultAsync(f => f.Id == id, cancellationToken) ?? throw new NotFoundException($"File with ID {id} not found.");
+        
+
+        // If StorageKey is set, try provider deletion first (safer for new storage layout)
+        if (!string.IsNullOrWhiteSpace(entity.StorageKey))
+        {
+            try
+            {
+                await _storageProvider.DeleteAsync(entity.StorageKey!, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to delete via storage provider: {Key}", entity.StorageKey);
+            }
+        }
+
+        var stored = entity.FilePath?.Trim() ?? string.Empty;
+        var relative = stored.TrimStart('/', '\\');
+
+        var candidates = new List<string>
+        {
+            Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relative)),
+            Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), relative)),
+            stored
+        };
+
+        foreach (var candidate in candidates.Distinct())
+        {
+            try
+            {
+                if (File.Exists(candidate))
+                {
+                    File.Delete(candidate);
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to delete file on disk: {Path}", candidate);
+            }
+        }
+
+        _dbContext.Set<FileStorageData>().Remove(entity);
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Deleted file with ID {Id}", id);
     }
 
     public Task<Stream> ExportByTargetAsync(string targetTable, string targetId, CancellationToken cancellationToken = default)
@@ -117,6 +163,7 @@ public class FileStorageService(
                 PublicUrl = file.IsPublic ? file.FilePath : null,
                 Checksum = file.CheckSum,
                 FileType = file.FileType,
+                FileSize = file.FileSize,
                 FileVisibility = file.FileVisibility,
                 AllowedRoles = file.AllowedRoles,
                 RelatedTable = file.RelatedTable,
@@ -194,51 +241,123 @@ public class FileStorageService(
 
     public async Task<Guid> UploadAsync(FileUploadRequest request, CancellationToken cancellationToken = default)
     {
-        //if (request.File == null || request.File.Length == 0)
-        //    throw new DomainException("File is required");
+        if (request.File == null || request.File.Length == 0)
+            throw new DomainException("File is required");
 
-        //var subfolder = request.IsPublic ? "public" : "private";
+        var subfolder = request.IsPublic ? "public" : "private";
 
-        //var saveFolderAbsolute = request.IsPublic
-        //    ? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", StoragePath, subfolder)
-        //    : Path.Combine(Directory.GetCurrentDirectory(), StoragePath, subfolder);
+        var saveFolderAbsolute = request.IsPublic
+            ? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", StoragePath, subfolder)
+            : Path.Combine(Directory.GetCurrentDirectory(), StoragePath, subfolder);
 
-        //if (!Directory.Exists(saveFolderAbsolute))
-        //    Directory.CreateDirectory(saveFolderAbsolute);
+        if (!Directory.Exists(saveFolderAbsolute))
+            Directory.CreateDirectory(saveFolderAbsolute);
 
-        //var fileId = Guid.NewGuid();
-        //var originalFileName = Path.GetFileNameWithoutExtension(request.File.FileName);
-        //var extension = Path.GetExtension(request.File.FileName);
+        var fileId = Guid.NewGuid();
+        var originalFileName = Path.GetFileNameWithoutExtension(request.File.FileName);
+        var extension = Path.GetExtension(request.File.FileName);
 
-        //var fileName = $"{fileId}{extension}";
-        //var fileAbsolutePath = Path.Combine(saveFolderAbsolute, fileName);
+        using Stream uploadStream = request.File.OpenReadStream();
+        using var ms = new MemoryStream();
+        await uploadStream.CopyToAsync(ms, cancellationToken);
+        ms.Position = 0;
 
-        //using Stream uploadStream = request.File.OpenReadStream();
-        //using var ms = new MemoryStream();
-        //await uploadStream.CopyToAsync(ms, cancellationToken);
-        //ms.Position = 0;
+        string? checksum = null;
+        try
+        {
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            ms.Position = 0;
+            var hash = sha.ComputeHash(ms);
+            checksum = Convert.ToHexStringLower(hash);
+            ms.Position = 0;
+        }
+        catch { }
 
-        //string? checksum = null;
-        //try
-        //{
-        //    using var sha = System.Security.Cryptography.SHA256.Create();
-        //    ms.Position = 0;
-        //    var hash = sha.ComputeHash(ms);
-        //    checksum = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-        //    ms.Position = 0;
-        //}
-        //catch { }
+        var datePath = Path.Combine(DateTime.UtcNow.ToString("yyyy"), DateTime.UtcNow.ToString("MM"), DateTime.UtcNow.ToString("dd"));
+        var subfolder2 = request.IsPublic ? Path.Combine("public", datePath) : Path.Combine("private", datePath);
+        var fileName2 = $"{fileId}{extension}";
+        var relativeStoragePath = Path.Combine(StoragePath, subfolder2, fileName2).Replace('\\', '/');
 
-        //var datePath = Path.Combine(DateTime.UtcNow.ToString("yyyy"), DateTime.UtcNow.ToString("MM"), DateTime.UtcNow.ToString("dd"));
-        //var subfolder2 = request.IsPublic ? Path.Combine("public", datePath) : Path.Combine("private", datePath);
-        //var fileName2 = $"{fileId}{extension}";
-        //var relativeStoragePath = Path.Combine(StoragePath, subfolder2, fileName2).Replace('\\', '/');
+        var storageKey = await _storageProvider.SaveAsync(ms, relativeStoragePath, request.IsPublic, cancellationToken);
 
-        //var storageKey = await _storageProvider.SaveAsync(ms, relativeStoragePath, request.IsPublic, cancellationToken);
+        FileType type = request.FileType ?? GetFileType(extension);
 
-        //FileType type = request.FileType ?? GetFileType(extension);
+        // If target table/id provided, ensure the record exists
+        if (!string.IsNullOrWhiteSpace(request.TargetTable) && !string.IsNullOrWhiteSpace(request.TargetId))
+        {
+            await EnsureTargetExistsAsync(request.TargetTable!, request.TargetId!);
+        }
 
-        throw new NotImplementedException();
+        // Use the storage key as stored path for backward compatibility
+        // If not Local, store the full path as requested
+        var storedPath = _storageProvider.Name == "Local"
+            ? storageKey
+            : _storageProvider.GetAbsolutePath(storageKey);
+
+        // Create entity
+        var fileStorage = FileStorageData.Create(
+             id: fileId,
+             fileName: originalFileName,
+             fileExtension: extension,
+             targetTable: request.TargetTable,
+             targetId: request.TargetId,
+             relatedTable: request.RelatedTable,
+             relatedId: request.RelatedId,
+             fileType: type,
+             isPublic: request.IsPublic,
+             fileVisibility: request.IsPublic ? FileVisibility.PUBLIC : FileVisibility.AUTHENTICATED, // Default to public, can be updated later
+             allowedRoles: string.Empty, // No roles by default, can be updated later
+             filePath: storedPath,
+             fileSize: request.File.Length / 1024f, // Size in KB
+             storageKey: storageKey,
+             checkSum: checksum
+        );
+
+        // Set default visibility and allowed roles
+        await _dbContext.Set<FileStorageData>().AddAsync(fileStorage, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("File uploaded successfully: {FileId}, {FileName}", fileId, originalFileName);
+
+        return fileId;
+    }
+
+    private async Task EnsureTargetExistsAsync(string tableName, string targetId)
+    {
+        PropertyInfo? prop = _dbContext.GetType().GetProperties()
+            .FirstOrDefault(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>)
+                && (string.Equals(p.Name, tableName, StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(p.PropertyType.GenericTypeArguments[0].Name, tableName, StringComparison.OrdinalIgnoreCase))) ?? throw new DomainException($"Target table '{tableName}' not found");
+
+        Type entityType = prop.PropertyType.GetGenericArguments()[0];
+        PropertyInfo idProp = entityType.GetProperty("Id") ?? throw new DomainException($"Entity '{entityType.Name}' has no Id property");
+
+        object keyValue;
+        try
+        {
+            Type idType = idProp.PropertyType;
+            if (idType == typeof(Guid) || idType == typeof(Guid?))
+                keyValue = Guid.Parse(targetId);
+            else if (idType == typeof(int) || idType == typeof(int?))
+                keyValue = int.Parse(targetId);
+            else if (idType == typeof(long) || idType == typeof(long?))
+                keyValue = long.Parse(targetId);
+            else
+                keyValue = targetId;
+        }
+        catch (Exception ex)
+        {
+            throw new DomainException($"Invalid target id format for '{tableName}': {ex.Message}");
+        }
+
+        var setMethod = _dbContext.GetType().GetMethods()
+            .Where(m => m.Name == "Set" && m.IsGenericMethodDefinition)
+            .FirstOrDefault(m => m.GetParameters().Length == 0)
+            ?? throw new DomainException($"Unable to resolve DbSet for '{tableName}'");
+
+        var set = setMethod.MakeGenericMethod(entityType).Invoke(_dbContext, null);
+        dynamic setDyn = set!;
+        dynamic found = await setDyn.FindAsync(keyValue) ?? throw new DomainException($"Target record '{targetId}' in table '{tableName}' not found");
     }
 
     private static string GetContentType(string extension)

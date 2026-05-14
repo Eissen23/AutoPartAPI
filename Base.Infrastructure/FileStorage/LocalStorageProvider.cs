@@ -8,6 +8,7 @@ namespace Base.Infrastructure.FileStorage;
 
 public class LocalStorageProvider(IWebHostEnvironment env) : IStorageProvider
 {
+    public string Name => "Local";
     private const string StorageRoot = "uploads";
     private readonly string _contentRoot = env.ContentRootPath;
 
