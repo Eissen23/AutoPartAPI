@@ -179,3 +179,7 @@ dotnet_diagnostic.RCS1047.severity = none
 
 # RCS1163: Unused parameter.
 dotnet_diagnostic.RCS1163.severity = none
+
+# disable CA1873: "Violation: expensive operation in logging argument"
+[*.{cs,vb}]
+dotnet_diagnostic.CA1873.severity = none

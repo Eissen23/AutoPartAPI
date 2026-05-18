@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using Base.Application.Common.Interface;
 using Base.Application.FilesStorage.Models;
 using Base.Domain.Entities.FileStorage;
@@ -46,12 +48,89 @@ public class FileStorageService(
 
     public async Task<int> BatchPublishAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var idList = ids.Distinct().ToList();
+        if (idList.Count == 0)
+            return 0;
+
+        var entities = await _dbContext.Set<FileStorageData>()
+            .Where(f => idList.Contains(f.Id))
+            .ToListAsync(cancellationToken);
+
+        var successCount = 0;
+        var now = DateTime.UtcNow;
+        var datePath = Path.Combine(now.ToString("yyyy"), now.ToString("MM"), now.ToString("dd"));
+
+        foreach (var entity in entities)
+        {
+            try
+            {
+                if (entity.IsPublic && entity.FileVisibility == FileVisibility.PUBLIC)
+                    continue;
+
+                var readKey = entity.StorageKey ?? entity.FilePath;
+                if (string.IsNullOrWhiteSpace(readKey))
+                {
+                    _logger.LogWarning("File {Id} has no storage key or path, skipping publish", entity.Id);
+                    continue;
+                }
+
+                await using var stream = await _storageProvider.OpenReadAsync(readKey, cancellationToken);
+                if (stream is null)
+                {
+                    _logger.LogWarning("File {Id} could not be read from storage: {Key}", entity.Id, readKey);
+                    continue;
+                }
+
+                using var ms = new MemoryStream();
+                await stream.CopyToAsync(ms, cancellationToken);
+                ms.Position = 0;
+
+                var fileName = $"{entity.Id}{entity.FileExtension}";
+                var relativeStoragePath = Path.Combine(StoragePath, "public", datePath, fileName).Replace('\\', '/');
+                var oldStorageKey = entity.StorageKey ?? readKey;
+
+                var newStorageKey = await _storageProvider.SaveAsync(ms, relativeStoragePath, isPublic: true, cancellationToken);
+
+                var storedPath = _storageProvider.Name == "Local"
+                    ? newStorageKey
+                    : _storageProvider.GetAbsolutePath(newStorageKey);
+
+                try
+                {
+                    await _storageProvider.DeleteAsync(oldStorageKey, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Failed to delete old file after publish: {Key}", oldStorageKey);
+                }
+
+                entity.FilePath = storedPath;
+                entity.StorageKey = newStorageKey;
+                entity.IsPublic = true;
+                entity.FileVisibility = FileVisibility.PUBLIC;
+
+                successCount++;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to publish file {Id}", entity.Id);
+            }
+        }
+
+        if (successCount > 0)
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return successCount;
     }
 
-    public Task<int> BatchPublishByTargetAsync(string targetTable, string targetId, CancellationToken cancellationToken = default)
+    public async Task<int> BatchPublishByTargetAsync(string targetTable, string targetId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var ids = await _dbContext.Set<FileStorageData>()
+            .Where(f => f.TargetTable == targetTable && f.TargetId == targetId)
+            .Select(f => f.Id)
+            .ToListAsync(cancellationToken);
+
+        return await BatchPublishAsync(ids, cancellationToken);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
@@ -105,14 +184,63 @@ public class FileStorageService(
         _logger.LogInformation("Deleted file with ID {Id}", id);
     }
 
-    public Task<Stream> ExportByTargetAsync(string targetTable, string targetId, CancellationToken cancellationToken = default)
+    public async Task<Stream> ExportByTargetAsync(string targetTable, string targetId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var files = await _dbContext.Set<FileStorageData>()
+            .AsNoTracking()
+            .Where(f => f.TargetTable == targetTable && f.TargetId == targetId)
+            .ToListAsync(cancellationToken);
+
+        var zipStream = new MemoryStream();
+        var usedEntryNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, leaveOpen: true))
+        {
+            foreach (var file in files)
+            {
+                var readKey = file.StorageKey ?? file.FilePath;
+                if (string.IsNullOrWhiteSpace(readKey))
+                {
+                    _logger.LogWarning("File {Id} has no storage key or path, skipping export", file.Id);
+                    continue;
+                }
+
+                await using var contentStream = await _storageProvider.OpenReadAsync(readKey, cancellationToken);
+                if (contentStream is null)
+                {
+                    _logger.LogWarning("File {Id} could not be read from storage: {Key}", file.Id, readKey);
+                    continue;
+                }
+
+                var entryName = BuildZipEntryName(file, usedEntryNames);
+                var entry = archive.CreateEntry(entryName, CompressionLevel.Optimal);
+                await using var entryStream = entry.Open();
+                await contentStream.CopyToAsync(entryStream, cancellationToken);
+            }
+        }
+
+        zipStream.Position = 0;
+        return zipStream;
     }
 
-    public Task<string> GeneratePresignedUrlAsync(Guid id, TimeSpan expiresIn, CancellationToken cancellationToken = default)
+    public async Task<string> GeneratePresignedUrlAsync(Guid id, TimeSpan expiresIn, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        if (expiresIn <= TimeSpan.Zero)
+            throw new DomainException("Expiration time span must be greater than zero.");
+
+        var exists = await _dbContext.Set<FileStorageData>()
+            .AsNoTracking()
+            .AnyAsync(f => f.Id == id, cancellationToken);
+
+        if (!exists)
+            throw new NotFoundException($"File with ID {id} not found.");
+
+        var expiresAt = DateTimeOffset.UtcNow.Add(expiresIn);
+        var payload = JsonSerializer.Serialize(new PresignedUrlPayload(id, expiresAt));
+        var protectedPayload = _dataProtector.Protect(Encoding.UTF8.GetBytes(payload));
+        var token = Base64UrlEncode(protectedPayload);
+
+        return $"/api/v1/FileStorage/presigned/{token}";
     }
 
     public async Task<FileStorageDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -234,9 +362,21 @@ public class FileStorageService(
         };
     }
 
-    public Task<string> UpdateVisibilityAsync(Guid id, FileVisibility visibility, string? allowedRoles, CancellationToken cancellationToken = default)
+    public async Task<string> UpdateVisibilityAsync(Guid id, FileVisibility visibility, string? allowedRoles, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var entity = await _dbContext.Set<FileStorageData>()
+            .FirstOrDefaultAsync(f => f.Id == id, cancellationToken)
+            ?? throw new NotFoundException($"File with ID {id} not found.");
+
+        entity.FileVisibility = visibility;
+        entity.AllowedRoles = allowedRoles ?? string.Empty;
+        entity.IsPublic = visibility == FileVisibility.PUBLIC;
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Updated visibility for file {Id} to {Visibility}", id, visibility);
+
+        return "Visibility Updated";
     }
 
     public async Task<Guid> UploadAsync(FileUploadRequest request, CancellationToken cancellationToken = default)
@@ -295,23 +435,23 @@ public class FileStorageService(
             : _storageProvider.GetAbsolutePath(storageKey);
 
         // Create entity
-        var fileStorage = FileStorageData.Create(
-             id: fileId,
-             fileName: originalFileName,
-             fileExtension: extension,
-             targetTable: request.TargetTable,
-             targetId: request.TargetId,
-             relatedTable: request.RelatedTable,
-             relatedId: request.RelatedId,
-             fileType: type,
-             isPublic: request.IsPublic,
-             fileVisibility: request.IsPublic ? FileVisibility.PUBLIC : FileVisibility.AUTHENTICATED, // Default to public, can be updated later
-             allowedRoles: string.Empty, // No roles by default, can be updated later
-             filePath: storedPath,
-             fileSize: request.File.Length / 1024f, // Size in KB
-             storageKey: storageKey,
-             checkSum: checksum
-        );
+        var fileStorage = new FileStorageData
+        {
+            FileName = originalFileName,
+            FileExtension = extension,
+            TargetTable = request.TargetTable,
+            TargetId = request.TargetId,
+            RelatedTable = request.RelatedTable,
+            RelatedId = request.RelatedId,
+            FileType = type,
+            IsPublic = request.IsPublic,
+            FileVisibility = request.IsPublic ? FileVisibility.PUBLIC : FileVisibility.AUTHENTICATED, // Default to public, can be updated later
+            AllowedRoles = string.Empty, // No roles by default, can be updated later
+            FilePath = storedPath,
+            FileSize = request.File.Length / 1024f, // Size in KB
+            StorageKey = storageKey,
+            CheckSum = checksum
+        };
 
         // Set default visibility and allowed roles
         await _dbContext.Set<FileStorageData>().AddAsync(fileStorage, cancellationToken);
@@ -360,6 +500,12 @@ public class FileStorageService(
         dynamic found = await setDyn.FindAsync(keyValue) ?? throw new DomainException($"Target record '{targetId}' in table '{tableName}' not found");
     }
 
+    private sealed record PresignedUrlPayload(Guid FileId, DateTimeOffset ExpiresAt);
+
+    #region private helpers
+    private static string Base64UrlEncode(byte[] data) =>
+        Convert.ToBase64String(data).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+
     private static string GetContentType(string extension)
     {
         return extension.ToLowerInvariant() switch
@@ -390,6 +536,50 @@ public class FileStorageService(
             ".mov" => "video/quicktime",
             _ => "application/octet-stream"
         };
+    }
+
+    private static string BuildZipEntryName(FileStorageData file, HashSet<string> usedEntryNames)
+    {
+        var baseName = SanitizeFileName($"{file.FileName}{file.FileExtension}");
+
+        string relativePath;
+        if (!string.IsNullOrWhiteSpace(file.RelatedTable) && !string.IsNullOrWhiteSpace(file.RelatedId))
+        {
+            relativePath = Path.Combine(
+                SanitizePath(file.RelatedTable),
+                SanitizePath(file.RelatedId),
+                baseName);
+        }
+        else if (!string.IsNullOrWhiteSpace(file.RelatedTable))
+        {
+            relativePath = Path.Combine(SanitizePath(file.RelatedTable), baseName);
+        }
+        else
+        {
+            relativePath = baseName;
+        }
+
+        return EnsureUniqueZipEntryName(relativePath.Replace('\\', '/'), usedEntryNames);
+    }
+
+    private static string EnsureUniqueZipEntryName(string entryName, HashSet<string> usedEntryNames)
+    {
+        if (usedEntryNames.Add(entryName))
+            return entryName;
+
+        var dir = Path.GetDirectoryName(entryName)?.Replace('\\', '/') ?? string.Empty;
+        var fileName = Path.GetFileNameWithoutExtension(entryName);
+        var ext = Path.GetExtension(entryName);
+
+        for (var i = 1; ; i++)
+        {
+            var candidate = string.IsNullOrEmpty(dir)
+                ? $"{fileName} ({i}){ext}"
+                : $"{dir}/{fileName} ({i}){ext}";
+
+            if (usedEntryNames.Add(candidate))
+                return candidate;
+        }
     }
 
     private static string SanitizeFileName(string fileName)
@@ -424,4 +614,6 @@ public class FileStorageService(
             _ => FileType.UNKNOWN
         };
     }
+
+    #endregion
 }
