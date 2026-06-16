@@ -1,66 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Base.Application.Common.Extension;
+﻿using Base.Application.Common.Interface;
 using Base.Application.Common.Models;
+using Base.Application.Common.Services;
 using Base.Application.Identities.Departments.Models;
-using Base.Application.Identities.Departments.Specs;
-using Base.Application.Identities.JobPosistions;
-using Base.Application.Persistence.Repository;
 using Base.Domain.Entities.Identity;
+using Microsoft.EntityFrameworkCore;
 using Shared.Common.Exceptions;
 
 namespace Base.Application.Identities.Departments.Services;
 
-internal class DepartmentService(
-        IRepositoryWithEvents<Department> eventRepos,
-        IReadRepository<Department> readRepos
-    ) : IDepartmentService
+internal class DepartmentService(IApplicationDbContext context)
+    : BaseService<Department, DepartmentDto>(context), IDepartmentService
 {
-    private readonly IRepositoryWithEvents<Department> _eventRepos = eventRepos;
-    private readonly IReadRepository<Department> _readRepos = readRepos;
-
     public async Task<Guid> CreateAsync(CreateDepartmentRequest request, CancellationToken ct = default)
     {
         var department = Department.Create(
             request.Name,
             request.Description ?? "",
-            request.ParentId
-        );
+            request.ParentId);
 
-        var createdDepartment = await _eventRepos.AddAsync(department, ct);
-        await _eventRepos.SaveChangesAsync(ct);
-
-        return createdDepartment.Id;
-    }
-
-    public async Task<Guid> DeleteAsync(Guid departmentId, CancellationToken ct = default)
-    {
-        var department = await _readRepos.GetByIdAsync(departmentId, ct);
-        _ = department ?? throw new NotFoundException("Department not found.");
-
-        var hasChildren = await _readRepos.AnyAsync(new DepartmentByParentId(department.Id), ct);
-        if( hasChildren )
-        {
-            throw new ConflicException("Cannot delete Department with children");
-        }
-
-        await _eventRepos.DeleteAsync(department, ct);
+        await base.CreateAsync(department, ct);
 
         return department.Id;
     }
 
-    public async Task<List<DepartmentDto>> GetAllAsync(CancellationToken ct = default)
+    public async Task<Guid> DeleteAsync(Guid departmentId, CancellationToken ct = default)
     {
-        var departments = await _readRepos.ListAsync(new GetAllDepartment(), ct);
+        var department = await FindAsync(departmentId, ct);
+        _ = department ?? throw new NotFoundException("Department not found.");
 
-        return departments;
+        var hasChildren = await Entities.AnyAsync(d => d.ParentId == department.Id, ct);
+        if (hasChildren)
+        {
+            throw new ConflicException("Cannot delete Department with children");
+        }
+
+        await base.DeleteAsync(department, ct);
+
+        return department.Id;
     }
+
+    public Task<List<DepartmentDto>> GetAllAsync(CancellationToken ct = default)
+        => ListAsync(ct);
 
     public async Task<DepartmentDto> GetByIdAsync(Guid departmentId, CancellationToken ct = default)
     {
-        var department = await _readRepos.GetByIdAsync(departmentId, ct);
-
+        var department = await FindAsync(departmentId, ct);
         _ = department ?? throw new NotFoundException("Department not found.");
 
         return new DepartmentDto
@@ -73,29 +57,20 @@ internal class DepartmentService(
     }
 
     public Task<PaginatedResponse<DepartmentDto>> GetPaginated(PaginationFilter filter, CancellationToken ct = default)
-    {
-
-        var spec = new DepartmentPaginated(filter);
-        var departments = _readRepos.PaginatedListAsync(spec, filter.PageNumber, filter.PageSize, ct);
-
-        return departments;
-    }
+        => PaginatedSearchAsync(filter, ct);
 
     public async Task<Guid> UpdateAsync(Guid id, UpdateDepartmentRequest request, CancellationToken ct = default)
     {
-        var department = await _readRepos.GetByIdAsync(id, ct);
-
+        var department = await FindAsync(id, ct);
         _ = department ?? throw new NotFoundException("Department not found.");
 
         department.Update(
             request.Name,
             request.Description,
-            request.ParentId
-        );
+            request.ParentId);
 
-        await _eventRepos.UpdateAsync(department, ct);
+        await base.UpdateAsync(department, ct);
 
         return department.Id;
     }
 }
-

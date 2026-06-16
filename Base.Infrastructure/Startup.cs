@@ -8,7 +8,7 @@ using Base.Infrastructure.Identities;
 using Base.Infrastructure.Middlewares;
 using Base.Infrastructure.OpenAPI;
 using Base.Infrastructure.Persistence;
-using Base.Infrastructure.Validator;
+
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +28,7 @@ public static class Startup
             .AddAuth()
             .AddSwagger()
             .AddPersistence()
-            .AddBehaviours(applicationAssembly)
+
             .AddExceptionMiddleware()
             .AddRouting(options => options.LowercaseUrls = true)
             .AddStorage()
@@ -52,7 +52,7 @@ public static class Startup
         .Services;
 
 
-    public static IApplicationBuilder UseInfrastructure (this IApplicationBuilder builder)
+    public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder builder)
     {
         builder
             .UseCorsPolicy()

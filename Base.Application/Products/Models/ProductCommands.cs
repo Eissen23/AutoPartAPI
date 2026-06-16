@@ -6,7 +6,7 @@ using Base.Domain.Entities.Products;
 
 namespace Base.Application.Products.Models;
 
-public class CreateProductRequest 
+public class CreateProductRequest
 {
     public string PartNumber { get; set; } = default!;
     public string Name { get; set; } = default!;
@@ -16,11 +16,11 @@ public class CreateProductRequest
     public Guid CategoryId { get; set; }
 }
 
-public class SearchProductRequest : PaginationFilter, IRequest<PaginatedResponse<ProductDto>>
+public class SearchProductRequest : PaginationFilter
 {
 }
 
-public class UpdateProductRequest 
+public class UpdateProductRequest
 {
     public string? PartNumber { get; set; }
     public string? Name { get; set; }

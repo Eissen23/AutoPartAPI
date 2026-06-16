@@ -1,34 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Base.Application.Categories;
-using Base.Application.Categories.Specs;
-using Base.Application.Common.Extension;
+using Base.Application.Categories.Models;
+using Base.Application.Common.Interface;
 using Base.Application.Common.Models;
-using Base.Application.PartLocations;
-using Base.Application.PartLocations.Specs;
-using Base.Application.Persistence.Repository;
+using Base.Application.Common.Services;
 using Base.Application.Products.Models;
-using Base.Application.Products.Specs;
 using Base.Domain.Entities.Categories;
 using Base.Domain.Entities.Products;
 using Base.Domain.Entities.Warehouses;
+using Microsoft.EntityFrameworkCore;
 using Shared.Common.Exceptions;
 
 namespace Base.Application.Products.Services;
 
-public class ProductService(
-        IRepositoryWithEvents<Product> eventRepos,
-        IReadRepository<Product> readRepos,
-        IReadRepository<Category> categoryRepos,
-        IReadRepository<PartLocation> partLocationRepos
-    ) : IProductService
+public class ProductService(IApplicationDbContext context)
+    : BaseService<Product, ProductDto>(context), IProductService
 {
-    private readonly IRepositoryWithEvents<Product> _eventRepos = eventRepos;
-    private readonly IReadRepository<Product> _readRepos = readRepos;
-    private readonly IReadRepository<Category> _categoryRepos = categoryRepos;
-    private readonly IReadRepository<PartLocation> _partLocationRepos = partLocationRepos;
-
     public async Task<Guid> CreateAsync(CreateProductRequest request, CancellationToken ct = default)
     {
         var product = new Product()
@@ -38,41 +23,58 @@ public class ProductService(
                 request.Description,
                 request.UnitCost,
                 request.RetailPrice,
-                request.CategoryId
-            );
+                request.CategoryId);
 
-        var result = await _eventRepos.AddAsync(product, ct);
-
-        return result.Id;
-    }
-
-    public async Task<Guid> DeleteAsync(Guid productId, CancellationToken ct = default)
-    {
-        var product = await _readRepos.GetByIdAsync(productId, ct);
-
-        _ = product ?? throw new NotFoundException($"Product with id {productId} not found.");
-
-        await _eventRepos.DeleteAsync(product, ct);
+        await base.CreateAsync(product, ct);
 
         return product.Id;
     }
 
-    public async Task<List<ProductDto>> GetAllAsync(CancellationToken ct = default)
+    public async Task<Guid> DeleteAsync(Guid productId, CancellationToken ct = default)
     {
-        var products = await _readRepos.ListAsync(new GetAllProducts(), ct);
+        var product = await FindAsync(productId, ct);
+        _ = product ?? throw new NotFoundException($"Product with id {productId} not found.");
 
-        return products;
+        await base.DeleteAsync(product, ct);
+
+        return product.Id;
     }
+
+    public Task<List<ProductDto>> GetAllAsync(CancellationToken ct = default)
+        => ListAsync(ct);
 
     public async Task<ProductDetailDto> GetByIdAsync(Guid productId, CancellationToken ct = default)
     {
-        var product = await _readRepos.GetByIdAsync(productId, ct);
+        var product = await FindAsync(productId, ct);
         _ = product ?? throw new NotFoundException($"Product with id {productId} not found.");
 
-        var category = await _categoryRepos.FirstOrDefaultAsync(new GetCategoryById(product.CategoryId), ct);
+        var category = await Context.Set<Category>()
+            .AsNoTracking()
+            .Where(c => c.Id == product.CategoryId)
+            .Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                CategoryCode = c.CategoryCode,
+                Name = c.Name,
+                Description = c.Description,
+                Type = c.Type,
+                DefaultMarkupPercentage = c.DefaultMarkupPercentage
+            })
+            .FirstOrDefaultAsync(ct);
 
-        var partLocations = await _partLocationRepos.ListAsync(new GetPartLocationByPartId(productId), ct);
-
+        var warehouseStocks = await Context.Set<PartLocation>()
+            .AsNoTracking()
+            .Where(pl => pl.PartId == productId)
+            .Select(pl => new WarehouseStockDto
+            {
+                Id = pl.Id,
+                ZoneCode = pl.WarehouseLocation!.ZoneCode,
+                Aisle = pl.WarehouseLocation.Aisle,
+                Shelf = pl.WarehouseLocation.Shelf,
+                Bin = pl.WarehouseLocation.Bin,
+                Quantity = pl.QuantityAtLocation
+            })
+            .ToListAsync(ct);
 
         return new ProductDetailDto
         {
@@ -82,24 +84,17 @@ public class ProductService(
             Description = product.Description,
             UnitCost = product.UnitCost,
             RetailPrice = product.RetailPrice,
-            Category = category is null
-                ? null
-                : category,
-            WarehouseStocks = partLocations
+            Category = category,
+            WarehouseStocks = warehouseStocks
         };
     }
 
-    public async Task<PaginatedResponse<ProductDto>> SearchAsync(PaginationFilter filter, CancellationToken ct = default)
-    {
-        var spec = new ProductPaginated(filter);
-        var result = await _readRepos.PaginatedListAsync(spec, filter.PageNumber, filter.PageSize, ct);
-
-        return result;
-    }
+    public Task<PaginatedResponse<ProductDto>> SearchAsync(PaginationFilter filter, CancellationToken ct = default)
+        => PaginatedSearchAsync(filter, ct);
 
     public async Task<Guid> UpdateAsync(Guid id, UpdateProductRequest request, CancellationToken ct = default)
     {
-        var product = await _readRepos.GetByIdAsync(id, ct);
+        var product = await FindAsync(id, ct);
         _ = product ?? throw new NotFoundException($"Product with id {id} not found.");
 
         product.Update(
@@ -108,10 +103,9 @@ public class ProductService(
             request.Description,
             request.UnitCost,
             request.RetailPrice,
-            request.CategoryId
-        );
+            request.CategoryId);
 
-        await _eventRepos.UpdateAsync(product, ct);
+        await base.UpdateAsync(product, ct);
 
         return product.Id;
     }

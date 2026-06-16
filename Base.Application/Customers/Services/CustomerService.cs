@@ -1,59 +1,44 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Base.Application.Common.Extension;
+using Base.Application.Common.Interface;
 using Base.Application.Common.Models;
+using Base.Application.Common.Services;
 using Base.Application.Customers.Models;
-using Base.Application.Customers.Specs;
-using Base.Application.Persistence.Repository;
 using Base.Domain.Entities.Customers;
 using Shared.Common.Exceptions;
 
 namespace Base.Application.Customers.Services;
 
-public class CustomerService(
-        IRepositoryWithEvents<Customer> eventRepos,
-        IReadRepository<Customer> readRepos
-    ) : ICustomerService
+public class CustomerService(IApplicationDbContext context)
+    : BaseService<Customer, CustomerDto>(context), ICustomerService
 {
-    private readonly IRepositoryWithEvents<Customer> _eventRepos = eventRepos;
-    private readonly IReadRepository<Customer> _readRepos = readRepos;
-
     public async Task<Guid> CreateAsync(CreateCustomerRequest request, CancellationToken ct)
     {
         var customer = Customer.Create(
-                request.Name,
-                request.Email,
-                request.PhoneNumber,
-                request.CustomerType
-            );
+            request.Name,
+            request.Email,
+            request.PhoneNumber,
+            request.CustomerType);
 
-        var result = await _eventRepos.AddAsync(customer, ct);
-
-        return result.Id;
-    }
-
-    public async Task<Guid> DeleteAsync(Guid customerId, CancellationToken ct)
-    {
-        var customer = await _readRepos.GetByIdAsync(customerId, ct);
-
-        _ = customer ?? throw new NotFoundException($"Customer with id {customerId} not found.");
-
-        await _eventRepos.DeleteAsync(customer, ct);
+        await base.CreateAsync(customer, ct);
 
         return customer.Id;
     }
 
-    public async Task<List<CustomerDto>> GetAllAsync(CancellationToken ct)
+    public async Task<Guid> DeleteAsync(Guid customerId, CancellationToken ct)
     {
-        var customers = await _readRepos.ListAsync(new GetAllCustomers(), ct);
+        var customer = await FindAsync(customerId, ct);
+        _ = customer ?? throw new NotFoundException($"Customer with id {customerId} not found.");
 
-        return customers;
+        await base.DeleteAsync(customer, ct);
+
+        return customer.Id;
     }
+
+    public Task<List<CustomerDto>> GetAllAsync(CancellationToken ct)
+        => ListAsync(ct);
 
     public async Task<CustomerDto> GetByIdAsync(Guid customerId, CancellationToken ct)
     {
-        var customer = await _readRepos.GetByIdAsync(customerId, ct);
+        var customer = await FindAsync(customerId, ct);
         _ = customer ?? throw new NotFoundException($"Customer with id {customerId} not found.");
 
         return new CustomerDto
@@ -66,27 +51,21 @@ public class CustomerService(
         };
     }
 
-    public async Task<PaginatedResponse<CustomerDto>> SearchAsync(PaginationFilter filter, CancellationToken ct)
-    {
-        var spec = new CustomerPaginated(filter);
-        var result = await _readRepos.PaginatedListAsync(spec, filter.PageNumber, filter.PageSize, ct);
-
-        return result;
-    }
+    public Task<PaginatedResponse<CustomerDto>> SearchAsync(PaginationFilter filter, CancellationToken ct)
+        => PaginatedSearchAsync(filter, ct);
 
     public async Task<Guid> UpdateAsync(Guid id, UpdateCustomerRequest request, CancellationToken ct)
     {
-        var customer = await _readRepos.GetByIdAsync(id, ct);
+        var customer = await FindAsync(id, ct);
         _ = customer ?? throw new NotFoundException($"Customer with id {id} not found.");
 
         customer.Update(
             request.Name,
             request.Email,
             request.PhoneNumber,
-            request.CustomerType
-        );
+            request.CustomerType);
 
-        await _eventRepos.UpdateAsync(customer, ct);
+        await base.UpdateAsync(customer, ct);
 
         return customer.Id;
     }

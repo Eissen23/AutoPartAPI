@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Base.Application.Common.Event;
 using Base.Application.Common.Interface;
 using Base.Domain.Entities.Categories;
 using Base.Domain.Entities.Common.Contracts;
@@ -16,20 +15,17 @@ using Base.Infrastructure.Identities;
 using Base.Infrastructure.Persistence.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Shared.Events;
 
 namespace Base.Infrastructure.Persistence.Context;
 
 public class ApplicationDbContext(
     DbContextOptions<ApplicationDbContext> options,
     ISerializerService serializerService,
-    ICurrentUser currentUser,
-    IEventPublisher eventPublisher
+    ICurrentUser currentUser
     ) : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options), IApplicationDbContext
 {
     private readonly ISerializerService _serializer = serializerService;
     private readonly ICurrentUser _currentUser = currentUser;
-    private readonly IEventPublisher _events = eventPublisher;
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Category> Categories => Set<Category>();
@@ -67,15 +63,13 @@ public class ApplicationDbContext(
 
         await HandleAuditingAfterSaveChangesAsync(auditEntries, cancellationToken);
 
-        await SendDomainEventsAsync();
-
         return result;
     }
 
     private List<AuditTrail> HandleAuditingBeforeSave(Guid userId)
     {
         // First pass: Update audit fields on entities
-        foreach(var entry in ChangeTracker.Entries<IAuditableEntity>().ToList())
+        foreach (var entry in ChangeTracker.Entries<IAuditableEntity>().ToList())
         {
             switch (entry.State)
             {
@@ -90,7 +84,7 @@ public class ApplicationDbContext(
                     break;
 
                 case EntityState.Deleted:
-                    if(entry.Entity is ISoftDelete softDeleteEntity)
+                    if (entry.Entity is ISoftDelete softDeleteEntity)
                     {
                         entry.State = EntityState.Modified;
                         softDeleteEntity.DeletedBy = userId;
@@ -106,7 +100,7 @@ public class ApplicationDbContext(
         var trailEntries = new List<AuditTrail>();
         var modifiedEntries = ChangeTracker.Entries<IAuditableEntity>()
             .Where(e => e.State is EntityState.Added or EntityState.Deleted or EntityState.Modified);
-        
+
         foreach (var entry in modifiedEntries)
         {
             var trailEntry = new AuditTrail(entry, _serializer)
@@ -115,7 +109,7 @@ public class ApplicationDbContext(
                 UserId = userId
             };
             trailEntries.Add(trailEntry);
-            
+
             foreach (var property in entry.Properties)
             {
                 if (property.IsTemporary)
@@ -147,10 +141,10 @@ public class ApplicationDbContext(
                         if (!property.IsModified)
                             break;
 
-                        var isSoftDeleteProperty = entry.Entity is ISoftDelete && 
-                                                   property.OriginalValue == null && 
+                        var isSoftDeleteProperty = entry.Entity is ISoftDelete &&
+                                                   property.OriginalValue == null &&
                                                    property.CurrentValue != null;
-                        
+
                         var isActuallyModified = property.OriginalValue?.Equals(property.CurrentValue) == false;
 
                         if (isSoftDeleteProperty)
@@ -209,27 +203,4 @@ public class ApplicationDbContext(
         return SaveChangesAsync(cancellationToken);
     }
 
-
-    /// <summary>
-    /// Publishes domain events raised by entities after database changes have been persisted.
-    /// Events are cleared from entities before publishing to prevent duplicate processing.
-    /// </summary>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    private async Task SendDomainEventsAsync()
-    {
-        var entitiesWithEvents = ChangeTracker.Entries<IEntity>()
-            .Select(e => e.Entity)
-            .Where(e => e.DomainEvents.Count > 0)
-            .ToArray();
-
-        foreach (var entity in entitiesWithEvents)
-        {
-            var domainEvents = entity.DomainEvents.ToArray();
-            entity.DomainEvents.Clear();
-            foreach (var domainEvent in domainEvents)
-            {
-                await _events.PublishAsync(domainEvent);
-            }
-        }
-    }
 }

@@ -16,7 +16,7 @@
         <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.1" />
         <PackageReference Include="Ardalis.Specification" Version="9.3.1" />
         <PackageReference Include="Azure.Identity" Version="1.17.1" />
-        <PackageReference Include="MediatR" Version="14.0.0" />
+
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.12" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.10" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.12" />

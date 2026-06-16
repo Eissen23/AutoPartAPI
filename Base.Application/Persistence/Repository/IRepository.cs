@@ -19,11 +19,3 @@ public interface IReadRepository<T> : IReadRepositoryBase<T>
     where T : class, IAggregateRoot
 {
 }
-
-/// <summary>
-/// The repository for an aggregate root that also dispatches domain events.
-/// </summary>
-public interface IRepositoryWithEvents<T> : IRepositoryBase<T>
-    where T : class, IAggregateRoot
-{
-}

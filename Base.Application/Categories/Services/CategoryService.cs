@@ -1,60 +1,47 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Base.Application.Categories.Models;
-using Base.Application.Categories.Specs;
-using Base.Application.Common.Extension;
+using Base.Application.Common.Interface;
 using Base.Application.Common.Models;
-using Base.Application.Persistence.Repository;
+using Base.Application.Common.Services;
 using Base.Domain.Entities.Categories;
+using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Shared.Common.Exceptions;
 
 namespace Base.Application.Categories.Services;
 
-public class CategoryService(
-        IRepositoryWithEvents<Category> eventRepos,
-        IReadRepository<Category> readRepos
-    ) : ICategoryService
+public class CategoryService(IApplicationDbContext context)
+    : BaseService<Category, CategoryDto>(context), ICategoryService
 {
-    private readonly IRepositoryWithEvents<Category> _eventRepos = eventRepos;
-    private readonly IReadRepository<Category> _readRepos = readRepos;
-
     public async Task<Guid> CreateAsync(CreateCategoryRequest request, CancellationToken ct = default)
     {
         var category = Category.Create(
-                request.CategoryCode,
-                request.Name,
-                request.Description,
-                request.Type,
-                request.DefaultMarkupPercentage
-            );
+            request.CategoryCode,
+            request.Name,
+            request.Description,
+            request.Type,
+            request.DefaultMarkupPercentage);
 
-        var result = await _eventRepos.AddAsync(category, ct);
-
-        return result.Id;
-    }
-
-    public async Task<Guid> DeleteAsync(Guid categoryId, CancellationToken ct = default)
-    {
-        var category = await _readRepos.GetByIdAsync(categoryId, ct);
-
-        _ = category ?? throw new NotFoundException($"Category with id {categoryId} not found.");
-
-        await _eventRepos.DeleteAsync(category, ct);
+        await base.CreateAsync(category, ct);
 
         return category.Id;
     }
 
-    public async Task<List<CategoryDto>> GetAllAsync(CancellationToken ct = default)
+    public async Task<Guid> DeleteAsync(Guid categoryId, CancellationToken ct = default)
     {
-        var categories = await _readRepos.ListAsync(new GetAllCategories(), ct);
+        var category = await FindAsync(categoryId, ct);
+        _ = category ?? throw new NotFoundException($"Category with id {categoryId} not found.");
 
-        return categories;
+        await base.DeleteAsync(category, ct);
+
+        return category.Id;
     }
+
+    public Task<List<CategoryDto>> GetAllAsync(CancellationToken ct = default)
+        => ListAsync(ct);
 
     public async Task<CategoryDto> GetByIdAsync(Guid categoryId, CancellationToken ct = default)
     {
-        var category = await _readRepos.GetByIdAsync(categoryId, ct);
+        var category = await FindAsync(categoryId, ct);
         _ = category ?? throw new NotFoundException($"Category with id {categoryId} not found.");
 
         return new CategoryDto
@@ -68,29 +55,21 @@ public class CategoryService(
         };
     }
 
-    public Task<List<CategoryNameDto>> GetMappingCategory(CancellationToken ct = default)
+    public async Task<List<CategoryNameDto>> GetMappingCategory(CancellationToken ct = default)
     {
-        return _readRepos.ListAsync(new GetAllCategories(), ct)
-            .ContinueWith(task => task.Result
-                .Select(c => new CategoryNameDto
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .ToList(), ct);
+        var categories = await ListAsync(ct);
+
+        return categories
+            .Select(c => new CategoryNameDto { Id = c.Id, Name = c.Name })
+            .ToList();
     }
 
-    public async Task<PaginatedResponse<CategoryDto>> SearchAsync(PaginationFilter filter, CancellationToken ct = default)
-    {
-        var spec = new CategoryPaginated(filter);
-        var result = await _readRepos.PaginatedListAsync(spec, filter.PageNumber, filter.PageSize, ct);
-
-        return result;
-    }
+    public Task<PaginatedResponse<CategoryDto>> SearchAsync(PaginationFilter filter, CancellationToken ct = default)
+        => PaginatedSearchAsync(filter, ct);
 
     public async Task<Guid> UpdateAsync(Guid id, UpdateCategoryRequest request, CancellationToken ct = default)
     {
-        var category = await _readRepos.GetByIdAsync(id, ct);
+        var category = await FindAsync(id, ct);
         _ = category ?? throw new NotFoundException($"Category with id {id} not found.");
 
         category.Update(
@@ -98,10 +77,9 @@ public class CategoryService(
             request.Name,
             request.Description,
             request.Type,
-            request.DefaultMarkupPercentage
-        );
+            request.DefaultMarkupPercentage);
 
-        await _eventRepos.UpdateAsync(category, ct);
+        await base.UpdateAsync(category, ct);
 
         return category.Id;
     }

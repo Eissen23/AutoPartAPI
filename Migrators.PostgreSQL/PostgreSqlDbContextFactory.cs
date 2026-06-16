@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Base.Application.Common.Event;
 using Base.Application.Common.Interface;
 using Base.Infrastructure.Persistence;
 using Base.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Events;
 
 namespace Migrators.PostgreSQL;
 
@@ -23,7 +21,6 @@ public class PostgreSqlDbContextFactory
 
         var services = new ServiceCollection();
         services.AddSingleton<ISerializerService, MockSerializerService>();
-        services.AddSingleton<IEventPublisher, MockEventPublisher>();
         services.AddSingleton<ICurrentUser, MockCurrentUser>();
 
         optionsBuilder.UseNpgsql(connectionString);
@@ -32,8 +29,7 @@ public class PostgreSqlDbContextFactory
         return new ApplicationDbContext(
             optionsBuilder.Options,
             serviceProvider.GetRequiredService<ISerializerService>(),
-            serviceProvider.GetRequiredService<ICurrentUser>(),
-            serviceProvider.GetRequiredService<IEventPublisher>()
+            serviceProvider.GetRequiredService<ICurrentUser>()
         );
     }
 }
@@ -44,11 +40,6 @@ public class MockSerializerService : ISerializerService
     public T Deserialize<T>(string serialized) => default;
 
     public string Serialize<T>(T obj, Type type) => string.Empty;
-}
-
-public class MockEventPublisher : IEventPublisher
-{
-    public Task PublishAsync(IEvent @event) => Task.CompletedTask;
 }
 
 public class MockCurrentUser : ICurrentUser
