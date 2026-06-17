@@ -5,7 +5,7 @@ using Base.Domain.Entities.Common.Contracts;
 
 namespace Base.Infrastructure.Identities;
 
-public class Permission : AuditableEntity
+public class Permission : AuditableEntity, IAggregateRoot
 {
     public string Name { get; set; } = default!;
 

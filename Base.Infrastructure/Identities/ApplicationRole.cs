@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using Base.Domain.Entities.Identity;
+using Base.Domain.Entities.Common.Contracts;
 using Microsoft.AspNetCore.Identity;
 
 namespace Base.Infrastructure.Identities;
 
-public class ApplicationRole : IdentityRole<Guid>
+public class ApplicationRole : IdentityRole<Guid>, IAggregateRoot
 {
     public string? Description { get; set; }
 
