@@ -27,7 +27,11 @@ internal class ExceptionMiddleware : IMiddleware
             context.Response.StatusCode = (int)ex.StatusCode;
 
             var response = ApiResponse.Failure(ex.Message, (int)ex.StatusCode);
-            
+            response.Meta = new
+            {
+                ex.ErrorCode
+            };
+
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
         catch (Exception)
@@ -41,7 +45,7 @@ internal class ExceptionMiddleware : IMiddleware
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
             var response = ApiResponse.Failure("An unexpected error occurred.", StatusCodes.Status500InternalServerError);
-            
+
             await context.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
     }

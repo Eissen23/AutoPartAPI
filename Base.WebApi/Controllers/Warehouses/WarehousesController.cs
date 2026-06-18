@@ -15,16 +15,16 @@ public class WarehousesController(
 
     [Authorize, HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreateWarehouseLocationRequest request)
     {
         var result = await _warehouseService.CreateAsync(request);
-        return this.ApiOk(result, "Create Warehouse Location Success");
+        return this.ApiCreated(result, "Create Warehouse Location Success");
     }
 
     [Authorize, HttpPost("search")]
-    [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<WarehouseLocationDto>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<List<WarehouseLocationDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchWarehouseLocationRequest request)
     {
         var result = await _warehouseService.SearchAsync(request);
@@ -33,7 +33,7 @@ public class WarehousesController(
 
     [Authorize, HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateWarehouseLocationRequest request)
     {
 
@@ -44,7 +44,7 @@ public class WarehousesController(
     [Authorize]
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         var result = await _warehouseService.DeleteAsync(id);
@@ -54,7 +54,7 @@ public class WarehousesController(
     [Authorize]
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<WarehouseLocationDetailDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
         var result = await _warehouseService.GetByIdAsync(id);

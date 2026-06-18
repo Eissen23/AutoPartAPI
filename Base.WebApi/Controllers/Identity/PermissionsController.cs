@@ -20,12 +20,12 @@ public class PermissionsController(
     {
         var result = await _permissionService.CreateAsync(request, ct);
 
-        return this.ApiOk(result, "Create Permission success.");
+        return this.ApiCreated(result, "Create Permission success.");
     }
 
     [Authorize]
     [HttpPost("search")]
-    [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<PermissionDto>>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<List<PermissionDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync([FromBody] SearchPermissionsRequest request, CancellationToken ct)
     {

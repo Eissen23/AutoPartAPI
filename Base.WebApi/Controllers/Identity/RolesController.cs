@@ -21,12 +21,12 @@ public class RolesController(
     {
         var result = await _roleService.CreateAsync(request, ct);
 
-        return this.ApiOk(result, "Create Role success.");
+        return this.ApiCreated(result, "Create Role success.");
     }
 
     [Authorize]
     [HttpPost("search")]
-    [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<RoleDto>>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<List<RoleDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync([FromBody] SearchRolesRequest request, CancellationToken ct)
     {

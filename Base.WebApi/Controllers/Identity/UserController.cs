@@ -15,13 +15,13 @@ public class UserController(
     /// Signup user with the create user request
     /// </summary>
     [AllowAnonymous, HttpPost]
-    [ProducesResponseType(typeof(ApiResponse<Guid>),StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserRequest request)
     {
         var result = await _userService.CreateUserAsync(request);
 
-        return this.ApiOk(result, "User created successfully");
+        return this.ApiCreated(result, "User created successfully");
     }
 
     /// <summary>
@@ -30,13 +30,13 @@ public class UserController(
     /// <param name="request"></param>
     /// <returns></returns>
     [Authorize, HttpPost("create-by-admin")]
-    [ProducesResponseType(typeof(ApiResponse<Guid>),StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateUserByAdminAsync([FromBody] CreateUserByAdminRequest request)
     {
         var result = await _userService.CreateUserByAdminAsync(request);
 
-        return this.ApiOk(result, "User created by admin successfully");
+        return this.ApiCreated(result, "User created by admin successfully");
     }
 
 
@@ -46,8 +46,8 @@ public class UserController(
     /// <param name="request"></param>
     /// <returns></returns>
     [Authorize, HttpPut]
-    [ProducesResponseType(typeof(ApiResponse<Guid>),StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateUserAsync([FromBody] UpdateUserRequest request)
     {
         var result = await _userService.UpdateUserAsync(request);
@@ -62,8 +62,8 @@ public class UserController(
     /// <param name="request"></param>
     /// <returns></returns>
     [Authorize, HttpPut("update-by-manager")]
-    [ProducesResponseType(typeof(ApiResponse<Guid>),StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateUserAdminAsync([FromBody] UpdateUserByManagerRequest request)
     {
         var result = await _userService.UpdateUserByManagerAsync(request);
@@ -73,8 +73,8 @@ public class UserController(
 
     [Authorize]
     [HttpGet("profile")]
-    [ProducesResponseType(typeof(ApiResponse<UserDetailDto>),StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<UserDetailDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetUserProfileAsync(CancellationToken ct)
     {
         var result = await _userService.GetCurrentUser(ct);

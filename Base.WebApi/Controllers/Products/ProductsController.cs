@@ -15,18 +15,18 @@ public class ProductsController(
     [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreateProductRequest request, CancellationToken ct)
     {
         var result = await _productService.CreateAsync(request, ct);
-        return this.ApiOk(result, "Create Product Success");
+        return this.ApiCreated(result, "Create Product Success");
     }
 
     [Authorize]
     [HttpPost]
     [Route("search")]
-    [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<ProductDto>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<List<ProductDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchProductRequest request, CancellationToken ct)
     {
         var result = await _productService.SearchAsync(request, ct);
@@ -36,7 +36,7 @@ public class ProductsController(
     [Authorize]
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, UpdateProductRequest request, CancellationToken ct)
     {
         var result = await _productService.UpdateAsync(id, request, ct);
@@ -46,7 +46,7 @@ public class ProductsController(
     [Authorize]
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id, CancellationToken ct)
     {
         var result = await _productService.DeleteAsync(id, ct);
@@ -56,7 +56,7 @@ public class ProductsController(
     [Authorize]
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<ProductDetailDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct)
     {
         var result = await _productService.GetByIdAsync(id, ct);

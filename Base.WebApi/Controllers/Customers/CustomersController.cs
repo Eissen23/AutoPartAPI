@@ -19,11 +19,11 @@ public class CustomersController(
     public async Task<IActionResult> CreateAsync(CreateCustomerRequest request, CancellationToken ct)
     {
         var result = await _customerService.CreateAsync(request, ct);
-        return this.ApiOk(result, "Create Customer Success");
+        return this.ApiCreated(result, "Create Customer Success");
     }
 
     [Authorize, HttpPost("search")]
-    [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<CustomerDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<List<CustomerDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchCustomerRequest request, CancellationToken ct)
     {
@@ -34,7 +34,7 @@ public class CustomersController(
     [Authorize, HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateCustomerRequest request,  CancellationToken ct)
+    public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateCustomerRequest request, CancellationToken ct)
     {
         var result = await _customerService.UpdateAsync(id, request, ct);
         return this.ApiOk(result, "Update Customer success.");

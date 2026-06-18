@@ -14,16 +14,16 @@ public class InvoicesController(
 
     [Authorize, HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreateInvoiceRequest request, CancellationToken ct)
     {
         var result = await _invoiceService.CreateAsync(request, ct);
-        return this.ApiOk(result, "Create Invoice Success");
+        return this.ApiCreated(result, "Create Invoice Success");
     }
 
     [Authorize, HttpPost("search")]
-    [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<InvoiceDto>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<List<InvoiceDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchInvoiceRequest request, CancellationToken ct)
     {
         var result = await _invoiceService.SearchAsync(request, ct);
@@ -32,7 +32,7 @@ public class InvoicesController(
 
     [Authorize, HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync(UpdateInvoiceRequest request, [FromRoute] Guid id, CancellationToken ct)
     {
         var result = await _invoiceService.UpdateAsync(id, request, ct);
@@ -49,7 +49,7 @@ public class InvoicesController(
 
     [Authorize, HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<InvoiceDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id, CancellationToken ct)
     {
         var result = await _invoiceService.GetByIdAsync(id, ct);

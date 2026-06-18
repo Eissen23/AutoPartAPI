@@ -10,20 +10,20 @@ public class PartLocationsController(
         IPartLocationService partLocationService
     ) : VersionedApiController
 {
-    private readonly IPartLocationService _partLocationService = partLocationService; 
+    private readonly IPartLocationService _partLocationService = partLocationService;
 
     [Authorize, HttpPost]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync(CreatePartLocationRequest request)
     {
         var result = await _partLocationService.CreateAsync(request);
-        return this.ApiOk(result, "Create Part Location Success");
+        return this.ApiCreated(result, "Create Part Location Success");
     }
 
     [Authorize, HttpPost("search")]
-    [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<PartLocationDto>>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<List<PartLocationDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchPartLocationRequest request)
     {
         var result = await _partLocationService.SearchAsync(request);
@@ -32,7 +32,7 @@ public class PartLocationsController(
 
     [Authorize, HttpPut("{id:Guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdatePartLocationRequest request)
     {
         var result = await _partLocationService.UpdateAsync(id, request);
@@ -42,7 +42,7 @@ public class PartLocationsController(
 
     [Authorize, HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         var result = await _partLocationService.DeleteAsync(id);
@@ -52,7 +52,7 @@ public class PartLocationsController(
     [Authorize]
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ApiResponse<PartLocationDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
         var result = await _partLocationService.GetByIdAsync(id);

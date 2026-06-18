@@ -4,6 +4,7 @@ using Host.Extensions;
 using Infrastructure;
 using Base.Infrastructure.Extensions;
 using Base.Infrastructure.Logging.Serilog;
+using Host.Filters;
 using Microsoft.AspNetCore.Authentication;
 using Serilog;
 
@@ -12,14 +13,17 @@ Log.Information("Starting Autopart Manager API...");
 try
 {
     var builder = WebApplication.CreateBuilder(args);
-    builder.Services.AddControllers();
+    builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<PaginationMetaFilter>();
+    });
     builder.AddConfigurations().RegisterSerilog();
 
     builder.Services.AddOpenApi();
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddApplication();
     builder.Services.AddDatabaseSeeder();
-    
+
     try
     {
         var app = builder.Build();
@@ -36,7 +40,7 @@ try
 
         //app.UseHttpsRedirection();
 
-        app.UseInfrastructure(); 
+        app.UseInfrastructure();
 
         app.MapControllers();
 

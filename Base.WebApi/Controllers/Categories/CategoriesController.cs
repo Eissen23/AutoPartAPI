@@ -18,11 +18,11 @@ public class CategoriesController(
     public async Task<IActionResult> CreateAsync(CreateCategoryRequest request)
     {
         var result = await _categoryService.CreateAsync(request);
-        return this.ApiOk(result, "Create Category Success");
+        return this.ApiCreated(result, "Create Category Success");
     }
 
     [Authorize, HttpPost("search")]
-    [ProducesResponseType(typeof(ApiResponse<PaginatedResponse<CategoryDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<List<CategoryDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchAsync(SearchCategoryRequest request)
     {
