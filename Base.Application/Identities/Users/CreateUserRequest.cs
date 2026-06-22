@@ -4,29 +4,35 @@ using System.Text;
 
 namespace Base.Application.Identities.Users;
 
-public record CreateUserRequest(
-    string Email,
-    string Username,
-    string FirstName,
-    string LastName,
-    string Gender,
-    DateTime DateOfBirth,
-    string Password,
-    string ConfirmPassword,
-    string? PhoneNumber
-);
+public record CreateUserRequest 
+{
+    public string Email { get; init; } = default!;
+    public string Username { get; set; } = default!;
+    public string FirstName { get; init; } = default!;
+    public string LastName { get; init; } = default!;
+    public DateTime DateOfBirth { get; init; }
 
-public record CreateUserByAdminRequest(
-    string FirstName,
-    string LastName,
-    string Email,
-    string UserName,
-    string Password,
-    string? ConfirmPassword,
-    string? PhoneNumber,
-    string? Gender,
-    DateTime DateOfBirth,
-    int? AddressLocationId,
-    int? JobPositionId,
-    int? DepartmentId
-);
+    public string Password { get; init; } = default!;
+    public string? ConfirmPassword { get; init; } = default!;
+    public string? PhoneNumber { get; init; } 
+};
+
+public record CreateUserByAdminRequest
+{
+
+    public string FirstName { get; init; } = default!;
+    public string LastName { get; init; } = default!;
+    public string Email { get; init; } = default!;
+    public string Username { get; init; } = default!;
+    public string Password { get; init; } = default!;
+
+    public string? ConfirmPassword { get; init; }
+
+    public string? PhoneNumber { get; init; }
+    public string? Gender { get; init; }
+    public DateTime DateOfBirth { get; init; }
+    public int? AddressLocationId { get; init; }
+    public int? JobPositionId { get; init; }
+    public int? DepartmentId { get; init; }
+
+}

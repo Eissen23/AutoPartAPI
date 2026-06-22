@@ -58,7 +58,7 @@ public class UserService(
     {
         var user = new ApplicationUser
         {
-            UserName = request.UserName,
+            UserName = request.Username,
             Email = request.Email,
             FirstName = request.FirstName,
             LastName = request.LastName,
